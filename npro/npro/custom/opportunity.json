@@ -69,14 +69,14 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
-   "creation": "2021-01-20 08:41:15.249507",
+   "creation": "2021-01-20 10:09:22.709278",
    "default_value": null,
    "doc_type": "Opportunity",
    "docstatus": 0,
    "doctype_or_field": "DocField",
    "field_name": "sales_stage",
    "idx": 0,
-   "modified": "2021-01-20 08:41:15.249507",
+   "modified": "2021-01-20 10:09:22.709278",
    "modified_by": "Administrator",
    "name": "Opportunity-sales_stage-default",
    "owner": "Administrator",
@@ -86,7 +86,7 @@
    "property": "default",
    "property_type": "Text",
    "row_name": null,
-   "value": ""
+   "value": "New"
   },
   {
    "_assign": null,
