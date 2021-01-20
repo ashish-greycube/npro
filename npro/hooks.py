@@ -141,7 +141,12 @@ doctype_js = {
 # override_doctype_dashboards = {
 # 	"Task": "npro.task.get_dashboard_data"
 # }
-
+fixtures = [
+      {
+        "dt": "Property Setter", 
+        "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]]
+      }   
+]
 # exempt linked doctypes from being automatically cancelled
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]

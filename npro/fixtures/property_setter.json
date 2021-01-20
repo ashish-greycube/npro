@@ -1,0 +1,18 @@
+[
+ {
+  "default_value": "0",
+  "doc_type": "Opportunity",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocType",
+  "field_name": null,
+  "modified": "2021-01-20 08:18:48.363583",
+  "name": "Opportunity-Allow events in timeline",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "allow_events_in_timeline",
+  "property_type": "Check",
+  "value": "1"
+ }
+]
