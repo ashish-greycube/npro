@@ -1,0 +1,101 @@
+[
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:43.973646",
+  "name": "Existing Customer",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Existing Customer"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:43.995347",
+  "name": "Reference",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Reference"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:44.006043",
+  "name": "Advertisement",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Advertisement"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:44.015714",
+  "name": "Cold Calling",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Cold Calling"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:44.042432",
+  "name": "Mass Mailing",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Mass Mailing"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-12 17:08:44.058451",
+  "name": "Campaign",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Campaign"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-18 08:37:38.233595",
+  "name": "LinkedIn",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "LinkedIn"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-18 08:38:04.726541",
+  "name": "Tele calling",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Tele calling"
+ },
+ {
+  "details": null,
+  "docstatus": 0,
+  "doctype": "Lead Source",
+  "modified": "2021-01-18 08:38:20.548332",
+  "name": "Tele calling referral",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "source_name": "Tele calling referral"
+ }
+]

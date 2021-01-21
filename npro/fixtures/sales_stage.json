@@ -1,0 +1,123 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-12 17:08:43.372175",
+  "name": "Prospecting",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Prospecting"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-12 17:08:43.403389",
+  "name": "Needs Analysis",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Needs Analysis"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-12 17:08:43.451712",
+  "name": "Proposal Sent",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Proposal Sent"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-12 17:08:43.467331",
+  "name": "Negotiation",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Negotiation"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:53:32.670484",
+  "name": "Discovery Call",
+  "opportunity_type_cf": "Project",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Discovery Call"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:52:39.694412",
+  "name": "NPro Candidate Sourcing",
+  "opportunity_type_cf": "Consulting",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "NPro Candidate Sourcing"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:52:01.390873",
+  "name": "Client CV Screening",
+  "opportunity_type_cf": "Consulting",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Client CV Screening"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:52:14.749662",
+  "name": "Client Interview",
+  "opportunity_type_cf": "Consulting",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Client Interview"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:51:48.807557",
+  "name": "Candidate Approved",
+  "opportunity_type_cf": "Consulting",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Candidate Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 07:50:21.865135",
+  "name": "New",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "New"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Sales Stage",
+  "modified": "2021-01-20 14:18:33.797701",
+  "name": "Completed",
+  "opportunity_type_cf": null,
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "stage_name": "Completed"
+ }
+]

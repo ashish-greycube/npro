@@ -1,0 +1,22 @@
+[
+ {
+  "description": "Project",
+  "docstatus": 0,
+  "doctype": "Opportunity Type",
+  "modified": "2021-01-18 08:01:23.188976",
+  "name": "Project",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "description": "Consulting",
+  "docstatus": 0,
+  "doctype": "Opportunity Type",
+  "modified": "2021-01-18 08:01:13.946009",
+  "name": "Consulting",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]
