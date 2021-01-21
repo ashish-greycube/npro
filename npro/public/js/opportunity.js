@@ -1,4 +1,14 @@
 frappe.ui.form.on("Opportunity", {
+    status:function(frm){
+        if (frm.doc.status=='Lost' && frm.doc.lost_reasons.length==0) {
+            frm.trigger('set_as_lost_dialog');
+        }        
+    },
+    validate:function(frm){
+        if (frm.doc.status=='Lost' && frm.doc.lost_reasons.length==0) {
+            frm.trigger('set_as_lost_dialog');
+        }
+    },
     setup:function(frm)
     {
         frm.set_query('sales_stage', () => {

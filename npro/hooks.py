@@ -61,7 +61,7 @@ doctype_js = {
 # Installation
 # ------------
 
-# before_install = "npro.install.before_install"
+before_install = "npro.api.remove_standard_crm_values"
 # after_install = "npro.install.after_install"
 
 # Desk Notifications
@@ -94,13 +94,11 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
+doc_events = {
+	"Opportunity": {
+		"on_update": "npro.api.set_status_value",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
@@ -145,7 +143,24 @@ fixtures = [
       {
         "dt": "Property Setter", 
         "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]]
-      }   
+      } ,
+      {
+        "dt": "Lead Source", 
+        "filters": [["name", "in", ["Tele calling referral", "Tele calling", "LinkedIn",
+                                    "Campaign", "Mass Mailing", "Cold Calling",
+                                    "Advertisement", "Reference", "Existing Customer"]]]
+      },
+      {
+        "dt": "Opportunity Type", 
+        "filters": [["name", "in", ["Project","Consulting"]]]
+      },        
+      {
+        "dt": "Sales Stage", 
+        "filters": [["name", "in", ["Completed","Discovery Call","NPro Candidate Sourcing",
+                                    "Client Interview","Client CV Screening","Candidate Approved",
+                                    "New","Negotiation","Proposal Sent",
+                                    "Needs Analysis","Prospecting"]]]
+      },               
 ]
 # exempt linked doctypes from being automatically cancelled
 #
