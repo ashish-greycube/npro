@@ -14,13 +14,12 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select
-            u.full_name lead_owner, l.status, count(l.status) total_count
+            coalesce(l.source,'Unknown') source, l.status, count(l.status) total_count
         from
             tabLead l
-            inner join tabUser u on u.name = l.lead_owner
         {where_conditions}
         group by 
-            lead_owner, status""".format(
+            coalesce(l.source,'Unknown'), status""".format(
             where_conditions=get_conditions(filters)
         ),
         filters,
@@ -31,7 +30,7 @@ def get_data(filters):
     df = pandas.DataFrame.from_records(data)
     df1 = pandas.pivot_table(
         df,
-        index=["lead_owner"],
+        index=["source"],
         values=["total_count"],
         columns=["status"],
         aggfunc=sum,
@@ -43,9 +42,7 @@ def get_data(filters):
     df1.columns = [frappe.scrub(d) for d in df1.columns.to_series().str[1]]
     df2 = df1.reset_index()
 
-    columns = [
-        dict(label="Sales Rep", fieldname="lead_owner", fieldtype="Data", width=165)
-    ]
+    columns = [dict(label="Source", fieldname="source", fieldtype="Data", width=165)]
     columns += [
         dict(label=frappe.unscrub(col), fieldname=col, fieldtype="Int", width=95)
         for col in df1.columns
