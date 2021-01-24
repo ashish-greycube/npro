@@ -31,5 +31,11 @@ frappe.query_reports["Active Lead Ageing Analysis By Status"] = {
       default: "90",
       reqd: 1,
     },
+    {
+      fieldname: "till_date",
+      label: __("Till Date"),
+      fieldtype: "Date",
+      default: moment().startOf("year"),
+    },
   ],
 };
