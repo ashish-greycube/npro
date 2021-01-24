@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.utils import cint
 import pandas
+from pandas.api.types import CategoricalDtype
 from operator import itemgetter
 
 
@@ -83,6 +84,12 @@ def get_data(filters):
     df1.columns = df1.columns.to_series().str[1]
     df2 = df1.reset_index()
 
+    # sort by sales stage priority_cf
+    sales_stages_ordered = get_sales_stage_ordered()
+    df2["sales_stage"] = df2["sales_stage"].astype("category")
+    df2["sales_stage"].cat.set_categories(sales_stages_ordered, inplace=True)
+    df2.sort_values(by="sales_stage", axis=0, inplace=True)
+
     columns = [
         dict(label="Sales Stage", fieldname="sales_stage", fieldtype="Data", width=130),
     ]
@@ -110,3 +117,11 @@ def get_ageing(filters, age_column):
         buckets.insert(-1, "{} - {}".format(low, days))
         low = days + 1
     return " \n ".join(ageing), buckets
+
+
+def get_sales_stage_ordered():
+    return [
+        d[0]
+        for d in frappe.db.get_all("Sales Stage", as_list=True, order_by="priority_cf")
+    ]
+

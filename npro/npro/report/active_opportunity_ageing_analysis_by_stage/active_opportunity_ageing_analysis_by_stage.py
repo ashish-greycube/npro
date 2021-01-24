@@ -81,7 +81,10 @@ def get_data(filters):
         ),
     ]
 
-    for col in df1.columns.to_list():
+    ordered = get_sales_stage_ordered()
+    for col in sorted(
+        df1.columns.to_list(), key=lambda x: ordered.index(x) if x in ordered else 100
+    ):
         columns += [
             dict(label=col, fieldname=col, fieldtype="Int", width=150),
         ]
@@ -104,3 +107,11 @@ def get_ageing(filters, age_column):
         buckets.insert(-1, "{} - {}".format(low, days))
         low = days + 1
     return " \n ".join(ageing), buckets
+
+
+def get_sales_stage_ordered():
+    return [
+        d[0]
+        for d in frappe.db.get_all("Sales Stage", as_list=True, order_by="priority_cf")
+    ]
+
