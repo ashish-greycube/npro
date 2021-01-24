@@ -3,7 +3,12 @@
 /* eslint-disable */
 
 frappe.query_reports["Customer Organization Chart"] = {
-	"filters": [
-
-	]
+  filters: [
+    {
+      fieldname: "customer",
+      label: __("Customer"),
+      fieldtype: "Link",
+      options: "Customer",
+    },
+  ],
 };
