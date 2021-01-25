@@ -46,9 +46,10 @@ def get_columns(filters):
             width=140,
         ),
         dict(
-            label="Last Updated",
-            fieldname="last_updated",
-            width=140,
+            label="Days since Last Status Updated",
+            fieldname="last_updated_days",
+            fieldtype="Int",
+            width=100,
         ),
     ]
 
@@ -72,7 +73,8 @@ def get_data(filters):
                 and v.data  REGEXP concat(',\n(   )("',ld.status,'")\n(  ]).*')
                 {where_conditions}
             )
-            select docname, lead_name, company_name, status, lead_owner, last_updated
+            select docname, lead_name, company_name, status, lead_owner, last_updated,
+            DATEDIFF(CURDATE(),fn.last_updated) last_updated_days
             from fn
             where rn = 1 
             and DATEDIFF(CURDATE(),fn.last_updated) > fn.stale_days
