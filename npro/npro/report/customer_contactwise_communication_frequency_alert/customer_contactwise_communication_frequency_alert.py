@@ -30,22 +30,23 @@ def get_columns(filters):
         ),
         dict(label="Phone", fieldname="mobile_no", width=110),
         dict(label="Email Id", fieldname="email_id", width=110),
+        dict(label="Linkedin Profile Id", fieldname="linkedin_profile_cf", width=130),
         dict(
             label="Last Communicated On",
             fieldname="communication_date",
             fieldtype="Date",
-            width=140,
+            width=170,
         ),
         dict(
             label="Last Communication Medium",
             fieldname="communication_medium",
-            width=140,
+            width=170,
         ),
         dict(
             label="Communication Frequency",
             fieldname="communication_frequency_in_days_cf",
             fieldtype="Int",
-            width=110,
+            width=160,
         ),
     ]
 
@@ -76,7 +77,7 @@ def get_data(filters):
             )
             select 
                 cus.name customer, dl.parent contact, ct.phone, ct.mobile_no, ct.email_id, 
-                ct.communication_frequency_in_days_cf, fn.communication_date,
+                ct.communication_frequency_in_days_cf, fn.communication_date, ct.linkedin_profile_cf,
                 fn.communication_medium, ifnull(DATEDIFF(CURDATE(), fn.communication_date),365)
             from tabCustomer cus
                 left outer join `tabDynamic Link` dl on dl.link_doctype = 'Customer' 
