@@ -22,7 +22,7 @@ frappe.query_reports["Customer Contactwise Communication Analysis"] = {
       fieldname: "communication_medium",
       label: __("Event Category"),
       fieldtype: "Select",
-      options: "\nEmail\nPhone\nSMS\nMeeting\nOther\nVisit\nChat",
+      options: "\nEmail\nPhone\nMeeting\nOther",
     },
   ],
 };

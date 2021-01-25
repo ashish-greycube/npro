@@ -13,7 +13,7 @@ def execute(filters=None):
 
 
 def get_conditions(filters):
-    where_clause = ["comm.reference_doctype = 'Contact'"]
+    where_clause = []
     if filters.get("from_date"):
         where_clause += ["date(comm.creation) >= %(from_date)s"]
     if filters.get("to_date"):
@@ -31,12 +31,15 @@ def get_data(filters):
         with fn as
         (
             select
-                dl.link_name customer, reference_name contact, 
+                dl.link_name customer, cml.link_name contact, 
                 datediff(%(today)s,communication_date) last_comm, communication_medium
             from 
                 tabCommunication comm
+                inner join `tabCommunication Link` cml on cml.parent = comm.name 
+                and cml.link_doctype = 'Contact'
                 left outer join `tabDynamic Link` dl on dl.link_doctype = 'Customer' 
-                and dl.parent = comm.reference_name and dl.parenttype = 'Contact'
+                and dl.parenttype = 'Contact'
+                and dl.parent = cml.link_name 
             {where_conditions}
         )
         select
@@ -50,7 +53,7 @@ def get_data(filters):
         ),
         filters,
         as_dict=True,
-        # debug=True,
+        debug=True,
     )
 
     if not data:
