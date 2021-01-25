@@ -11,6 +11,8 @@ Customization for NPro Pte Ltd
 
 4. Contact > Communication Frequency (in days) for Communication Matrix
 
+5. Auto Email Report for Reports :  Lead Status Reminder and Opportunity Stage Reminder
+
 #### License
 
 MIT
