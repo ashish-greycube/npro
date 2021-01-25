@@ -3,7 +3,12 @@
 /* eslint-disable */
 
 frappe.query_reports["Lead Status Reminder"] = {
-	"filters": [
-
-	]
+  filters: [
+    {
+      fieldname: "lead_owner",
+      label: __("Lead Owner"),
+      fieldtype: "Link",
+      options: "User",
+    },
+  ],
 };

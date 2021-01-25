@@ -33,10 +33,7 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {
-    "Lead" : "public/js/lead.js",
-    "Opportunity" : "public/js/opportunity.js"
-    }
+doctype_js = {"Lead": "public/js/lead.js", "Opportunity": "public/js/opportunity.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -49,7 +46,7 @@ doctype_js = {
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Generators
@@ -95,31 +92,29 @@ before_install = "npro.api.remove_standard_crm_values"
 # Hook on document methods and events
 
 doc_events = {
-	"Opportunity": {
-		"on_update": "npro.api.set_status_value",
-	}
+    "Opportunity": {
+        "on_update": "npro.api.set_status_value",
+    }
 }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"npro.tasks.all"
-# 	],
-# 	"daily": [
-# 		"npro.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"npro.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"npro.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"npro.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+    "daily": ["npro.npro.report.lead_status_reminder.lead_status_reminder"]
+    # 	"all": [
+    # 		"npro.tasks.all"
+    # 	],
+    # 	"hourly": [
+    # 		"npro.tasks.hourly"
+    # 	],
+    # 	"weekly": [
+    # 		"npro.tasks.weekly"
+    # 	]
+    # 	"monthly": [
+    # 		"npro.tasks.monthly"
+    # 	]
+}
 
 # Testing
 # -------
@@ -140,29 +135,54 @@ doc_events = {
 # 	"Task": "npro.task.get_dashboard_data"
 # }
 fixtures = [
-      {
-        "dt": "Property Setter", 
-        "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]]
-      } ,
-      {
-        "dt": "Lead Source", 
-        "filters": [["name", "in", ["Tele calling referral", "Tele calling", "LinkedIn",
-                                    "Campaign", "Mass Mailing", "Cold Calling",
-                                    "Advertisement", "Reference", "Existing Customer"]]]
-      },
-      {
-        "dt": "Opportunity Type", 
-        "filters": [["name", "in", ["Project","Consulting"]]]
-      },        
-      {
-        "dt": "Sales Stage", 
-        "filters": [["name", "in", ["Completed","Discovery Call","NPro Candidate Sourcing",
-                                    "Client Interview","Client CV Screening","Candidate Approved",
-                                    "New","Negotiation","Proposal Sent",
-                                    "Needs Analysis","Prospecting"]]]
-      },               
+    {
+        "dt": "Property Setter",
+        "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]],
+    },
+    {
+        "dt": "Lead Source",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Tele calling referral",
+                    "Tele calling",
+                    "LinkedIn",
+                    "Campaign",
+                    "Mass Mailing",
+                    "Cold Calling",
+                    "Advertisement",
+                    "Reference",
+                    "Existing Customer",
+                ],
+            ]
+        ],
+    },
+    {"dt": "Opportunity Type", "filters": [["name", "in", ["Project", "Consulting"]]]},
+    {
+        "dt": "Sales Stage",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Completed",
+                    "Discovery Call",
+                    "NPro Candidate Sourcing",
+                    "Client Interview",
+                    "Client CV Screening",
+                    "Candidate Approved",
+                    "New",
+                    "Negotiation",
+                    "Proposal Sent",
+                    "Needs Analysis",
+                    "Prospecting",
+                ],
+            ]
+        ],
+    },
 ]
 # exempt linked doctypes from being automatically cancelled
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]
-

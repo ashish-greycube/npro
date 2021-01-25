@@ -7,9 +7,9 @@ from frappe.utils import cint, data
 import pandas
 from operator import itemgetter
 import collections
-from frappe.utils import (
-    get_url_to_report,
-)
+from frappe.utils import get_url_to_report
+import json
+from frappe import _
 
 
 def execute(filters=None):
@@ -70,14 +70,17 @@ def get_data(filters):
                 and v.ref_doctype = 'Lead'
                 and v.data REGEXP '.*"changed":.*().*'
                 and v.data  REGEXP concat(',\n(   )("',ld.status,'")\n(  ]).*')
-                where ld.status in ('New', 'Working', 'Nurturing')
+                {where_conditions}
             )
-            select * 
+            select docname, lead_name, company_name, status, lead_owner, last_updated
             from fn
             where rn = 1 
             and DATEDIFF(CURDATE(),fn.last_updated) > fn.stale_days
             order by fn.status, fn.last_updated
-        """,
+         """.format(
+            where_conditions=get_conditions(filters),
+        ),
+        filters,
         as_dict=True,
         # debug=True,
     )
@@ -85,31 +88,53 @@ def get_data(filters):
     return data
 
 
+def get_conditions(filters):
+    conditions = ["ld.status in ('New', 'Working','Nurturing')"]
+    if filters.get("lead_owner"):
+        conditions += ["ld.lead_owner = %(lead_owner)s"]
+
+    return conditions and " where " + " and ".join(conditions) or ""
+
+
 def send_reminder():
-    reminders = collections.defaultdict(list)
-    columns, data = execute(filters=None)
-    for d in data:
-        reminders[d.lead_owner].append(d)
+    # bench --site <site_name> execute npro.npro.report.lead_status_reminder.lead_status_reminder.send_reminder
+    if not frappe.db.exists("Auto Email Report", "Lead Status Reminder"):
+        from frappe.email.smtp import get_default_outgoing_email_account
 
-    for d in reminders:
-        html = frappe.render_template(
-            "frappe/templates/emails/auto_email_report.html",
-            {
-                "title": "Lead Reminder",
-                "description": "Leads inactive",
-                "date_time": frappe.utils.now(),
-                "columns": columns,
-                "data": reminders[d],
-                "report_url": get_url_to_report(
-                    "Lead Status Reminder", "Script", "Report"
-                ),
-                "report_name": "Lead Status Reminder",
-                "edit_report_settings": "",
-            },
-        )
+        frappe.get_doc(
+            dict(
+                doctype="Auto Email Report",
+                report="Lead Status Reminder",
+                report_type="Script Report",
+                user="Administrator",
+                enabled=1,
+                email_to=get_default_outgoing_email_account(0),
+                format="HTML",
+                frequency="Daily",
+                filters=json.dumps(dict(lead_owner="Administrator")),
+            )
+        ).insert()
+        frappe.db.commit()
 
-        frappe.sendmail(
-            recipients="vijaywm@gmail.com",
-            subject="Lead Reminder",
-            message=html,
-        )
+    lead_reminder = frappe.get_doc("Auto Email Report", "Lead Status Reminder")
+
+    # select lead owners for Leads created in past 3 months
+    for d in frappe.db.sql(
+        """
+        select 
+            distinct lead_owner 
+        from 
+            tabLead
+        where 
+            creation > DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+        """
+    ):
+        lead_reminder.filters = json.dumps(dict(lead_owner=d[0]))
+        lead_reminder.email_to = d[0]
+        try:
+            lead_reminder.send()
+        except Exception as e:
+            frappe.log_error(
+                e, _("Failed to send {0} Auto Email Report").format(lead_reminder.name)
+            )
+    frappe.db.commit()
