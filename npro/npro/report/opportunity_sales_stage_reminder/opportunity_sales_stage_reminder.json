@@ -1,5 +1,5 @@
 {
- "add_total_row": 1,
+ "add_total_row": 0,
  "columns": [],
  "creation": "2021-01-24 16:06:14.981591",
  "disable_prepared_report": 1,
@@ -9,7 +9,7 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2021-01-24 16:07:40.748883",
+ "modified": "2021-01-25 06:11:13.350923",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Sales Stage Reminder",

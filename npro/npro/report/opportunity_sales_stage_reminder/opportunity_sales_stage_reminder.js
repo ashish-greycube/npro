@@ -3,7 +3,12 @@
 /* eslint-disable */
 
 frappe.query_reports["Opportunity Sales Stage Reminder"] = {
-	"filters": [
-
-	]
+  filters: [
+    {
+      fieldname: "opportunity_owner",
+      label: __("Owner"),
+      fieldtype: "Link",
+      options: "User",
+    },
+  ],
 };
