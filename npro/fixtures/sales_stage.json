@@ -2,122 +2,131 @@
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-12 17:08:43.372175",
-  "name": "Prospecting",
-  "opportunity_type_cf": null,
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "stage_name": "Prospecting"
- },
- {
-  "docstatus": 0,
-  "doctype": "Sales Stage",
-  "modified": "2021-01-12 17:08:43.403389",
+  "modified": "2021-01-25 06:51:08.875934",
   "name": "Needs Analysis",
   "opportunity_type_cf": null,
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Needs Analysis"
+  "priority_cf": 2,
+  "stage_name": "Needs Analysis",
+  "stale_no_of_days_for_reminder_cf": 2
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-12 17:08:43.451712",
+  "modified": "2021-01-25 06:51:08.671647",
   "name": "Proposal Sent",
   "opportunity_type_cf": null,
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Proposal Sent"
+  "priority_cf": 8,
+  "stage_name": "Proposal Sent",
+  "stale_no_of_days_for_reminder_cf": 2
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-12 17:08:43.467331",
+  "modified": "2021-01-25 06:51:08.402100",
   "name": "Negotiation",
   "opportunity_type_cf": null,
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Negotiation"
+  "priority_cf": 9,
+  "stage_name": "Negotiation",
+  "stale_no_of_days_for_reminder_cf": 3
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:53:32.670484",
+  "modified": "2021-01-25 06:51:08.847280",
   "name": "Discovery Call",
   "opportunity_type_cf": "Project",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Discovery Call"
+  "priority_cf": 3,
+  "stage_name": "Discovery Call",
+  "stale_no_of_days_for_reminder_cf": 3
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:52:39.694412",
+  "modified": "2021-01-25 06:51:08.819549",
   "name": "NPro Candidate Sourcing",
   "opportunity_type_cf": "Consulting",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "NPro Candidate Sourcing"
+  "priority_cf": 4,
+  "stage_name": "NPro Candidate Sourcing",
+  "stale_no_of_days_for_reminder_cf": 3
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:52:01.390873",
+  "modified": "2021-01-25 06:51:08.794293",
   "name": "Client CV Screening",
   "opportunity_type_cf": "Consulting",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Client CV Screening"
+  "priority_cf": 5,
+  "stage_name": "Client CV Screening",
+  "stale_no_of_days_for_reminder_cf": 5
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:52:14.749662",
+  "modified": "2021-01-25 06:51:08.773930",
   "name": "Client Interview",
   "opportunity_type_cf": "Consulting",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Client Interview"
+  "priority_cf": 6,
+  "stage_name": "Client Interview",
+  "stale_no_of_days_for_reminder_cf": 5
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:51:48.807557",
+  "modified": "2021-01-25 06:51:08.748366",
   "name": "Candidate Approved",
   "opportunity_type_cf": "Consulting",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Candidate Approved"
+  "priority_cf": 7,
+  "stage_name": "Candidate Approved",
+  "stale_no_of_days_for_reminder_cf": 2
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 07:50:21.865135",
+  "modified": "2021-01-25 06:51:08.897379",
   "name": "New",
   "opportunity_type_cf": null,
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "New"
+  "priority_cf": 1,
+  "stage_name": "New",
+  "stale_no_of_days_for_reminder_cf": 1
  },
  {
   "docstatus": 0,
   "doctype": "Sales Stage",
-  "modified": "2021-01-20 14:18:33.797701",
+  "modified": "2021-01-25 06:51:08.922547",
   "name": "Completed",
   "opportunity_type_cf": null,
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "stage_name": "Completed"
+  "priority_cf": 10,
+  "stage_name": "Completed",
+  "stale_no_of_days_for_reminder_cf": 0
  }
 ]
