@@ -110,15 +110,15 @@ def send_reminder():
                 report_type="Script Report",
                 user="Administrator",
                 enabled=1,
-                email_to=get_default_outgoing_email_account(0),
+                email_to=get_default_outgoing_email_account(0).login_id,
                 format="HTML",
                 frequency="Daily",
-                filters=json.dumps(dict(lead_owner="Administrator")),
+                filters=json.dumps(dict(lead_owner="leads@abc.com")),
             )
         ).insert()
         frappe.db.commit()
 
-    lead_reminder = frappe.get_doc("Auto Email Report", "Lead Status Reminder")
+    auto_email = frappe.get_doc("Auto Email Report", "Lead Status Reminder")
 
     # select lead owners for Leads created in past 3 months
     for d in frappe.db.sql(
@@ -129,14 +129,15 @@ def send_reminder():
             tabLead
         where 
             creation > DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+            and lead_owner is not null
         """
     ):
-        lead_reminder.filters = json.dumps(dict(lead_owner=d[0]))
-        lead_reminder.email_to = d[0]
+        auto_email.filters = json.dumps(dict(lead_owner=d[0]))
+        auto_email.email_to = d[0]
         try:
-            lead_reminder.send()
+            auto_email.send()
         except Exception as e:
             frappe.log_error(
-                e, _("Failed to send {0} Auto Email Report").format(lead_reminder.name)
+                e, _("Failed to send {0} Auto Email Report").format(auto_email.name)
             )
     frappe.db.commit()

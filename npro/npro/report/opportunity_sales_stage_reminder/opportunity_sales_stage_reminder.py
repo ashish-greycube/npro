@@ -132,7 +132,7 @@ def send_reminder():
                 report_type="Script Report",
                 user="Administrator",
                 enabled=1,
-                email_to=get_default_outgoing_email_account(0),
+                email_to=get_default_outgoing_email_account(0).login_id,
                 format="HTML",
                 frequency="Daily",
                 filters=json.dumps(dict(opportunity_owner="sales@abc.com")),
@@ -140,7 +140,7 @@ def send_reminder():
         ).insert()
         frappe.db.commit()
 
-    reminder = frappe.get_doc("Auto Email Report", "Opportunity Sales Stage Reminder")
+    auto_email = frappe.get_doc("Auto Email Report", "Opportunity Sales Stage Reminder")
 
     # select opportunity owners for Opportunities created in past 3 months
     for d in frappe.db.sql(
@@ -152,15 +152,16 @@ def send_reminder():
         where 
             status = 'Open' 
             and creation > DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+            and opportunity_owner_cf is not null
         """
     ):
-        reminder.filters = json.dumps(dict(opportunity_owner=d[0]))
-        reminder.email_to = d[0]
+        auto_email.filters = json.dumps(dict(opportunity_owner=d[0]))
+        auto_email.email_to = d[0]
         try:
-            reminder.send()
+            auto_email.send()
         except Exception as e:
             frappe.log_error(
-                e, _("Failed to send {0} Auto Email Report").format(reminder.name)
+                e, _("Failed to send {0} Auto Email Report").format(auto_email.name)
             )
             frappe.throw(e)
     frappe.db.commit()

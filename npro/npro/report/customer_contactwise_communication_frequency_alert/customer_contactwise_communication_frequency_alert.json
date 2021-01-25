@@ -1,5 +1,5 @@
 {
- "add_total_row": 1,
+ "add_total_row": 0,
  "columns": [],
  "creation": "2021-01-25 12:49:33.359894",
  "disable_prepared_report": 1,
@@ -9,7 +9,7 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2021-01-25 12:49:33.359894",
+ "modified": "2021-01-25 20:48:24.718572",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Customer Contactwise Communication Frequency Alert",

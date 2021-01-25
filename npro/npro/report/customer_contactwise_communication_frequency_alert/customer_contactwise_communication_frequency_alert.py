@@ -6,6 +6,7 @@ import frappe
 from frappe.utils import cint
 import pandas
 from operator import itemgetter
+import json
 
 
 def execute(filters=None):
@@ -96,3 +97,48 @@ def get_data(filters):
     )
 
     return data
+
+
+def send_reminder():
+    # bench --site <site_name> execute npro.npro.report.customer_contactwise_communication_frequency_alert.customer_contactwise_communication_frequency_alert.send_reminder
+    if not frappe.db.exists("Auto Email Report", "Lead Status Reminder"):
+        from frappe.email.smtp import get_default_outgoing_email_account
+
+        frappe.get_doc(
+            dict(
+                doctype="Auto Email Report",
+                report="Customer Contactwise Communication Frequency Alert",
+                report_type="Script Report",
+                user="Administrator",
+                enabled=1,
+                email_to=get_default_outgoing_email_account(0).login_id,
+                format="HTML",
+                frequency="Daily",
+                filters=json.dumps(dict(account_manager="accounts@abc.com")),
+            )
+        ).insert()
+        frappe.db.commit()
+
+    auto_email = frappe.get_doc(
+        "Auto Email Report", "Customer Contactwise Communication Frequency Alert"
+    )
+
+    # select account_managers
+    for d in frappe.db.sql(
+        """
+        select 
+            distinct account_manager 
+        from 
+            tabCustomer
+        where account_manager is not null
+        """
+    ):
+        auto_email.filters = json.dumps(dict(account_manager=d[0]))
+        auto_email.email_to = d[0]
+        try:
+            auto_email.send()
+        except Exception as e:
+            frappe.log_error(
+                e, _("Failed to send {0} Auto Email Report").format(auto_email.name)
+            )
+    frappe.db.commit()
