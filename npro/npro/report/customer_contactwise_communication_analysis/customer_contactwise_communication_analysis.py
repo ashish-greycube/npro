@@ -41,11 +41,18 @@ def get_data(filters):
                 and dl.parenttype = 'Contact'
                 and dl.parent = cml.link_name 
             {where_conditions}
+                and not exists (
+                 select 1 from tabEvent e
+                 where comm.reference_doctype = 'Event' 
+                 and e.name = comm.reference_name and e.status = 'Open'
+             )
         )
         select
             fn.customer, fn.contact, communication_medium, min(fn.last_comm) last_comm
         from 
             fn
+        where 
+            fn.customer is not null
         group by 
             fn.customer, fn.contact, communication_medium
         """.format(
@@ -53,7 +60,7 @@ def get_data(filters):
         ),
         filters,
         as_dict=True,
-        debug=True,
+        # debug=True,
     )
 
     if not data:
@@ -62,18 +69,24 @@ def get_data(filters):
     df = pandas.DataFrame.from_records(data)
 
     df1 = pandas.pivot_table(
-        df, values="last_comm", index=["customer", "contact"], aggfunc=min
-    )
-    df2 = pandas.pivot_table(
         df,
         values="last_comm",
         index=["customer", "contact"],
         columns=["communication_medium"],
         aggfunc="count",
+        margins=True,
+        margins_name="Total",
     )
-    df3 = pandas.concat((df1, df2), axis=1)
-    df3.reset_index()
+    df1.drop(index="Total", axis=0, inplace=True)
+    df2 = pandas.pivot_table(
+        df,
+        values="last_comm",
+        index=["customer", "contact"],
+        aggfunc=min,
+    )
 
+    df3 = df1.join(df2, rsuffix="__")
+    df3 = df3.reset_index().fillna(0)
     columns = [
         dict(
             label="Customer",
@@ -99,5 +112,8 @@ def get_data(filters):
             width=95,
         )
         for col in df3.columns
+        if not col in ["customer", "contact"]
     ]
-    return columns, df3.reset_index().to_dict("r")
+
+    data = df3.to_dict("records")
+    return columns, data

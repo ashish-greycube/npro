@@ -28,7 +28,7 @@ def get_columns(filters):
             width=140,
         ),
         dict(
-            label="Title",
+            label="Opportunity Title",
             fieldname="title",
             width=140,
         ),
@@ -38,22 +38,22 @@ def get_columns(filters):
             width=140,
         ),
         dict(
-            label="Type",
+            label="Opportunity Type",
             fieldname="opportunity_type",
             width=90,
         ),
         dict(
-            label="Date",
+            label="Opportunity Date",
             fieldname="transaction_date",
             width=90,
         ),
         dict(
-            label="Stage",
+            label="Sales Stage",
             fieldname="sales_stage",
             width=110,
         ),
         dict(
-            label="Last Updated (D)",
+            label="Days Since Last Sales Stage Updated",
             fieldname="last_updated_days",
             width=140,
         ),
