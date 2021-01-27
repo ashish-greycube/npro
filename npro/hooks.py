@@ -106,7 +106,11 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    "daily": ["npro.npro.report.lead_status_reminder.lead_status_reminder"]
+    "daily": [
+        "npro.npro.report.lead_status_reminder.lead_status_reminder.send_reminder",
+        "npro.npro.report.opportunity_sales_stage_reminder.opportunity_sales_stage_reminder.send_reminder",
+        "npro.npro.report.customer_contactwise_communication_frequency_alert.customer_contactwise_communication_frequency_alert.send_reminder",
+    ]
     # 	"all": [
     # 		"npro.tasks.all"
     # 	],
