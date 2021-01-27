@@ -11,7 +11,7 @@ def execute(filters=None):
 
 
 def get_data(filters):
-    ageing, _ = get_ageing(filters, "creation")
+    ageing, buckets = get_ageing(filters, "creation")
 
     data = frappe.db.sql(
         """
@@ -30,41 +30,51 @@ def get_data(filters):
     group by 
         fn.ageing, fn.status
     """.format(
-            ageing=ageing, where_conditions=get_conditions(filters),
+            ageing=ageing,
+            where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
         # debug=True,
     )
+
+    if not data:
+        return [], []
+
+    # add a default 0 count for each slab, so report has all slabs
+    ageing_defaults = [
+        {"ageing": d, "status": data[0].status, "total_count": 0} for d in buckets
+    ]
+    data += ageing_defaults
+
     df = pandas.DataFrame.from_records(data)
     df1 = pandas.pivot_table(
         df,
-        index=["ageing"],
+        index=["status"],
         values=["total_count"],
-        columns=["status"],
+        columns=["ageing"],
         aggfunc=sum,
         fill_value=0,
         margins=True,
     )
 
     df1.drop(index="All", axis=0, inplace=True)
-    df1.columns = [frappe.scrub(d) for d in df1.columns.to_series().str[1]]
+    df1.columns = [d for d in df1.columns.to_series().str[1]]
     df2 = df1.reset_index()
 
-    columns = [dict(label="Age", fieldname="ageing", fieldtype="Data", width=165)]
+    columns = [dict(label="Status", fieldname="status", fieldtype="Data", width=165)]
     columns += [
-        dict(label=frappe.unscrub(col), fieldname=col, fieldtype="Int", width=95)
-        for col in df1.columns
+        dict(label=col, fieldname=col, fieldtype="Int", width=95) for col in df1.columns
     ]
     return columns, df2.to_dict("r")
 
 
 def get_conditions(filters):
     conditions = []
-    if filters.get("till_date"):
-        conditions += ["date(creation) >= %(till_date)s"]
     if filters.get("from_date"):
-        conditions += ["date(creation) <= %(from_date)s"]
+        conditions += ["date(creation) >= %(from_date)s"]
+    if filters.get("till_date"):
+        conditions += ["date(creation) <= %(till_date)s"]
 
     return conditions and " where " + " and ".join(conditions) or ""
 
@@ -77,11 +87,10 @@ def get_ageing(filters, age_column):
         days = filters.get(d)
         ageing.insert(
             -1,
-            "when date(`{}`) > DATE_SUB(%(from_date)s, INTERVAL {} DAY) then '{} - {}'".format(
+            "when date(`{}`) > DATE_SUB(%(till_date)s, INTERVAL {} DAY) then '{} - {}'".format(
                 age_column, days + 1, low, days
             ),
         )
         buckets.insert(-1, "{} - {}".format(low, days))
         low = days + 1
     return " \n ".join(ageing), buckets
-

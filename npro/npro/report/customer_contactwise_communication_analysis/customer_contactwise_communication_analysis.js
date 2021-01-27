@@ -25,4 +25,8 @@ frappe.query_reports["Customer Contactwise Communication Analysis"] = {
       options: "\nEmail\nPhone\nMeeting\nOther",
     },
   ],
+
+  onload: function (report) {
+    report.page.set_title("Customer Communication Analysis");
+  },
 };

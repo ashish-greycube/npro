@@ -40,7 +40,13 @@ def get_data(filters):
     )
 
     df1.drop(index="All", axis=0, inplace=True)
+    sort_order = frappe.db.get_single_value(
+        "NPro Setting", "lead_status_sort_order"
+    ).split(",")
     df1.columns = [frappe.scrub(d) for d in df1.columns.to_series().str[1]]
+    df1.columns = sorted(
+        df1.columns, key=lambda x: sort_order.index(x) if x in sort_order else 100
+    )
     df2 = df1.reset_index()
 
     columns = [

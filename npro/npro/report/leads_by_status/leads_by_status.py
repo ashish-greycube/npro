@@ -30,9 +30,9 @@ def get_data(filters):
 def get_conditions(filters):
     conditions = []
     if filters.get("from_date"):
-        conditions += ["creation >= %(from_date)s"]
+        conditions += ["date(creation) >= %(from_date)s"]
     if filters.get("to_date"):
-        conditions += ["creation <= %(to_date)s"]
+        conditions += ["date(creation) <= %(to_date)s"]
 
     return conditions and " where " + " and ".join(conditions) or ""
 
@@ -42,4 +42,3 @@ def get_columns(filters):
         dict(label="Status", fieldname="status", fieldtype="Data", width=200),
         dict(label="Count", fieldname="count", fieldtype="Int", width=90),
     ]
-
