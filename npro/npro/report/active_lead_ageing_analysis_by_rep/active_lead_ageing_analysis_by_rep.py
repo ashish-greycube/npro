@@ -23,7 +23,8 @@ def get_data(filters):
         group by 
             u.full_name, ageing
         """.format(
-            ageing=ageing, where_conditions=get_conditions(filters),
+            ageing=ageing,
+            where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
@@ -60,7 +61,12 @@ def get_data(filters):
     ]
 
     columns += [
-        dict(label=col, fieldname=col, fieldtype="Int", width=95,)
+        dict(
+            label=col,
+            fieldname=col,
+            fieldtype="Int",
+            width=95,
+        )
         for col in df1.columns
     ]
     return columns, df2.to_dict("r")
@@ -68,12 +74,19 @@ def get_data(filters):
 
 def get_conditions(filters):
     conditions = []
-    conditions += ["ld.status not in ('Qualified','Unqualified')"]
+    lead_active_status = (
+        frappe.db.get_single_value("NPro Settings", "lead_active_status") or ""
+    )
+    conditions += [
+        "status in ({})".format(
+            ",".join("'{}'".format(d) for d in lead_active_status.split(","))
+        )
+    ]
 
     if filters.get("from_date"):
-        conditions += ["date(ld.creation) <= %(from_date)s"]
+        conditions += ["date(ld.creation) >= %(from_date)s"]
     if filters.get("till_date"):
-        conditions += ["date(ld.creation) >= %(till_date)s"]
+        conditions += ["date(ld.creation) <= %(till_date)s"]
 
     return conditions and " where " + " and ".join(conditions) or ""
 
@@ -86,7 +99,7 @@ def get_ageing(filters, age_column):
         days = filters.get(d)
         ageing.insert(
             -1,
-            "when date({}) > DATE_SUB(%(from_date)s, INTERVAL {} DAY) then '{} - {}'".format(
+            "when date({}) > DATE_SUB(%(till_date)s, INTERVAL {} DAY) then '{} - {}'".format(
                 age_column, days + 1, low, days
             ),
         )
@@ -100,4 +113,3 @@ def get_sales_stage_ordered():
         d[0]
         for d in frappe.db.get_all("Sales Stage", as_list=True, order_by="priority_cf")
     ]
-

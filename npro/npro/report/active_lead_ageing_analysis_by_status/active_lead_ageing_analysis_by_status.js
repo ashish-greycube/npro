@@ -6,7 +6,13 @@ frappe.query_reports["Active Lead Ageing Analysis By Status"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date"),
+      label: __("From Date (Status Last Updated Date)"),
+      fieldtype: "Date",
+      default: moment().startOf("year"),
+    },
+    {
+      fieldname: "till_date",
+      label: __("Till Date (Status Last Updated Date)"),
       fieldtype: "Date",
       default: frappe.datetime.get_today(),
     },
@@ -31,11 +37,9 @@ frappe.query_reports["Active Lead Ageing Analysis By Status"] = {
       default: "90",
       reqd: 1,
     },
-    {
-      fieldname: "till_date",
-      label: __("Till Date"),
-      fieldtype: "Date",
-      default: moment().startOf("year"),
-    },
   ],
+
+  onload: function (report) {
+    report.page.set_title("Active Lead Processing Speed By Status");
+  },
 };

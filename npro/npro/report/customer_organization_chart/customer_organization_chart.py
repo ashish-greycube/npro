@@ -22,29 +22,41 @@ def get_columns(filters):
             width=160,
         ),
         dict(
-            label="L1 Contact",
+            label="Level 1 Contact",
             fieldname="l1_name",
             fieldtype="Link",
             options="Contact",
             width=160,
         ),
-        dict(label="L1 Communication", fieldname="l1_comm", width=160,),
         dict(
-            label="L2 Contact",
+            label="Level 1 Contact Details",
+            fieldname="l1_comm",
+            width=160,
+        ),
+        dict(
+            label="Level 2 Contact",
             fieldname="l2_name",
             fieldtype="Link",
             options="Contact",
             width=160,
         ),
-        dict(label="L2 Communication", fieldname="l2_comm", width=160,),
         dict(
-            label="L3 Contact",
+            label="Level 2 Contact Details",
+            fieldname="l2_comm",
+            width=160,
+        ),
+        dict(
+            label="Level 3 Contact",
             fieldname="l3_name",
             fieldtype="Link",
             options="Contact",
             width=160,
         ),
-        dict(label="L3 Communication", fieldname="l3_comm", width=160,),
+        dict(
+            label="Level 3 Contact Details",
+            fieldname="l3_comm",
+            width=160,
+        ),
     ]
 
 
@@ -71,7 +83,7 @@ def get_data(filters):
                 left outer join tabContact x on x.reports_to_cf = l2.l2_name
             )
             select 
-                cus.name customer, fn_contact.*
+                distinct cus.name customer, fn_contact.*
             from tabCustomer cus
                 left outer join `tabDynamic Link` dl on dl.link_name = cus.name 
                 and dl.link_doctype = 'Customer' and dl.parenttype = 'Contact'
@@ -96,4 +108,3 @@ def get_conditions(filters):
         where_clause.append("cus.name = %(customer)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""
-

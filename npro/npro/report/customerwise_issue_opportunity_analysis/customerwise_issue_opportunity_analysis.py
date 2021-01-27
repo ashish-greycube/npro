@@ -14,9 +14,23 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        dict(label="Customer", fieldname="customer", width=160,),
-        dict(label="Issue #", fieldname="issue_count", fieldtype="Int", width=130,),
-        dict(label="Opportunity #", fieldname="opp_count", fieldtype="Int", width=130,),
+        dict(
+            label="Customer",
+            fieldname="customer",
+            width=160,
+        ),
+        dict(
+            label="Issue #",
+            fieldname="issue_count",
+            fieldtype="Int",
+            width=130,
+        ),
+        dict(
+            label="Opportunity #",
+            fieldname="opp_count",
+            fieldtype="Int",
+            width=130,
+        ),
         dict(
             label="Total Opp Amount",
             fieldname="opportunity_amount",
@@ -26,7 +40,7 @@ def get_columns(filters):
     ]
 
 
-def get_conditions(filters):
+def get_issue_conditions(filters):
     where_clause = []
     if filters.get("from_date"):
         where_clause.append("date(iss.creation) >= %(from_date)s")
@@ -36,21 +50,51 @@ def get_conditions(filters):
     return " where " + " and ".join(where_clause) if where_clause else ""
 
 
+def get_opportunity_conditions(filters):
+    where_clause = []
+    where_clause.append("status = 'Open'")
+    if filters.get("from_date"):
+        where_clause.append("date(transaction_date) >= %(from_date)s")
+    if filters.get("to_date"):
+        where_clause.append("date(transaction_date) <= %(to_date)s")
+
+    return " where " + " and ".join(where_clause) if where_clause else ""
+
+
 def get_data(filters):
 
     data = frappe.db.sql(
         """
             select 
-                customer, count(iss.name) 'issue_count', 
-                count(opp.name) 'opp_count', sum(opp.opportunity_amount) opportunity_amount
-            from 
-                tabIssue iss
-                left outer join tabOpportunity opp on opp.customer_name = iss.customer and opp.status = 'Open' 
-            {where_conditions}
+                t.customer, 
+                sum(t.issue_count) issue_count, 
+                sum(t.opp_count) opp_count,
+                sum(t.opportunity_amount) opportunity_amount
+            from             
+            (
+                select 
+                    customer, count(iss.name) 'issue_count', 
+                    0 'opp_count', 0 opportunity_amount
+                from 
+                    tabIssue iss
+                    {where_issue}
+                group by 
+                    iss.customer
+                union all                
+                select 
+                    opp.customer_name, 0 'issue_count', 
+                    count(opp.name) 'opp_count', sum(opp.opportunity_amount) opportunity_amount
+                from 
+                    tabOpportunity opp
+                    {where_opportunity}
+                group by 
+                    opp.customer_name
+            ) t
             group by 
-                iss.customer
+                t.customer 
         """.format(
-            where_conditions=get_conditions(filters)
+            where_issue=get_issue_conditions(filters),
+            where_opportunity=get_opportunity_conditions(filters),
         ),
         filters,
         as_dict=True,

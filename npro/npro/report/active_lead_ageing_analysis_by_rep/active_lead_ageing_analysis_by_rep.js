@@ -6,7 +6,13 @@ frappe.query_reports["Active Lead Ageing Analysis By Rep"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date"),
+      label: __("From Date (Lead Creation Date)"),
+      fieldtype: "Date",
+      default: moment().startOf("year"),
+    },
+    {
+      fieldname: "till_date",
+      label: __("Till Date (Lead Creation Date)"),
       fieldtype: "Date",
       default: frappe.datetime.get_today(),
     },
@@ -30,12 +36,6 @@ frappe.query_reports["Active Lead Ageing Analysis By Rep"] = {
       fieldtype: "Int",
       default: "90",
       reqd: 1,
-    },
-    {
-      fieldname: "till_date",
-      label: __("Till Date"),
-      fieldtype: "Date",
-      default: moment().startOf("year"),
     },
   ],
 };

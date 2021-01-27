@@ -71,6 +71,15 @@ def get_data(filters):
 
 def get_conditions(filters):
     conditions = []
+    lead_active_status = (
+        frappe.db.get_single_value("NPro Settings", "lead_active_status") or ""
+    )
+    conditions += [
+        "status in ({})".format(
+            ",".join("'{}'".format(d) for d in lead_active_status.split(","))
+        )
+    ]
+
     if filters.get("from_date"):
         conditions += ["date(creation) >= %(from_date)s"]
     if filters.get("till_date"):

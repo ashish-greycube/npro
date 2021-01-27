@@ -14,9 +14,26 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        dict(label="Customer", fieldname="customer_name", width=160,),
-        dict(label="Title", fieldname="title", width=160,),
-        dict(label="Opp Type", fieldname="opportunity_type", width=110,),
+        dict(
+            label="Customer",
+            fieldname="customer_name",
+            width=160,
+        ),
+        dict(
+            label="Title",
+            fieldname="title",
+            width=160,
+        ),
+        dict(
+            label="Opp Type",
+            fieldname="opportunity_type",
+            width=110,
+        ),
+        dict(
+            label="Sales Stage",
+            fieldname="sales_stage",
+            width=110,
+        ),
         dict(
             label="Creation Date",
             fieldname="transaction_date",
@@ -29,7 +46,12 @@ def get_columns(filters):
             fieldtype="Date",
             width=100,
         ),
-        dict(label="Close Date", fieldname="close_date", fieldtype="Date", width=100,),
+        dict(
+            label="Close Date",
+            fieldname="close_date",
+            fieldtype="Date",
+            width=100,
+        ),
         dict(
             label="Amount",
             fieldname="opportunity_amount",
@@ -37,13 +59,17 @@ def get_columns(filters):
             width=110,
         ),
         dict(
-            label="Opportunity",
+            label="Opportunity Record",
             fieldname="name",
             fieldtype="Link",
             options="Opportunity",
             width=160,
         ),
-        dict(label="Owner", fieldname="opportunity_owner_cf", width=160,),
+        dict(
+            label="Owner",
+            fieldname="opportunity_owner_cf",
+            width=160,
+        ),
     ]
 
 
@@ -70,7 +96,7 @@ def get_data(filters):
             with fn as 
             (
                 select
-                op.customer_name, op.title, op.opportunity_type,
+                op.customer_name, op.title, op.opportunity_type,op.sales_stage,
                 op.opportunity_owner_cf, op.transaction_date,
                 date(ver.creation) as 'last_status_updated',
                 case 

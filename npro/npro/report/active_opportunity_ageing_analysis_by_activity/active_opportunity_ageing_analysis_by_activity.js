@@ -18,7 +18,14 @@ frappe.query_reports["Active Opportunity Ageing Analysis by Activity"] = {
     },
     {
       fieldname: "from_date",
-      label: __("From Date"),
+      label: __("From Date (Sales Stage Last Updated Date)"),
+      fieldtype: "Date",
+      default: moment().startOf("year"),
+      reqd: 1,
+    },
+    {
+      fieldname: "till_date",
+      label: __("Till Date (Sales Stage Last Updated Date)"),
       fieldtype: "Date",
       default: moment(),
       reqd: 1,
@@ -44,12 +51,9 @@ frappe.query_reports["Active Opportunity Ageing Analysis by Activity"] = {
       default: "90",
       reqd: 1,
     },
-    {
-      fieldname: "till_date",
-      label: __("Till Date"),
-      fieldtype: "Date",
-      default: moment().startOf("year"),
-      reqd: 1,
-    },
   ],
+
+  onload: function (report) {
+    report.page.set_title("Active Opportunity Ageing By Activity");
+  },
 };

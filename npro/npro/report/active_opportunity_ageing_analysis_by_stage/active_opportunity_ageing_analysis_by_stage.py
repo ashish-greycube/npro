@@ -14,12 +14,15 @@ def execute(filters=None):
 
 def get_conditions(filters):
     where_clause = []
+    where_clause.append("op.status = 'Open'")
     if filters.get("opportunity_type"):
         where_clause.append("op.opportunity_type = %(opportunity_type)s")
     if filters.get("opportunity_owner"):
         where_clause.append("op.opportunity_owner_cf = %(opportunity_owner)s")
+    if filters.get("from_date"):
+        where_clause.append("op.transaction_date >= %(from_date)s")
     if filters.get("till_date"):
-        where_clause.append("op.transaction_date >= %(till_date)s")
+        where_clause.append("op.transaction_date <= %(till_date)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""
 
@@ -44,7 +47,8 @@ def get_data(filters):
         group by 
             ageing, sales_stage
         """.format(
-            ageing=ageing, where_conditions=get_conditions(filters),
+            ageing=ageing,
+            where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
@@ -62,9 +66,11 @@ def get_data(filters):
     df = pandas.DataFrame.from_records(data)
     df1 = pandas.pivot_table(
         df,
-        index=["ageing",],
+        index=[
+            "sales_stage",
+        ],
         values=["count"],
-        columns=["sales_stage"],
+        columns=["ageing"],
         fill_value=0,
         margins=True,
         margins_name="Total",
@@ -76,9 +82,7 @@ def get_data(filters):
     df2 = df1.reset_index()
 
     columns = [
-        dict(
-            label="Age of Opportunity", fieldname="ageing", fieldtype="Data", width=130
-        ),
+        dict(label="Sales Stage", fieldname="sales_stage", fieldtype="Data", width=130),
     ]
 
     ordered = get_sales_stage_ordered()
@@ -100,7 +104,7 @@ def get_ageing(filters, age_column):
         days = filters.get(d)
         ageing.insert(
             -1,
-            "when `{}` > DATE_SUB(%(from_date)s, INTERVAL {} DAY) then '{} - {}'".format(
+            "when `{}` > DATE_SUB(%(till_date)s, INTERVAL {} DAY) then '{} - {}'".format(
                 age_column, days + 1, low, days
             ),
         )
@@ -114,4 +118,3 @@ def get_sales_stage_ordered():
         d[0]
         for d in frappe.db.get_all("Sales Stage", as_list=True, order_by="priority_cf")
     ]
-

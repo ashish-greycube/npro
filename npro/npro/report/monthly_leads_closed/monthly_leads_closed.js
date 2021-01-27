@@ -6,15 +6,31 @@ frappe.query_reports["Monthly Leads Closed"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date"),
+      label: __("From Date (Lead Creation Date)"),
       fieldtype: "Date",
-      default: moment().startOf("month").subtract(3, "month").format(),
+      default: moment().startOf("year").format(),
     },
     {
       fieldname: "to_date",
-      label: __("To Date"),
+      label: __("To Date (Lead Creation Date)"),
       fieldtype: "Date",
       default: frappe.datetime.get_today(),
+    },
+    {
+      fieldname: "timespan",
+      label: __("Lead Creation Date in "),
+      fieldtype: "Select",
+      options: npro.utils.TIMESPAN_OPTIONS,
+      on_change: function (query_report) {
+        let date_range = npro.utils.get_date_range(
+          query_report.get_values().timespan
+        );
+        frappe.query_report.set_filter_value({
+          from_date: date_range[0],
+          to_date: date_range[1],
+        });
+      },
+      default: "This Year",
     },
   ],
 };
