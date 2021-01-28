@@ -87,7 +87,7 @@ def get_data(filters):
 
 
 def get_conditions(filters):
-    conditions = ["ld.status in ('Qualified', 'Unqualified','Converted')"]
+    conditions = ["ld.status in ('Converted','Do Not Contact')"]
     if filters.get("from_date"):
         conditions += ["ld.creation >= %(from_date)s"]
     if filters.get("to_date"):
