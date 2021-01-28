@@ -86,7 +86,8 @@ def get_data(filters):
                 left outer join tabContact ct on ct.name = dl.parent
                 left outer join fn on fn.contact = ct.name and fn.rn = 1 
             where 
-                communication_frequency_in_days_cf <  ifnull(DATEDIFF(CURDATE(), fn.communication_date),365) 
+                communication_frequency_in_days_cf <> 0
+                and communication_frequency_in_days_cf <  ifnull(DATEDIFF(CURDATE(), fn.communication_date),365) 
                 {where_conditions}
         """.format(
             where_conditions=get_conditions(filters)
