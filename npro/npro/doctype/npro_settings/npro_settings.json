@@ -10,7 +10,7 @@
  ],
  "fields": [
   {
-   "default": "New,Working,Nurturing,Qualified,Unqualified,Converted,Do Not Contact",
+   "default": "New,Working,Nurturing,Converted,Do Not Contact",
    "fieldname": "lead_status_sort_order",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -28,7 +28,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-01-27 11:18:25.833227",
+ "modified": "2021-01-28 13:56:46.083356",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
