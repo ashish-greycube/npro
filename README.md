@@ -9,9 +9,11 @@ Customization for NPro Pte Ltd
 
 3. Sales Stage > Priority (for Report Display) , Stale days 
 
-4. Contact > Communication Frequency (in days) for Communication Matrix
+4. NPro Settings : For Active Lead Status and Order 
 
-5. Auto Email Report for Reports :  Lead Status Reminder and Opportunity Stage Reminder
+5. Contact > Communication Frequency (in days) for Communication Matrix
+
+6. Auto Email Report for Reports :  Lead Status Reminder and Opportunity Stage Reminder
 
 #### License
 
