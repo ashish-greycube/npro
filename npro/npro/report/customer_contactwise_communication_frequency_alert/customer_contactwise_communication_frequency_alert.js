@@ -11,4 +11,8 @@ frappe.query_reports["Customer Contactwise Communication Frequency Alert"] = {
       options: "User",
     },
   ],
+
+  onload: function (report) {
+    report.page.set_title("Customer Contact Frequency");
+  },
 };
