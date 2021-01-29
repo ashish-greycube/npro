@@ -37,6 +37,6 @@ frappe.query_reports["Leads By Status"] = {
   onload: function (report) {
     setTimeout(() => {
       npro.utils.create_chart("status", "count", report);
-    }, 800);
+    }, 1600);
   },
 };
