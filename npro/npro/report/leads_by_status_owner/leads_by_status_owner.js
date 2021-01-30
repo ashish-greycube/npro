@@ -34,7 +34,19 @@ frappe.query_reports["Leads By Status Owner"] = {
     },
   ],
 
-  onload: function (report) {
-    report.page.set_title("Leads By Status & Owner");
+  after_datatable_render: function (datatable) {
+    const chart_columns = {
+      New: "#fff168",
+      Working: "#aee4ff",
+      Nurturing: "#9deca2",
+      Converted: "#49937E",
+      "Do Not Contact": "#ff4d4d",
+    };
+    npro.utils.create_chart(
+      "lead_owner",
+      chart_columns,
+      datatable,
+      frappe.query_report
+    );
   },
 };

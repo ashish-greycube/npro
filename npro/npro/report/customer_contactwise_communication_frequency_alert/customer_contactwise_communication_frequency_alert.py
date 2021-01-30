@@ -102,7 +102,9 @@ def get_data(filters):
 
 def send_reminder():
     # bench --site <site_name> execute npro.npro.report.customer_contactwise_communication_frequency_alert.customer_contactwise_communication_frequency_alert.send_reminder
-    if not frappe.db.exists("Auto Email Report", "Lead Status Reminder"):
+    if not frappe.db.exists(
+        "Auto Email Report", "Customer Contactwise Communication Frequency Alert"
+    ):
         from frappe.email.smtp import get_default_outgoing_email_account
 
         frappe.get_doc(

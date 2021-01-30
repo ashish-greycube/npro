@@ -34,9 +34,16 @@ frappe.query_reports["Leads By Status"] = {
     },
   ],
 
-  onload: function (report) {
-    setTimeout(() => {
-      npro.utils.create_chart("status", "count", report);
-    }, 1600);
+  after_datatable_render: function (datatable) {
+    const chart_columns = {
+      count: "#aee4ff",
+    };
+
+    npro.utils.create_chart(
+      "status",
+      chart_columns,
+      datatable,
+      frappe.query_report
+    );
   },
 };

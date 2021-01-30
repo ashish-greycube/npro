@@ -57,16 +57,30 @@ Object.assign(npro.utils, {
     return values;
   },
 
-  create_chart: function (x_field, y_field, report) {
-    let values = {
-      x_field: x_field,
+  create_chart: function (x_field, columns, datatable, report) {
+    function get_y_axis_fields(datatable) {
+      let y_axis_fields = [];
+      let data = datatable.datamanager.data;
+      for (const key in columns) {
+        if (Object.hasOwnProperty.call(columns, key)) {
+          if (data.some((x) => x[key] > 0)) {
+            y_axis_fields.push({
+              color: columns[key],
+              y_field: key,
+            });
+          }
+        }
+      }
+      return y_axis_fields;
+    }
+    let y_axis_fields = get_y_axis_fields(datatable);
+    let chart = {
       chart_type: "Bar",
-      y_axis_fields: [
-        { color: "#ff8989", idx: 1, _islocal: true, y_field: y_field },
-      ],
+      x_field: x_field,
+      y_axis_fields: y_axis_fields,
     };
 
-    values = npro.utils.set_chart_values(values);
+    let values = npro.utils.set_chart_values(chart);
     let options = frappe.report_utils.make_chart_options(
       report.columns,
       report.raw_data,
@@ -74,8 +88,8 @@ Object.assign(npro.utils, {
     );
     report.chart_fields = values;
 
-    let x_field_label = frappe.model.unscrub(x_field);
-    let y_field_label = frappe.model.unscrub(y_field);
+    let x_field_label = frappe.model.unscrub(chart.x_field);
+    let y_field_label = frappe.model.unscrub(chart.y_field);
 
     options.title = __("{0}: {1} vs {2}", [
       report.report_name,

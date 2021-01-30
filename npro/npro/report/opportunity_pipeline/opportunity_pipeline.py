@@ -82,7 +82,7 @@ def get_data(filters):
         group by 
             opportunity_type, opportunity_owner, sales_stage, priority
         order by
-            opportunity_type, opportunity_owner, sales_stage, priority
+            opportunity_type, opportunity_owner, priority
         """.format(
             where_conditions=get_conditions(filters)
         ),
