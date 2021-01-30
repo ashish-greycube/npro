@@ -85,15 +85,21 @@ def get_data(filters):
         dict(label="Sales Stage", fieldname="sales_stage", fieldtype="Data", width=130),
     ]
 
-    ordered = get_sales_stage_ordered()
-    for col in sorted(
-        df1.columns.to_list(), key=lambda x: ordered.index(x) if x in ordered else 100
-    ):
+    for col in df1.columns:
         columns += [
             dict(label=col, fieldname=col, fieldtype="Int", width=150),
         ]
 
-    return columns, df2.to_dict("r")
+    out = df2.to_dict("records")
+    sales_stage_ordered = get_sales_stage_ordered()
+    out = sorted(
+        out,
+        key=lambda x: sales_stage_ordered.index(x["sales_stage"])
+        if x["sales_stage"] in sales_stage_ordered
+        else 100,
+    )
+
+    return columns, out
 
 
 def get_ageing(filters, age_column):

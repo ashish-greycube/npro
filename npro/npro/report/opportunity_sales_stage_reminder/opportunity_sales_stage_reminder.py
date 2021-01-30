@@ -24,7 +24,9 @@ def get_columns(filters):
         ),
         dict(
             label="Customer",
-            fieldname="customer",
+            fieldname="customer_name",
+            fieldtype="Link",
+            options="Customer",
             width=140,
         ),
         dict(
@@ -35,6 +37,8 @@ def get_columns(filters):
         dict(
             label="Contact",
             fieldname="contact_person",
+            fieldtype="Link",
+            options="Contact",
             width=140,
         ),
         dict(
@@ -83,6 +87,7 @@ def get_data(filters):
                     op.name docname,
                     op.opportunity_owner_cf,
                     op.title,
+                    op.customer_name,
                     op.contact_person,
                     op.opportunity_type,
                     op.transaction_date,
@@ -101,8 +106,9 @@ def get_data(filters):
                 {where_conditions}
             )
             select 
-                name docname, opportunity_owner_cf owner, title, contact_person, opportunity_type, transaction_date, sales_stage,
-                 last_updated, last_updated_days, stg.stale_no_of_days_for_reminder_cf
+                name docname, opportunity_owner_cf owner, title, contact_person, 
+                opportunity_type, transaction_date, sales_stage, customer_name,
+                last_updated, last_updated_days, stg.stale_no_of_days_for_reminder_cf
             from fn
             inner join `tabSales Stage` stg on stg.name = fn.sales_stage
             where 

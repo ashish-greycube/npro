@@ -14,12 +14,32 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        dict(label="Opportunity Type", fieldname="opportunity_type", width=160,),
-        dict(label="Opportunity Owner", fieldname="opportunity_owner", width=160,),
-        dict(label="Sales Stage", fieldname="sales_stage", width=160,),
-        dict(label="Count #", fieldname="count", fieldtype="Int", width=100,),
         dict(
-            label="Amount (SAR)", fieldname="amount", fieldtype="Currency", width=100,
+            label="Opportunity Type",
+            fieldname="opportunity_type",
+            width=160,
+        ),
+        dict(
+            label="Opportunity Owner",
+            fieldname="opportunity_owner",
+            width=160,
+        ),
+        dict(
+            label="Sales Stage",
+            fieldname="sales_stage",
+            width=160,
+        ),
+        dict(
+            label="Count #",
+            fieldname="count",
+            fieldtype="Int",
+            width=100,
+        ),
+        dict(
+            label="Amount (SAR)",
+            fieldname="amount",
+            fieldtype="Currency",
+            width=100,
         ),
     ]
 
@@ -47,17 +67,22 @@ def get_data(filters):
             (
                 select us.full_name opportunity_owner,
                 op.opportunity_type, ifnull(op.sales_stage,'UNKNOWN') sales_stage, 
-                 op.opportunity_amount
+                coalesce(stg.priority_cf,-1) priority,
+                op.opportunity_amount
                 from `tabOpportunity` op
+                left outer join `tabSales Stage` stg on stg.name = op.sales_stage 
                 left outer join tabUser us on us.name = op.opportunity_owner_cf
                 {where_conditions}
             )
         select 
-            opportunity_type, opportunity_owner, sales_stage, count(sales_stage) `count`, sum(opportunity_amount) amount
+            opportunity_type, opportunity_owner, sales_stage, priority, 
+            count(sales_stage) `count`, sum(opportunity_amount) amount
         from 
             fn
         group by 
-            opportunity_type, opportunity_owner, sales_stage
+            opportunity_type, opportunity_owner, sales_stage, priority
+        order by
+            opportunity_type, opportunity_owner, sales_stage, priority
         """.format(
             where_conditions=get_conditions(filters)
         ),
