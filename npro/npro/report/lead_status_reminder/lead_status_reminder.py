@@ -110,7 +110,7 @@ def send_reminder():
                 report_type="Script Report",
                 user="Administrator",
                 enabled=1,
-                email_to=get_default_outgoing_email_account(0).login_id,
+                email_to=get_default_outgoing_email_account(0).email_id,
                 format="HTML",
                 frequency="Daily",
                 filters=json.dumps(dict(lead_owner="leads@abc.com")),
