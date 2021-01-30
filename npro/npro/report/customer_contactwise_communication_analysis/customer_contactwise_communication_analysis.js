@@ -29,4 +29,19 @@ frappe.query_reports["Customer Contactwise Communication Analysis"] = {
   onload: function (report) {
     report.page.set_title("Customer Communication Analysis");
   },
+
+  after_datatable_render: function (datatable) {
+    const chart_columns = {
+      Email: "#fff168",
+      Meeting: "#a6e4ff",
+      Total: "#9deca2",
+      days_since_last_communication: "#49937E",
+    };
+    npro.utils.create_chart(
+      "contact",
+      chart_columns,
+      datatable,
+      frappe.query_report
+    );
+  },
 };

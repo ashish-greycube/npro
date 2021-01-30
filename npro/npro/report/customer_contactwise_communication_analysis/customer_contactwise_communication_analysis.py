@@ -32,7 +32,7 @@ def get_data(filters):
         (
             select
                 dl.link_name customer, cml.link_name contact, 
-                datediff(%(today)s,communication_date) last_comm, communication_medium
+                datediff(%(today)s,communication_date) days_since_last_communication, communication_medium
             from 
                 tabCommunication comm
                 inner join `tabCommunication Link` cml on cml.parent = comm.name 
@@ -48,7 +48,7 @@ def get_data(filters):
              )
         )
         select
-            fn.customer, fn.contact, communication_medium, min(fn.last_comm) last_comm
+            fn.customer, fn.contact, communication_medium, min(fn.days_since_last_communication) days_since_last_communication
         from 
             fn
         where 
@@ -70,7 +70,7 @@ def get_data(filters):
 
     df1 = pandas.pivot_table(
         df,
-        values="last_comm",
+        values="days_since_last_communication",
         index=["customer", "contact"],
         columns=["communication_medium"],
         aggfunc="count",
@@ -80,7 +80,7 @@ def get_data(filters):
     df1.drop(index="Total", axis=0, inplace=True)
     df2 = pandas.pivot_table(
         df,
-        values="last_comm",
+        values="days_since_last_communication",
         index=["customer", "contact"],
         aggfunc=min,
     )
@@ -106,7 +106,9 @@ def get_data(filters):
 
     columns += [
         dict(
-            label="Days since Communication" if col == "last_comm" else col,
+            label="Days Since Last Communication"
+            if col == "days_since_last_communication"
+            else col,
             fieldname=col,
             fieldtype="Int",
             width=95,

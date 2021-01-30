@@ -91,7 +91,7 @@ Object.assign(npro.utils, {
     let x_field_label = frappe.model.unscrub(chart.x_field);
     let y_field_label = frappe.model.unscrub(chart.y_field);
 
-    options.title = __("{0}: {1} vs {2}", [
+    options.title = __("{0}", [
       report.report_name,
       x_field_label,
       y_field_label,
