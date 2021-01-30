@@ -34,7 +34,7 @@ frappe.query_reports["Leads By Status"] = {
     },
   ],
 
-  after_datatable_render: function (datatable) {
+  _after_datatable_render: function (datatable) {
     const chart_columns = {
       count: "#aee4ff",
     };

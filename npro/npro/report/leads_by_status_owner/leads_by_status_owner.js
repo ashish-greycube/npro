@@ -34,7 +34,7 @@ frappe.query_reports["Leads By Status Owner"] = {
     },
   ],
 
-  after_datatable_render: function (datatable) {
+  _after_datatable_render: function (datatable) {
     const chart_columns = {
       New: "#fff168",
       Working: "#aee4ff",

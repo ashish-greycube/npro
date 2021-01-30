@@ -36,7 +36,7 @@ frappe.query_reports["Customerwise Issue Opportunity Analysis"] = {
     },
   ],
 
-  after_datatable_render: function (datatable) {
+  _after_datatable_render: function (datatable) {
     const chart_columns = {
       issue_count: "#fff168",
       opp_count: "#a6e4ff",

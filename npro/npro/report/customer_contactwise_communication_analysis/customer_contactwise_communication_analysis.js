@@ -30,7 +30,7 @@ frappe.query_reports["Customer Contactwise Communication Analysis"] = {
     report.page.set_title("Customer Communication Analysis");
   },
 
-  after_datatable_render: function (datatable) {
+  _after_datatable_render: function (datatable) {
     const chart_columns = {
       Email: "#fff168",
       Meeting: "#a6e4ff",
