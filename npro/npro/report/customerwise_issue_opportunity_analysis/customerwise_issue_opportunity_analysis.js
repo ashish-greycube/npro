@@ -35,4 +35,18 @@ frappe.query_reports["Customerwise Issue Opportunity Analysis"] = {
       default: "This Month",
     },
   ],
+
+  after_datatable_render: function (datatable) {
+    const chart_columns = {
+      issue_count: "#fff168",
+      opp_count: "#a6e4ff",
+      opportunity_amount: "#9deca2",
+    };
+    npro.utils.create_chart(
+      "customer",
+      chart_columns,
+      datatable,
+      frappe.query_report
+    );
+  },
 };

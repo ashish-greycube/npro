@@ -58,6 +58,8 @@ Object.assign(npro.utils, {
   },
 
   create_chart: function (x_field, columns, datatable, report) {
+    if (!report.data || !report.data.length) return;
+
     function get_y_axis_fields(datatable) {
       let y_axis_fields = [];
       let data = datatable.datamanager.data;
@@ -98,6 +100,6 @@ Object.assign(npro.utils, {
     ]);
 
     report.render_chart(options);
-    report.add_chart_buttons_to_toolbar(true);
+    // report.add_chart_buttons_to_toolbar(true);
   },
 });
