@@ -185,8 +185,7 @@ fixtures = [
                     "New",
                     "Negotiation",
                     "Proposal Sent",
-                    "Needs Analysis",
-                    "Prospecting",
+                    "Needs Analysis"
                 ],
             ]
         ],
