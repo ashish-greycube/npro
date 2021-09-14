@@ -48,7 +48,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Stage",
-   "options": "\nDiscovery Call\nProposal Sent\nnegotiation\nWon\nLost"
+   "options": "\nDiscovery Call\nProposal Sent\nNegotiation\nWon\nLost"
   },
   {
    "depends_on": "eval:doc.stage == 'Lost' ",
@@ -61,7 +61,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-09-14 06:47:43.775671",
+ "modified": "2021-09-14 06:56:00.170589",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Project Detail CT",
