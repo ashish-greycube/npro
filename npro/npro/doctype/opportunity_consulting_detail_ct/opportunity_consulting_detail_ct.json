@@ -11,7 +11,9 @@
   "amount",
   "location",
   "expected_close_date",
+  "cb_1",
   "stage",
+  "billing_start_date",
   "expectation",
   "lost_reason"
  ],
@@ -64,7 +66,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Stage",
-   "options": "\nDiscovery Call\nProposal Sent\nnegotiation\nWon\nLost"
+   "options": "\nNeed Analysis\nProposal Sent\nNegotiation\nNPro Candidate Sourcing\nClient CV Screening\nClient Interview\nCandidate Selected\nCandidate On-Boarded\nPO Pending\nWon\nLost"
   },
   {
    "columns": 1,
@@ -78,12 +80,22 @@
    "fieldname": "lost_reason",
    "fieldtype": "Data",
    "label": "Lost Reason"
+  },
+  {
+   "depends_on": "eval:(doc.stage == 'Candidate Selected' || doc.stage=='Candidate On-Boarded')",
+   "fieldname": "billing_start_date",
+   "fieldtype": "Date",
+   "label": "Billing Start Date"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-09-08 10:50:32.716770",
+ "modified": "2021-09-14 06:50:55.396123",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Consulting Detail CT",

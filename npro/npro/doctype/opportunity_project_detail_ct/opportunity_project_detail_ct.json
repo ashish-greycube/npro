@@ -10,7 +10,6 @@
   "expected_close_date",
   "location",
   "stage",
-  "billing_start_date",
   "lost_reason"
  ],
  "fields": [
@@ -49,7 +48,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Stage",
-   "options": "\nNeed Analysis\nProposal Sent\nNegotiation\nNPro Candidate Sourcing\nClient CV Screening\nClient interview\nCandidate selected\nPO Pending\nWon\nLost"
+   "options": "\nDiscovery Call\nProposal Sent\nnegotiation\nWon\nLost"
   },
   {
    "depends_on": "eval:doc.stage == 'Lost' ",
@@ -57,18 +56,12 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Lost Reason"
-  },
-  {
-   "depends_on": "eval:(doc.stage == 'Candidate Selected' or doc.stage=='Candidate On-Boarded')",
-   "fieldname": "billing_start_date",
-   "fieldtype": "Date",
-   "label": "Billing Start Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-09-14 06:33:58.860011",
+ "modified": "2021-09-14 06:47:43.775671",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Project Detail CT",
