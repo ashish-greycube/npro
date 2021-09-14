@@ -1,0 +1,31 @@
+{
+ "actions": [],
+ "creation": "2021-09-08 09:26:45.316457",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "application"
+ ],
+ "fields": [
+  {
+   "fieldname": "application",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Application",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-09-08 10:55:27.939165",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Applications CT",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

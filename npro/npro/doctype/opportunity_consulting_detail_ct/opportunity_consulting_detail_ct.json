@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2021-09-08 09:59:12.458577",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project_name",
+  "duration_in_months",
+  "billing_per_month",
+  "amount",
+  "location",
+  "expected_close_date",
+  "stage",
+  "expectation",
+  "lost_reason"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Technology",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "duration_in_months",
+   "fieldtype": "Int",
+   "label": "Duration (in months)"
+  },
+  {
+   "columns": 1,
+   "fieldname": "billing_per_month",
+   "fieldtype": "Currency",
+   "label": "Billing Per Month"
+  },
+  {
+   "columns": 1,
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Location"
+  },
+  {
+   "columns": 1,
+   "fieldname": "expected_close_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Expected Close Date"
+  },
+  {
+   "columns": 1,
+   "fieldname": "stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Stage",
+   "options": "\nDiscovery Call\nProposal Sent\nnegotiation\nWon\nLost"
+  },
+  {
+   "columns": 1,
+   "fieldname": "expectation",
+   "fieldtype": "Data",
+   "label": "Expectation"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval:doc.stage == 'Lost' ",
+   "fieldname": "lost_reason",
+   "fieldtype": "Data",
+   "label": "Lost Reason"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-09-08 10:50:32.716770",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Opportunity Consulting Detail CT",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

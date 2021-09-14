@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "creation": "2021-09-08 09:53:52.981839",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project_name",
+  "amount",
+  "expected_close_date",
+  "location",
+  "stage",
+  "billing_start_date",
+  "lost_reason"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Project Name",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount"
+  },
+  {
+   "columns": 1,
+   "fieldname": "expected_close_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Expected Close Date"
+  },
+  {
+   "columns": 1,
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Location"
+  },
+  {
+   "columns": 2,
+   "fieldname": "stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Stage",
+   "options": "\nNeed Analysis\nProposal Sent\nNegotiation\nNPro Candidate Sourcing\nClient CV Screening\nClient interview\nCandidate selected\nPO Pending\nWon\nLost"
+  },
+  {
+   "depends_on": "eval:doc.stage == 'Lost' ",
+   "fieldname": "lost_reason",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Lost Reason"
+  },
+  {
+   "depends_on": "eval:(doc.stage == 'Candidate Selected' or doc.stage=='Candidate On-Boarded')",
+   "fieldname": "billing_start_date",
+   "fieldtype": "Date",
+   "label": "Billing Start Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-09-14 06:33:58.860011",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Opportunity Project Detail CT",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
