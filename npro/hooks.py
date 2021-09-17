@@ -98,6 +98,7 @@ before_install = "npro.api.remove_standard_crm_values"
 doc_events = {
     "Opportunity": {
         "on_update": "npro.api.set_status_value",
+        "validate": "npro.api.opportunity_cost_calculation",
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
 }

@@ -1,6 +1,51 @@
 from __future__ import unicode_literals
 import frappe, json
+from frappe.utils import getdate,add_days,today,flt
 
+
+@frappe.whitelist()
+def opportunity_cost_calculation(self,method):
+    #check if expected_date in child table has passed then  stage should be  either Won or Lost
+    if getdate(self.expected_closing) < getdate(today()) :
+        if self.opportunity_type=='Consulting':
+            for row in self.opportunity_consulting_detail_ct_cf:
+                if row.stage not in ['Won','Lost','Candidate On-Boarded']:
+                    frappe.throw(title='Incorrect stage in Opportunity Consulting Detail',
+                                msg='Row #{0}, stage is {1}. It should be either Won or Lost or Candidate On-Boarded. Please correct it.'.format(frappe.bold(row.idx),row.stage))                    
+        elif self.opportunity_type=='Project':
+            for row in self.opportunity_project_detail_ct_cf:
+                if row.stage not in ['Won','Lost']:
+                    frappe.throw(title='Incorrect stage in Opportunity Project Detail',
+                                msg='Row #{0}, stage is {1}. It should be either Won or Lost. Please correct it.'.format(frappe.bold(row.idx),row.stage))   
+
+    #calculate per row amount for  Consulting
+    if self.opportunity_type=='Consulting':
+        for row in self.opportunity_consulting_detail_ct_cf:
+            row.amount=flt(row.duration_in_months*row.billing_per_month)    
+
+    #calculate child table grand total amount, won and lost amount
+    child_table_grand_total=0.0
+    child_table_won_amount=0.0
+    child_table_lost_amount=0.0
+    if self.opportunity_type=='Consulting':
+        for row in self.opportunity_consulting_detail_ct_cf:
+            if row.stage in ['Won','Candidate On-Boarded']:
+                child_table_won_amount+=flt(row.amount)
+            elif row.stage=='Lost':
+                child_table_lost_amount+=flt(row.amount)
+            child_table_grand_total+=flt(row.amount)
+    elif self.opportunity_type=='Project':
+        for row in self.opportunity_project_detail_ct_cf:
+            if row.stage=='Won':
+                child_table_won_amount+=flt(row.amount)
+            elif row.stage=='Lost':
+                child_table_lost_amount+=flt(row.amount)
+            child_table_grand_total+=flt(row.amount)
+    
+    self.won_amount_cf=child_table_won_amount
+    self.lost_amount_cf=child_table_lost_amount
+    self.opportunity_amount=flt(child_table_grand_total-child_table_won_amount-child_table_lost_amount)
+                    
 
 @frappe.whitelist()
 def set_status_value(self, method):
