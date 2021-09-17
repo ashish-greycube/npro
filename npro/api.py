@@ -6,17 +6,16 @@ from frappe.utils import getdate,add_days,today,flt
 @frappe.whitelist()
 def opportunity_cost_calculation(self,method):
     #check if expected_date in child table has passed then  stage should be  either Won or Lost
-    if getdate(self.expected_closing) < getdate(today()) :
-        if self.opportunity_type=='Consulting':
-            for row in self.opportunity_consulting_detail_ct_cf:
-                if row.stage not in ['Won','Lost','Candidate On-Boarded']:
-                    frappe.throw(title='Incorrect stage in Opportunity Consulting Detail',
-                                msg='Row #{0}, stage is {1}. It should be either Won or Lost or Candidate On-Boarded. Please correct it.'.format(frappe.bold(row.idx),row.stage))                    
-        elif self.opportunity_type=='Project':
-            for row in self.opportunity_project_detail_ct_cf:
-                if row.stage not in ['Won','Lost']:
-                    frappe.throw(title='Incorrect stage in Opportunity Project Detail',
-                                msg='Row #{0}, stage is {1}. It should be either Won or Lost. Please correct it.'.format(frappe.bold(row.idx),row.stage))   
+    if self.opportunity_type=='Consulting':
+        for row in self.opportunity_consulting_detail_ct_cf:
+            if getdate(row.expected_close_date) < getdate(today()) and row.stage not in ['Won','Lost','Candidate On-Boarded']:
+                frappe.throw(title='Incorrect stage in Opportunity Consulting Detail',
+                            msg='Row #{0}, stage is {1}. It should be either Won or Lost or Candidate On-Boarded. Please correct it.'.format(frappe.bold(row.idx),row.stage))                    
+    elif self.opportunity_type=='Project':
+        for row in self.opportunity_project_detail_ct_cf:
+            if getdate(row.expected_close_date) < getdate(today()) and row.stage not in ['Won','Lost']:
+                frappe.throw(title='Incorrect stage in Opportunity Project Detail',
+                            msg='Row #{0}, stage is {1}. It should be either Won or Lost. Please correct it.'.format(frappe.bold(row.idx),row.stage))   
 
     #calculate per row amount for  Consulting
     if self.opportunity_type=='Consulting':
