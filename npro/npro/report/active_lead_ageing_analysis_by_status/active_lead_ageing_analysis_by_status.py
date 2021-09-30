@@ -33,7 +33,7 @@ def get_data(filters):
         fn
     where 
         rn = 1
-    group by 
+    group by fn.status,
         ageing
     """.format(
             ageing=ageing,
