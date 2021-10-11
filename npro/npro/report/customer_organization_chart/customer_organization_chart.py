@@ -13,49 +13,31 @@ def execute(filters=None):
 
 
 def get_columns(filters):
+
     return [
         dict(
-            label="Customer",
-            fieldname="customer",
-            fieldtype="Link",
-            options="Customer",
-            width=160,
-        ),
-        dict(
-            label="Level 1 Contact",
-            fieldname="l1_name",
+            label="Contact",
+            fieldname="contact",
             fieldtype="Link",
             options="Contact",
+            width=260,
+        ),
+        dict(
+            label="Email",
+            fieldname="email_id",
+            width=260,
+        ),
+        dict(
+            label="Mobile",
+            fieldname="mobile_no",
             width=160,
         ),
         dict(
-            label="Level 1 Contact Details",
-            fieldname="l1_comm",
-            width=160,
-        ),
-        dict(
-            label="Level 2 Contact",
-            fieldname="l2_name",
+            label="Reports To",
+            fieldname="reports_to_cf",
             fieldtype="Link",
             options="Contact",
-            width=160,
-        ),
-        dict(
-            label="Level 2 Contact Details",
-            fieldname="l2_comm",
-            width=160,
-        ),
-        dict(
-            label="Level 3 Contact",
-            fieldname="l3_name",
-            fieldtype="Link",
-            options="Contact",
-            width=160,
-        ),
-        dict(
-            label="Level 3 Contact Details",
-            fieldname="l3_comm",
-            width=160,
+            width=260,
         ),
     ]
 
@@ -64,33 +46,14 @@ def get_data(filters):
 
     data = frappe.db.sql(
         """
-            with l1 as
+            select name contact, coalesce(email_id,'') email_id, coalesce(mobile_no,'') mobile_no, reports_to_cf 
+            from tabContact con
+            where exists
             (
-                select name l1_name, concat_ws(' ',email_id, mobile_no) l1_comm 
-                from tabContact
-                where reports_to_cf is null
-            ),
-            l2 as 
-            (
-                select l1_name, l1_comm, x.name l2_name, concat_ws(' ',email_id, mobile_no) l2_comm
-                from l1
-                left outer join tabContact x on x.reports_to_cf = l1_name
-            ),
-            fn_contact as
-            (
-                select l1_name, l1_comm, l2_name, l2_comm, x.name l3_name, concat_ws(' ',email_id, mobile_no) l3_comm
-                from l2
-                left outer join tabContact x on x.reports_to_cf = l2.l2_name
-            )
-            select 
-                distinct cus.name customer, fn_contact.*
-            from tabCustomer cus
-                left outer join `tabDynamic Link` dl on dl.link_name = cus.name 
-                and dl.link_doctype = 'Customer' and dl.parenttype = 'Contact'
-                left outer join fn_contact on dl.parent in (l1_name, l2_name, l3_name) 
-            {where_conditions}
-            order by 
-                ifnull(customer,'zzz')
+                select 1 from `tabDynamic Link` dl 
+                where dl.link_doctype = 'Customer' and dl.parenttype = 'Contact' 
+                and dl.parent = con.name and dl.link_name = %(customer)s
+            ) 
         """.format(
             where_conditions=get_conditions(filters)
         ),

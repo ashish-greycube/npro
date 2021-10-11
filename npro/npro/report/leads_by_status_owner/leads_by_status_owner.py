@@ -11,6 +11,11 @@ def execute(filters=None):
 
 
 def get_data(filters):
+
+    columns = [
+        dict(label="Sales Rep", fieldname="lead_owner", fieldtype="Data", width=165)
+    ]
+
     data = frappe.db.sql(
         """
         select
@@ -27,6 +32,8 @@ def get_data(filters):
         as_dict=True,
         # debug=True,
     )
+    if not data:
+        return columns, []
 
     df = pandas.DataFrame.from_records(data)
     df1 = pandas.pivot_table(
@@ -53,9 +60,6 @@ def get_data(filters):
     )
     df2 = df1.reset_index()
 
-    columns = [
-        dict(label="Sales Rep", fieldname="lead_owner", fieldtype="Data", width=165)
-    ]
     columns += [
         dict(label=frappe.unscrub(col), fieldname=col, fieldtype="Int", width=95)
         for col in df1.columns
