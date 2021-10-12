@@ -15,25 +15,19 @@ def get_data(filters):
     data = frappe.db.sql(
         """
             select 
-                op.name name, op.customer_name, op.contact_person, op.opportunity_owner_cf, op.source,
+                op.name name, op.customer_name, op.contact_person, op.opportunity_owner_cf,
                 op.opportunity_amount, op.transaction_date, op.contact_date, op.to_discuss,
                 op.modified_by, date(op.modified) modified, 
-                COALESCE(pr.stage, cons.stage) sales_stage, 
-                COALESCE(pr.requirement, cons.requirement) requirement, 
-                COALESCE(pr.amount, cons.amount) amount
+                comm.content latest_comment
             from 
                 tabOpportunity op
-            left outer join 
+            left outer join
             (
-                select parent, stage, project_name requirement, amount
-                from `tabOpportunity Project Detail CT`
-            ) pr on pr.parent = op.name and op.opportunity_type = 'Project'
-            left outer join 
-            (
-                select parent, stage, project_name requirement, amount
-                from `tabOpportunity Consulting Detail CT`
-            ) cons on cons.parent = op.name and op.opportunity_type = 'Consulting'
-            {where_conditions}
+                select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
+                reference_name, content from tabComment
+                where reference_doctype = 'Opportunity' -- and content is not NULL
+            ) comm on comm.reference_name = op.name and rn = 1            
+{where_conditions}
         """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -45,7 +39,6 @@ def get_data(filters):
 
 
 def get_columns(filters):
-
     return [
         {
             "label": _("Opportunity"),
@@ -60,9 +53,9 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": _("Source"),
-            "fieldname": "source",
-            "width": 200,
+            "label": _("Contact Person"),
+            "fieldname": "contact_person",
+            "width": 100,
         },
         {
             "label": _("Opportunity Owner"),
@@ -70,14 +63,10 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": _("Sales Stage"),
-            "fieldname": "sales_stage",
-            "width": 200,
-        },
-        {
-            "label": _("Requirement"),
-            "fieldname": "requirement",
-            "width": 200,
+            "label": "Open opportunity amount",
+            "fieldname": "opportunity_amount",
+            "fieldtype": "Currency",
+            "width": 110,
         },
         {
             "label": _("Opp created on"),
@@ -86,22 +75,31 @@ def get_columns(filters):
             "width": 110,
         },
         {
-            "label": _("Contact Person"),
-            "fieldname": "contact_person",
-            "width": 100,
+            "label": _("Next Contact Date"),
+            "fieldname": "contact_date",
+            "fieldtype": "Date",
+            "width": 110,
         },
         {
-            "label": "Amount",
-            "fieldname": "amount",
-            "fieldtype": "Currency",
-            "width": 110,
+            "label": _("To Discuss"),
+            "fieldname": "to_discuss",
+            "width": 200,
+        },
+        {
+            "label": _("Latest Comment"),
+            "fieldname": "latest_comment",
+            "width": 300,
         },
     ]
 
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("op.status = 'Open'")
+    # where_clause.append("op.status = 'Open'")
+    # if filters.get("opportunity_type"):
+    #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
+    # if filters.get("opportunity_owner"):
+    #     where_clause.append("op.opportunity_owner_cf = %(opportunity_owner)s")
     if filters.get("from_date"):
         where_clause.append("op.transaction_date >= %(from_date)s")
     if filters.get("till_date"):

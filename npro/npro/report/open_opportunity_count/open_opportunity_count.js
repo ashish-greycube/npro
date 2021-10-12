@@ -2,13 +2,13 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Opportunity Pipeline"] = {
+frappe.query_reports["Open Opportunity Count"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date (Opportunity Creation Date)"),
+      label: __("From Date (Opportunity Created Date)"),
       fieldtype: "Date",
-      default: moment().startOf("month"),
+      default: moment().startOf("year"),
       reqd: 1,
     },
     {
@@ -35,4 +35,6 @@ frappe.query_reports["Opportunity Pipeline"] = {
       default: "This Month",
     },
   ],
+
+  onload: function (report) {},
 };
