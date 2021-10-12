@@ -155,11 +155,11 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("op.status = 'Open'")
-    if filters.get("opportunity_type"):
-        where_clause.append("op.opportunity_type = %(opportunity_type)s")
-    if filters.get("opportunity_owner"):
-        where_clause.append("op.opportunity_owner_cf = %(opportunity_owner)s")
+    # where_clause.append("op.status = 'Open'")
+    # if filters.get("opportunity_type"):
+    #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
+    # if filters.get("opportunity_owner"):
+    #     where_clause.append("op.opportunity_owner_cf = %(opportunity_owner)s")
     if filters.get("from_date"):
         where_clause.append("op.transaction_date >= %(from_date)s")
     if filters.get("till_date"):

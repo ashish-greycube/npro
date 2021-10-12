@@ -2,18 +2,18 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Won Opportunity"] = {
+frappe.query_reports["Opportunity Lost"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date (Sales Stage Last Updated Date)"),
+      label: __("From Date (Opportunity Creation Date)"),
       fieldtype: "Date",
       default: moment().startOf("year"),
       reqd: 1,
     },
     {
       fieldname: "till_date",
-      label: __("Till Date (Sales Stage Last Updated Date)"),
+      label: __("Till Date (Opportunity Creation Date)"),
       fieldtype: "Date",
       default: moment(),
       reqd: 1,

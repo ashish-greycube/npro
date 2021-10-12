@@ -15,7 +15,8 @@ def get_data(filters):
     data = frappe.db.sql(
         """
             select 
-                op.name name, op.customer_name, op.won_amount_cf, op.opportunity_owner_cf, op.business_module
+                op.name name, op.customer_name, op.opportunity_amount, op.opportunity_owner_cf,
+                op.contact_person, op.business_module, op.transaction_date
             from 
                 tabOpportunity op     
             {where_conditions}
@@ -44,12 +45,6 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": "Won opportunity amount",
-            "fieldname": "won_amount_cf",
-            "fieldtype": "Currency",
-            "width": 110,
-        },
-        {
             "label": _("Business Modile"),
             "fieldname": "business_module",
             "width": 200,
@@ -59,12 +54,29 @@ def get_columns(filters):
             "fieldname": "opportunity_owner_cf",
             "width": 200,
         },
+        {
+            "label": _("Contact Person"),
+            "fieldname": "contact_person",
+            "width": 100,
+        },
+        {
+            "label": "Opportunity amount",
+            "fieldname": "opportunity_amount",
+            "fieldtype": "Currency",
+            "width": 160,
+        },
+        {
+            "label": _("Opportunity Created on"),
+            "fieldname": "transaction_date",
+            "fieldtype": "Date",
+            "width": 120,
+        },
     ]
 
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("op.won_amount_cf > 0")
+    where_clause.append("op.opportunity_amount > 0")
     # if filters.get("opportunity_type"):
     #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
     # if filters.get("opportunity_owner"):
