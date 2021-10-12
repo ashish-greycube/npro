@@ -35,10 +35,8 @@ def get_columns():
             "width": 180,
         },
         {
-            "label": _("Company"),
-            "fieldname": "company",
-            "fieldtype": "Link",
-            "options": "Company",
+            "label": _("Organization"),
+            "fieldname": "company_name",
             "width": 180,
         },
         {
@@ -66,7 +64,7 @@ def get_data(filters):
 			`tabLead`.lead_name,
 			`tabLead`.lead_owner,
 			`tabLead`.source,
-			`tabLead`.company
+			`tabLead`.company_name
 		FROM
 			`tabLead` 
 		WHERE

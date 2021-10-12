@@ -2,33 +2,37 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Leads Converted To Opportunity"] = {
+frappe.query_reports["Opportunity Detail"] = {
   filters: [
     {
-      fieldname: "company",
-      label: __("Company"),
+      fieldname: "opportunity_owner",
+      label: __("Opportunity Owner"),
       fieldtype: "Link",
-      options: "Company",
-      default: frappe.defaults.get_user_default("Company"),
-      reqd: 1,
+      options: "User",
+    },
+    {
+      fieldname: "opportunity_type",
+      label: __("Opportunity Type"),
+      fieldtype: "Link",
+      options: "Opportunity Type",
     },
     {
       fieldname: "from_date",
-      label: __("From Date"),
+      label: __("From Date (Sales Stage Last Updated Date)"),
       fieldtype: "Date",
-      default: frappe.datetime.add_months(frappe.datetime.get_today(), -12),
+      default: moment().startOf("month"),
       reqd: 1,
     },
     {
-      fieldname: "to_date",
-      label: __("To Date"),
+      fieldname: "till_date",
+      label: __("Till Date (Sales Stage Last Updated Date)"),
       fieldtype: "Date",
-      default: frappe.datetime.get_today(),
+      default: moment(),
       reqd: 1,
     },
     {
       fieldname: "timespan",
-      label: __("Lead Creation Date in "),
+      label: __("Opportunity Creation Date in "),
       fieldtype: "Select",
       options: npro.utils.TIMESPAN_OPTIONS,
       on_change: function (query_report) {
@@ -37,10 +41,12 @@ frappe.query_reports["Leads Converted To Opportunity"] = {
         );
         frappe.query_report.set_filter_value({
           from_date: date_range[0],
-          to_date: date_range[1],
+          till_date: date_range[1],
         });
       },
-      default: "This Year",
+      default: "This Month",
     },
   ],
+
+  onload: function (report) {},
 };

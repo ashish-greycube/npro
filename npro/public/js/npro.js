@@ -16,6 +16,7 @@ Object.assign(npro.utils, {
     timespan = timespan.toLowerCase();
     let current_date = frappe.datetime.now_date();
     let date_range_map = {
+      today: [current_date, current_date],
       "this week": [frappe.datetime.week_start(), current_date],
       "this month": [frappe.datetime.month_start(), current_date],
       "this quarter": [frappe.datetime.quarter_start(), current_date],
