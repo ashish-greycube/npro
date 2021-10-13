@@ -35,7 +35,7 @@ def get_data(filters):
             (
                 select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
                 reference_name, content from tabComment
-                where reference_doctype = 'Opportunity' -- and content is not NULL
+                where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
 {where_conditions}
         """.format(

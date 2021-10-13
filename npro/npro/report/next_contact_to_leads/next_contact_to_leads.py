@@ -75,8 +75,7 @@ def get_data(filters):
 		with fn as (
 			select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
 			reference_name, content from tabComment
-			where reference_doctype = 'Lead' 
-			and content is not NULL and comment_type = 'Comment'
+			where reference_doctype = 'Lead' and comment_type = 'Comment'
 		)
 		SELECT
 		ld.name,

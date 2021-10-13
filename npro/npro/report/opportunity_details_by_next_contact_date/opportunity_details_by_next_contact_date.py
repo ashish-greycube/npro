@@ -16,8 +16,9 @@ def get_data(filters):
         """
             select 
                 op.name name, op.customer_name, op.contact_person, op.opportunity_owner_cf,
-                op.opportunity_amount, op.transaction_date, op.contact_date, op.to_discuss,
-                op.modified_by, date(op.modified) modified, 
+                (op.opportunity_amount + op.won_amount_cf + op.lost_amount_cf) opportunity_amount, 
+                op.transaction_date, DATE(op.contact_date) contact_date,
+                op.contact_by, op.to_discuss, op.modified_by, date(op.modified) modified, 
                 comm.content latest_comment
             from 
                 tabOpportunity op
@@ -25,7 +26,7 @@ def get_data(filters):
             (
                 select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
                 reference_name, content from tabComment
-                where reference_doctype = 'Opportunity' -- and content is not NULL
+                where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
 {where_conditions}
         """.format(
@@ -63,7 +64,7 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": "Open opportunity amount",
+            "label": "Opportunity amount",
             "fieldname": "opportunity_amount",
             "fieldtype": "Currency",
             "width": 110,
@@ -79,6 +80,11 @@ def get_columns(filters):
             "fieldname": "contact_date",
             "fieldtype": "Date",
             "width": 110,
+        },
+        {
+            "label": _("Next Contact By"),
+            "fieldname": "contact_by",
+            "width": 150,
         },
         {
             "label": _("To Discuss"),

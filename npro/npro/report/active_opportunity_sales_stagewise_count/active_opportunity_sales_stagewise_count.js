@@ -8,7 +8,7 @@ frappe.query_reports["Active Opportunity Sales Stagewise Count"] = {
       fieldname: "status",
       label: __("Status"),
       fieldtype: "Select",
-      options: " Open\nQuotation\nConverted\nLost\nReplied\nClosed",
+      options: " Open\nConverted\nLost",
     },
 
     {

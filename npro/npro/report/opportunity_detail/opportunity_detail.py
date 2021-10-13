@@ -43,7 +43,7 @@ def get_data(filters):
             (
                 select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
                 reference_name, content from tabComment
-                where reference_doctype = 'Opportunity' -- and content is not NULL
+                where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
 {where_conditions}
         """.format(
@@ -129,6 +129,11 @@ def get_columns(filters):
             "width": 100,
         },
         {
+            "label": _("Latest Comment"),
+            "fieldname": "latest_comment",
+            "width": 190,
+        },
+        {
             "label": "Open opportunity amount",
             "fieldname": "opportunity_amount",
             "fieldtype": "Currency",
@@ -146,10 +151,6 @@ def get_columns(filters):
             "fieldtype": "Currency",
             "width": 110,
         },
-        # Organization,source, status, opportunity owner,sales stage, requirement,
-        # next contact date, to discuss, opportunity created on, contact person,
-        # last updated by,last update date, latest comment, competitors,
-        # open opportunity amount, won opportunity amount, lost opportunity amount,
     ]
 
 

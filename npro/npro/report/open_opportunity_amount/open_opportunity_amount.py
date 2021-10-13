@@ -45,7 +45,7 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": _("Business Modile"),
+            "label": _("Business Module"),
             "fieldname": "business_module",
             "width": 200,
         },
