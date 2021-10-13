@@ -46,7 +46,12 @@ def get_data(filters):
 
     data = frappe.db.sql(
         """
-            select name contact, coalesce(email_id,'') email_id, coalesce(mobile_no,'') mobile_no, reports_to_cf 
+        with fn as
+        (
+            select 
+            name contact,
+            coalesce(email_id,'') email_id, coalesce(mobile_no,'') mobile_no, 
+            reports_to_cf 
             from tabContact con
             where exists
             (
@@ -54,7 +59,15 @@ def get_data(filters):
                 where dl.link_doctype = 'Customer' and dl.parenttype = 'Contact' 
                 and dl.parent = con.name and dl.link_name = %(customer)s
             ) 
-        """.format(
+        ) 
+        select fn.email_id, fn.mobile_no, 
+        concat_ws(' ', c.first_name, c.last_name) contact, 
+        concat_ws(' ', mgr.first_name, mgr.last_name) reports_to_cf
+        from fn 
+        inner join tabContact c on c.name = fn.contact
+        left outer join tabContact mgr on mgr.name = fn.reports_to_cf
+
+              """.format(
             where_conditions=get_conditions(filters)
         ),
         filters,

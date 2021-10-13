@@ -20,16 +20,23 @@ frappe.query_reports["Customer Organization Chart"] = {
   ],
 
   onload: function (report) {
-    frappe.require(["assets/npro/js/lib/loader.js"], () => {
-      google.charts.load("current", { packages: ["orgchart"] });
+    frappe.require(
+      [
+        "assets/npro/js/lib/loader.js",
+        "assets/npro/js/lib/dom-to-image.min.js",
+        "assets/npro/js/lib/download.min.js",
+      ],
+      () => {
+        google.charts.load("current", { packages: ["orgchart"] });
 
-      google.charts.setOnLoadCallback(() => {
-        report.org_chart = new frappe.GoogleChart(report, {});
-        setTimeout(() => {
-          report.refresh();
-        }, 500);
-      });
-    });
+        google.charts.setOnLoadCallback(() => {
+          report.org_chart = new frappe.GoogleChart(report, {});
+          setTimeout(() => {
+            report.refresh();
+          }, 500);
+        });
+      }
+    );
   },
 };
 
@@ -51,16 +58,25 @@ frappe.GoogleChart = Class.extend({
         me.set_data();
       });
     };
+
     // destroy tabulator when navigating away
     window.addEventListener("hashchange", this.destroy.bind(this), {
       once: true,
     });
+
+    frappe.router.on("change", () => {
+      me.destroy();
+    });
+
+    this.add_buttons();
   },
+
+  // `<div id='org-container' style='display:flex;overflow-x:auto' class='.org-container'></div>`
 
   make() {
     let me = this,
       el = $(
-        "<div id='org-container' style='display:flex;overflow-x:auto' class='.org-container'></div>"
+        `<div id='org-container' style='display:flex;overflow-x:auto'></div> `
       );
     el.insertBefore($(".report-wrapper"));
 
@@ -71,7 +87,6 @@ frappe.GoogleChart = Class.extend({
 
   destroy(e) {
     this.report.refresh = this.original_refresh;
-    // this.tabulator && this.tabulator.destroy();
     $("#org-container").remove();
     this.toggle_frappe_datatable(false);
     // need to set route_options here to force refresh when navigating back to same report
@@ -99,6 +114,7 @@ frappe.GoogleChart = Class.extend({
         ]);
       });
 
+      this.org_chart_data = data;
       this.org_chart.draw(data, { allowHtml: true });
     }
   },
@@ -108,42 +124,51 @@ frappe.GoogleChart = Class.extend({
     // $(".datatable").toggleClass("hidden d-none", flag);
     // this.report.$message.toggleClass("hidden d-none", flag);
   },
+
+  add_buttons() {
+    var me = this;
+    this.report.page.add_inner_button("Download Chart", () => {
+      let el = $(`
+      <div style="margin-left:1800px;">  
+        <div id='org-print' ></div>
+      </div>
+      `);
+      el.insertAfter($(".layout-main"));
+
+      var chart = new google.visualization.OrgChart(
+        document.getElementById("org-print")
+      );
+      chart.draw(me.org_chart_data, { allowHtml: true });
+      download_as_image("org-print", "Customer Organization Chart.png");
+      // var printContents = document.getElementById("org-container").innerHTML;
+      // var printWindow = window.open(
+      //   "",
+      //   "",
+      //   "height=400,width=600,top=100,left=300"
+      // );
+      // let html = `
+      // <html>
+      //   <head>
+      //     <link rel="stylesheet" href="https://www.gstatic.com/charts/51/css/orgchart/orgchart.css"  type="text/css" />
+      //   </head>
+      //   <body onload="">${printContents}</body>
+      // </html> `;
+      // printWindow.document.write(html);
+      // printWindow.document.close();
+    });
+  },
 });
 
-// var dataSourceUrl = 'https://spreadsheets.google.com/tq?key=rCaVQNfFDMhOM6ENNYeYZ9Q&pub=1';
+function download_as_image(element_id, filename) {
+  var node = document.getElementById(element_id);
 
-// <html>
-//   <head>
-//     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-//     <script type="text/javascript">
-//       google.charts.load('current', {packages:["orgchart"]});
-//       google.charts.setOnLoadCallback(drawChart);
-
-//       function drawChart() {
-//         var data = new google.visualization.DataTable();
-//         data.addColumn('string', 'Name');
-//         data.addColumn('string', 'Manager');
-//         data.addColumn('string', 'ToolTip');
-
-//         // For each orgchart box, provide the name, manager, and tooltip to show.
-//         data.addRows([
-//           [{'v':'Mike', 'f':'Mike<div style="color:red; font-style:italic">President</div>'},
-//            '', 'The President'],
-//           [{'v':'Jim', 'f':'Jim<div style="color:red; font-style:italic">Vice President</div>'},
-//            'Mike', 'VP'],
-//           ['Alice', 'Mike', ''],
-//           ['Bob', 'Jim', 'Bob Sponge'],
-//           ['Carol', 'Bob', '']
-//         ]);
-
-//         // Create the chart.
-//         var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-//         // Draw the chart, setting the allowHtml option to true for the tooltips.
-//         chart.draw(data, {'allowHtml':true});
-//       }
-//    </script>
-//     </head>
-//   <body>
-//     <div id="chart_div"></div>
-//   </body>
-// </html>
+  domtoimage
+    .toPng(node)
+    .then(function (dataUrl) {
+      download(dataUrl, filename, "image/png");
+      node.remove();
+    })
+    .catch(function (error) {
+      console.error("oops, something went wrong!", error);
+    });
+}
