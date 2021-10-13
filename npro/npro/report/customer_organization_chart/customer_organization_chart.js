@@ -128,9 +128,29 @@ frappe.GoogleChart = Class.extend({
   add_buttons() {
     var me = this;
     this.report.page.add_inner_button("Download Chart", () => {
+      let customer = frappe.query_report.get_filter_value("customer");
       let el = $(`
-      <div style="margin-left:1800px;">  
-        <div id='org-print' ></div>
+      <div>
+      <style>
+      .no-show {
+        position:absolute;
+        left:-3000px;
+      }
+      .title {
+        text-align:center;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      </style>
+      <div class='no-show'>
+        <div id="print-div">
+          <div class="title">
+              ${customer} Organization Chart
+          </div>
+          <div id='org-print'>         
+          </div>
+        </div>
+      </div>
       </div>
       `);
       el.insertAfter($(".layout-main"));
@@ -139,7 +159,7 @@ frappe.GoogleChart = Class.extend({
         document.getElementById("org-print")
       );
       chart.draw(me.org_chart_data, { allowHtml: true });
-      download_as_image("org-print", "Customer Organization Chart.png");
+      download_as_image("print-div", `${customer} - Organization Chart.png`);
       // var printContents = document.getElementById("org-container").innerHTML;
       // var printWindow = window.open(
       //   "",
