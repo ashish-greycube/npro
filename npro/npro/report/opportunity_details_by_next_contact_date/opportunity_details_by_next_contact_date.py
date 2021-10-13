@@ -16,7 +16,7 @@ def get_data(filters):
         """
             select 
                 op.name name, op.customer_name, op.contact_person, op.opportunity_owner_cf,
-                (op.opportunity_amount + op.won_amount_cf + op.lost_amount_cf) opportunity_amount, 
+                op.opportunity_amount, 
                 op.transaction_date, DATE(op.contact_date) contact_date,
                 op.contact_by, op.to_discuss, op.modified_by, date(op.modified) modified, 
                 comm.content latest_comment
@@ -29,6 +29,7 @@ def get_data(filters):
                 where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
 {where_conditions}
+    order by DATE(op.contact_date) 
         """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -64,7 +65,7 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": "Opportunity amount",
+            "label": "Open Opportunity amount",
             "fieldname": "opportunity_amount",
             "fieldtype": "Currency",
             "width": 110,
@@ -101,11 +102,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    # where_clause.append("op.status = 'Open'")
-    # if filters.get("opportunity_type"):
-    #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
-    # if filters.get("opportunity_owner"):
-    #     where_clause.append("op.opportunity_owner_cf = %(opportunity_owner)s")
+    where_clause.append("DATE(op.contact_date) >= '%s'" % frappe.utils.today())
     if filters.get("from_date"):
         where_clause.append("op.transaction_date >= %(from_date)s")
     if filters.get("till_date"):

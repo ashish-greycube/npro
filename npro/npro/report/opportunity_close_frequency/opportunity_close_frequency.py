@@ -79,7 +79,7 @@ def get_columns(filters):
             "width": 110,
         },
         {
-            "label": "Days Between",
+            "label": "Won within Days",
             "fieldname": "days_between",
             "fieldtype": "Int",
             "width": 110,

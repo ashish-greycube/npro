@@ -5,13 +5,6 @@
 frappe.query_reports["Active Opportunity Sales Stagewise Count"] = {
   filters: [
     {
-      fieldname: "status",
-      label: __("Status"),
-      fieldtype: "Select",
-      options: " Open\nConverted\nLost",
-    },
-
-    {
       fieldname: "opportunity_owner",
       label: __("Sales Person"),
       fieldtype: "Link",

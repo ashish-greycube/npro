@@ -46,6 +46,7 @@ def get_data(filters):
                 where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
 {where_conditions}
+        order by modified desc
         """.format(
             where_conditions=get_conditions(filters),
         ),

@@ -60,7 +60,7 @@ def get_columns(filters):
             "width": 100,
         },
         {
-            "label": "Opportunity amount",
+            "label": "Open Opportunity amount",
             "fieldname": "opportunity_amount",
             "fieldtype": "Currency",
             "width": 160,

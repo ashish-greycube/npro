@@ -17,10 +17,22 @@ def get_columns(filters):
     return [
         dict(
             label="Contact",
-            fieldname="contact",
+            fieldname="name",
             fieldtype="Link",
             options="Contact",
-            width=260,
+            width=180,
+        ),
+        dict(
+            label="Name",
+            fieldname="contact",
+            fieldtype="Data",
+            width=180,
+        ),
+        dict(
+            label="Designation",
+            fieldname="designation",
+            fieldtype="Data",
+            width=200,
         ),
         dict(
             label="Email",
@@ -48,10 +60,9 @@ def get_data(filters):
         """
         with fn as
         (
-            select 
-            name contact,
+            select name, 
             coalesce(email_id,'') email_id, coalesce(mobile_no,'') mobile_no, 
-            reports_to_cf 
+            reports_to_cf, con.designation
             from tabContact con
             where exists
             (
@@ -60,11 +71,11 @@ def get_data(filters):
                 and dl.parent = con.name and dl.link_name = %(customer)s
             ) 
         ) 
-        select fn.email_id, fn.mobile_no, 
+        select fn.name, fn.email_id, fn.mobile_no, fn.designation,
         concat_ws(' ', c.first_name, c.last_name) contact, 
         concat_ws(' ', mgr.first_name, mgr.last_name) reports_to_cf
         from fn 
-        inner join tabContact c on c.name = fn.contact
+        inner join tabContact c on c.name = fn.name
         left outer join tabContact mgr on mgr.name = fn.reports_to_cf
 
               """.format(

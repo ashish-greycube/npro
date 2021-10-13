@@ -35,6 +35,7 @@ def get_data(filters):
         select fn.opportunity_owner_cf, 
         sum(case when stage not in ('Won','Lost') then 1 else 0 end) open_count,
         sum(case when stage in ('Won') then 1 else 0 end) won_count,
+        count(stage) total_count,
         sum(case when stage in ('Won') then 1 else 0 end) / count(stage)  efficiency
         from fn
         group by fn.opportunity_owner_cf
@@ -58,6 +59,12 @@ def get_columns(filters):
             "width": 200,
         },
         {
+            "label": _("Total Count"),
+            "fieldname": "total_count",
+            "fieldtype": "Int",
+            "width": 220,
+        },
+        {
             "label": _("Open Requirement Count"),
             "fieldname": "open_count",
             "fieldtype": "Int",
@@ -72,7 +79,7 @@ def get_columns(filters):
         {
             "label": _("Efficiency"),
             "fieldname": "efficiency",
-            "fieldtype": "Float",
+            "fieldtype": "Percent",
             "width": 120,
         },
     ]
