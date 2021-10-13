@@ -36,7 +36,7 @@ def get_data(filters):
         sum(case when stage not in ('Won','Lost') then 1 else 0 end) open_count,
         sum(case when stage in ('Won') then 1 else 0 end) won_count,
         count(stage) total_count,
-        sum(case when stage in ('Won') then 1 else 0 end) / count(stage)  efficiency
+        100 * sum(case when stage in ('Won') then 1 else 0 end)  / count(stage)  efficiency
         from fn
         group by fn.opportunity_owner_cf
         order by fn.opportunity_owner_cf
