@@ -59,7 +59,7 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": _("Total Count"),
+            "label": _("Total Opportunity Count"),
             "fieldname": "total_count",
             "fieldtype": "Int",
             "width": 220,

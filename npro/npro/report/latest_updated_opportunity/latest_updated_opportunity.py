@@ -37,7 +37,8 @@ def get_data(filters):
                 reference_name, content from tabComment
                 where reference_doctype = 'Opportunity' and comment_type = 'Comment'
             ) comm on comm.reference_name = op.name and rn = 1            
-{where_conditions}
+        {where_conditions}
+            order by modified desc
         """.format(
             where_conditions=get_conditions(filters),
         ),
