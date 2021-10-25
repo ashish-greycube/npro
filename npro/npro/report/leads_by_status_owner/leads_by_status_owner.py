@@ -45,25 +45,22 @@ def get_data(filters):
         fill_value=0,
         margins=True,
     )
-
     df1.drop(index="All", axis=0, inplace=True)
-    lead_status_sort_order = (
+    df1.columns = [d for d in df1.columns.to_series().str[1]]
+    df2 = df1.reset_index()
+ 
+    #  sorting grid columns
+    sort_order = (
         frappe.db.get_single_value("NPro Settings", "lead_status_sort_order") or ""
     )
-    lead_status_sort_order = lead_status_sort_order.split(",")
-    df1.columns = [d for d in df1.columns.to_series().str[1]]
-    df1.columns = sorted(
-        df1.columns,
-        key=lambda x: lead_status_sort_order.index(x)
-        if x in lead_status_sort_order
+    sort_order = sort_order.split(",")
+    columns = columns + sorted([
+        dict(label=frappe.unscrub(col), fieldname=col, fieldtype="Int", width=95)
+        for col in df1.columns],
+        key=lambda x: sort_order.index(x) if x in sort_order
         else 100,
     )
-    df2 = df1.reset_index()
 
-    columns += [
-        dict(label=frappe.unscrub(col), fieldname=col, fieldtype="Int", width=95)
-        for col in df1.columns
-    ]
     return columns, df2.to_dict("r")
 
 

@@ -51,6 +51,14 @@ def get_columns(filters):
             options="Contact",
             width=260,
         ),
+        dict(
+            label="Department",
+            fieldname="department_cf",
+            fieldtype="Data",
+            # options="Contact",
+            width=260,
+        ),
+
     ]
 
 
@@ -73,7 +81,8 @@ def get_data(filters):
         ) 
         select fn.name, fn.email_id, fn.mobile_no, fn.designation,
         concat_ws(' ', c.first_name, c.last_name) contact, 
-        concat_ws(' ', mgr.first_name, mgr.last_name) reports_to_cf
+        concat_ws(' ', mgr.first_name, mgr.last_name) reports_to_cf,
+        c.department_cf
         from fn 
         inner join tabContact c on c.name = fn.name
         left outer join tabContact mgr on mgr.name = fn.reports_to_cf
