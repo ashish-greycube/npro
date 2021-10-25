@@ -9,7 +9,7 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2021-10-11 16:30:28.102375",
+ "modified": "2021-10-25 12:38:57.477209",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Leads Converted To Opportunity",
@@ -27,6 +27,9 @@
   },
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Sales Master Manager"
   }
  ]
 }

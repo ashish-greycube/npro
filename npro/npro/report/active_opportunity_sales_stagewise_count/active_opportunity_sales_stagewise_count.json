@@ -9,7 +9,7 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2021-10-13 14:55:10.792221",
+ "modified": "2021-10-25 12:34:25.434589",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Active Opportunity Sales Stagewise Count",
@@ -18,5 +18,18 @@
  "ref_doctype": "Opportunity",
  "report_name": "Active Opportunity Sales Stagewise Count",
  "report_type": "Script Report",
- "roles": []
+ "roles": [
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales Master Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
 }
