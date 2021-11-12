@@ -64,6 +64,7 @@ doctype_js = {
 
 before_install = "npro.api.remove_standard_crm_values"
 # after_install = "npro.install.after_install"
+after_migrate = "npro.install.after_migrate"
 
 # Desk Notifications
 # ------------------
@@ -186,7 +187,7 @@ fixtures = [
                     "New",
                     "Negotiation",
                     "Proposal Sent",
-                    "Needs Analysis"
+                    "Needs Analysis",
                 ],
             ]
         ],

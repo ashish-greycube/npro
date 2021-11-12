@@ -15,7 +15,10 @@ def get_data(filters):
     data = frappe.db.sql(
         """
             select 
-                op.name name, op.customer_name, op.source, op.opportunity_type, op.sales_stage, op.status,
+                op.name name, op.customer_name, 
+                                case when op.opportunity_from = 'Customer' then 'Existing Customer'
+                else op.source end source,
+                op.opportunity_type, op.sales_stage, op.status,
                 op.opportunity_owner_cf, op.to_discuss, op.contact_person, op.transaction_date, op.modified_by,
                 op.modified, date(op.contact_date) contact_date, 
                 COALESCE(pr.stage, cons.stage) sales_stage, 
