@@ -19,9 +19,11 @@ def get_data(filters):
                 op.opportunity_amount, 
                 op.transaction_date, DATE(op.contact_date) contact_date,
                 op.contact_by, op.to_discuss, op.modified_by, date(op.modified) modified, 
-                comm.content latest_comment
+                comm.content latest_comment,
+                cd.location 
             from 
                 tabOpportunity op
+			left outer join `tabOpportunity Consulting Detail CT` cd on cd.parent = op.name      
             left outer join
             (
                 select ROW_NUMBER() over (PARTITION BY reference_name order by creation desc) rn,
@@ -96,6 +98,11 @@ def get_columns(filters):
             "label": _("Latest Comment"),
             "fieldname": "latest_comment",
             "width": 300,
+        },
+        {
+            "label": _("Location"),
+            "fieldname": "location",
+            "width": 200,
         },
     ]
 

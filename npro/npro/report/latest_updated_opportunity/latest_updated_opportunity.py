@@ -44,7 +44,7 @@ def get_data(filters):
         ),
         filters,
         as_dict=True,
-        # debug=True,
+        debug=True,
     )
     return data or []
 
@@ -94,7 +94,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    # where_clause.append("op.status = 'Open'")
+    where_clause.append("COALESCE(pr.stage, cons.stage) <> 'Lost' ")
     # if filters.get("opportunity_type"):
     #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
     # if filters.get("opportunity_owner"):
