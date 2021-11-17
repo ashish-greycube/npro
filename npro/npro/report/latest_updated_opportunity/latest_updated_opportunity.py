@@ -25,11 +25,13 @@ def get_data(filters):
             (
                 select parent, stage, project_name requirement, opportunity_close_date
                 from `tabOpportunity Project Detail CT`
+                where stage <> 'Lost'
             ) pr on pr.parent = op.name and op.opportunity_type = 'Project'
             left outer join 
             (
                 select parent, stage, project_name requirement, opportunity_close_date
                 from `tabOpportunity Consulting Detail CT`
+                where stage <> 'Lost'
             ) cons on cons.parent = op.name and op.opportunity_type = 'Consulting'
             left outer join
             (
@@ -94,7 +96,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("COALESCE(pr.stage, cons.stage) <> 'Lost' ")
+    # where_clause.append("COALESCE(pr.stage, cons.stage) <> 'Lost' ")
     # if filters.get("opportunity_type"):
     #     where_clause.append("op.opportunity_type = %(opportunity_type)s")
     # if filters.get("opportunity_owner"):
