@@ -17,3 +17,4 @@ def after_migrate():
         "Opportunity Sales Stage Reminder",
     ]:
         frappe.db.sql("delete from tabReport where name = %s", (report,))
+    frappe.db.commit()
