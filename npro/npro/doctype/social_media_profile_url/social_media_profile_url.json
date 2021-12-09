@@ -1,0 +1,39 @@
+{
+ "actions": [],
+ "creation": "2021-12-09 06:52:55.275169",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "social_media_platform",
+  "profile_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "social_media_platform",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Social Media Platform",
+   "options": "Social Media Platform CT",
+   "reqd": 1
+  },
+  {
+   "fieldname": "profile_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Profile URL"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-12-09 06:52:55.275169",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Social Media Profile URL",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

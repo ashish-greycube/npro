@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "creation": "2021-12-02 09:31:25.696177",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "skill",
+  "description",
+  "proficiency"
+ ],
+ "fields": [
+  {
+   "fieldname": "skill",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Skill",
+   "options": "Skill",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "skill.description",
+   "fetch_if_empty": 1,
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Description"
+  },
+  {
+   "fieldname": "proficiency",
+   "fieldtype": "Rating",
+   "in_list_view": 1,
+   "label": "Proficiency"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2021-12-02 09:34:14.205857",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "JRSS CT",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
