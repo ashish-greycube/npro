@@ -6,11 +6,17 @@ frappe.ui.form.on('Job Opening', {
                 round = locals['Interview Round'][round];
                 round.round_name = `${frm.doc.job_title}-${frm.doc.customer_cf}`;
                 round.designation = frm.doc.designation;
+                let avg_proficiency = 0;
                 (frm.doc.jrss_ct_cf || []).forEach(t => {
                     let skill = frappe.model.add_child(round, 'Expected Skill Set', 'expected_skill_set');
                     skill.skill = t.skill;
-                    skill.description = t.description
+                    skill.description = t.description;
+                    skill.expected_proficiency_cf = t.proficiency || 0;
+                    avg_proficiency = avg_proficiency + (t.proficiency || 0);
                 });
+                if (avg_proficiency > 0) {
+                    round.expected_average_rating = avg_proficiency / frm.doc.jrss_ct_cf.length;
+                }
                 frappe.set_route('Form', 'Interview Round', round.name);
             })
 
