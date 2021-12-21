@@ -6,7 +6,7 @@ frappe.ui.form.on('Job Opening', {
                 round = locals['Interview Round'][round];
                 round.round_name = frm.doc.job_title;
                 round.designation = frm.doc.designation;
-                frm.doc.jrss_ct_cf.forEach(t => {
+                (frm.doc.jrss_ct_cf || []).forEach(t => {
                     let skill = frappe.model.add_child(round, 'Expected Skill Set', 'expected_skill_set');
                     skill.skill = t.skill;
                     skill.description = t.description
@@ -20,7 +20,7 @@ frappe.ui.form.on('Job Opening', {
         if (frm.doc.designation) {
             frappe.model.with_doc("Designation", frm.doc.designation, () => {
                 let designation = frappe.model.get_doc("Designation", frm.doc.designation);
-                let skills = frm.doc.jrss_ct_cf.map(t => t.skill);
+                let skills = (frm.doc.jrss_ct_cf || []).map(t => t.skill);
                 designation.skills.forEach((d) => {
                     if (!skills.includes(d.skill)) {
 
