@@ -136,3 +136,24 @@ def contact_for_customer_query(doctype, txt, searchfield, start, page_len, filte
         filters,
         as_dict=False,
     )
+
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_contacts_for_customer(doctype, txt, searchfield, start, page_len, filters):
+
+    filters["txt"] = "%%{}%%".format(txt)
+    return frappe.db.sql(
+        """
+        select 
+            distinct x.parent 
+        from 
+            `tabDynamic Link` x 
+        where 
+            x.parenttype='Contact' and x.link_doctype = 'Customer'
+            and x.link_name = %(customer)s
+            and x.parent like %(txt)s
+    """,
+        filters,
+        as_dict=False,
+    )
