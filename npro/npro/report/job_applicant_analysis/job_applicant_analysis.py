@@ -18,36 +18,35 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
-select tja.applicant_name , tjo.customer_cf, tjc.skill, tjo.designation,
-tjc.proficiency proficiency_jrss, 
-coalesce(iro.expected_proficiency_cf,0) proficiency_interview_round,
-coalesce(ir.rating,0) obtained_average_rating,
-ir.interviewers
-from `tabJob Applicant` tja 
-inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
-inner join `tabJRSS CT` tjc on tjc.parent = tjo.name 
-left outer join (
-	select tir.designation, skill, expected_proficiency_cf, tir.name
-	from `tabExpected Skill Set` tess 
-	inner join `tabInterview Round` tir on tir.name = tess.parent 
-) iro on iro.designation = tjo.designation and iro.skill = tjc.skill
-left outer join (
-	select ti.job_applicant, ti.job_opening, ti.interview_round,
-	tsa.skill, sum(ifnull(tsa.rating,0)) rating, 
-	count(tif.interviewer) interviewer_count, concat_ws(',', tif.interviewer) interviewers
-	,tif.interview 
-	from tabInterview ti 
-	left outer join `tabInterview Feedback` tif on tif.interview = ti.name
-	left outer join `tabSkill Assessment` tsa on tsa.parent = tif.name
-    {where_conditions}
-	group by ti.job_applicant, ti.job_opening, 
-	tsa.skill, tif.interview, ti.interview_round
-) ir on tjc.skill = ir.skill and ir.job_applicant = tja.name 
-            {job_opening_filter}""".format(
+        select tja.applicant_name , tjo.customer_cf, tjc.skill, tjo.designation,
+        tjc.proficiency proficiency_jrss, 
+        coalesce(iro.expected_proficiency_cf,0) proficiency_interview_round,
+        coalesce(ir.rating,0) obtained_average_rating,
+        ir.interviewers
+        from `tabJob Applicant` tja 
+        inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
+        inner join `tabJRSS CT` tjc on tjc.parent = tjo.name 
+        left outer join (
+            select tir.designation, skill, expected_proficiency_cf, tir.name
+            from `tabExpected Skill Set` tess 
+            inner join `tabInterview Round` tir on tir.name = tess.parent 
+        ) iro on iro.designation = tjo.designation and iro.skill = tjc.skill
+        left outer join (
+            select ti.job_applicant, ti.job_opening, ti.interview_round,
+            tsa.skill, sum(ifnull(tsa.rating,0)) rating, 
+            count(tif.interviewer) interviewer_count, concat_ws(',', tif.interviewer) interviewers
+            ,tif.interview 
+            from tabInterview ti 
+            left outer join `tabInterview Feedback` tif on tif.interview = ti.name
+            left outer join `tabSkill Assessment` tsa on tsa.parent = tif.name
+            {where_conditions}
+            group by ti.job_applicant, ti.job_opening, 
+            tsa.skill, tif.interview, ti.interview_round
+        ) ir on tjc.skill = ir.skill and ir.job_applicant = tja.name 
+        {job_opening_filters}
+""".format(
             where_conditions=get_conditions(filters),
-            job_opening_filter=""
-            if not filters.get("job_opening")
-            else " where tjo.name = %(job_opening)s",
+            job_opening_filters=get_job_conditions(filters),
         ),
         filters,
         as_dict=1,
@@ -123,9 +122,19 @@ def get_conditions(filters):
     return " where " + " and ".join(where_clause) if where_clause else ""
 
 
+def get_job_conditions(filters):
+    where_clause = []
+    if filters.get("interviewer"):
+        where_clause.append("ir.interviewers <> ''")
+    if filters.get("job_opening"):
+        where_clause.append("tjo.name = %(job_opening)s")
+
+    return " where " + " and ".join(where_clause) if where_clause else ""
+
+
 @frappe.whitelist()
 def get_interviewers(filters=None):
-    return [
+    return [""] + [
         d[0]
         for d in frappe.db.sql(
             """ 
