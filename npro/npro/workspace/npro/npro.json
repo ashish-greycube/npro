@@ -1,0 +1,53 @@
+{
+ "cards_label": "Quick Links",
+ "category": "Modules",
+ "charts": [],
+ "creation": "2021-12-24 07:25:20.758408",
+ "developer_mode_only": 0,
+ "disable_user_customization": 1,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 0,
+ "icon": "quality-3",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "NPro",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Custom Reports",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Opening Analysis",
+   "link_to": "Job Opening Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Applicant Analysis",
+   "link_to": "Job Applicant Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2021-12-24 07:27:06.817976",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 1,
+ "shortcuts": []
+}
