@@ -42,10 +42,10 @@ def get_data(filters):
     left outer join (
         select  job_title, 
         count(*) no_applied,
-        case 
+        sum(case 
             when status like 'CV%%' 
             or status in ('Rejected', 'Accepted', 'Hold', 'Interview Scheduled') 
-        then 1 else 0 end no_passed_screening,
+        then 1 else 0 end) no_passed_screening,
         sum(if(status='Accepted',1,0)) no_selected,
         sum(if(status='CV Shared with Client',1,0)) no_shared_with_client,
         sum(if(status='CV Selected for Interview',1,0)) no_selected_by_client,
@@ -68,26 +68,36 @@ def get_columns(filters):
         {
             "label": "Customer",
             "fieldname": "customer_cf",
+            "fieldtype": "Link",
+            "options": "Customer",
             "width": 145,
         },
         {
             "label": "Customer Contact",
             "fieldname": "customer_contact_cf",
+            "fieldtype": "Link",
+            "options": "Contact",
             "width": 145,
         },
         {
             "label": "Job Opening",
             "fieldname": "job_opening",
+            "fieldtype": "Link",
+            "options": "Job Opening",
             "width": 145,
         },
         {
             "label": "NPro Sourcing Owner",
             "fieldname": "npro_sourcing_owner_cf",
+            "fieldtype": "Link",
+            "options": "User",
             "width": 145,
         },
         {
             "label": "Npro Sales Person",
             "fieldname": "sales_person_cf",
+            "fieldtype": "Link",
+            "options": "User",
             "width": 145,
         },
         {
