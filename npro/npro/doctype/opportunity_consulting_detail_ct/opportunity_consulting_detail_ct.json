@@ -13,6 +13,7 @@
   "expected_close_date",
   "cb_1",
   "stage",
+  "email_sent_for_job_opening_creation",
   "opportunity_close_date",
   "billing_start_date",
   "exception",
@@ -98,12 +99,19 @@
    "fieldtype": "Date",
    "label": "Opportunity Close Date",
    "mandatory_depends_on": "eval:doc.stage=='Won'"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_sent_for_job_opening_creation",
+   "fieldtype": "Check",
+   "label": "Email Sent for Job Opening Creation",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-10-11 11:39:28.615499",
+ "modified": "2021-12-27 10:23:47.725095",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Consulting Detail CT",
