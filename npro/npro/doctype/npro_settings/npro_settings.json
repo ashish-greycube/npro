@@ -6,7 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "lead_status_sort_order",
-  "lead_active_status"
+  "lead_active_status",
+  "candidate_sourcing_notification"
  ],
  "fields": [
   {
@@ -23,12 +24,18 @@
    "fieldtype": "Data",
    "label": "Lead Active Status",
    "reqd": 1
+  },
+  {
+   "fieldname": "candidate_sourcing_notification",
+   "fieldtype": "Link",
+   "label": "Candidate Sourcing Notification",
+   "options": "Notification"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-01-28 13:56:46.083356",
+ "modified": "2021-12-28 09:54:39.044031",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",

@@ -20,21 +20,15 @@ def get_data(filters):
         """
         select tja.applicant_name , tjo.customer_cf, tjc.skill, tjo.designation,
         tjc.proficiency proficiency_jrss, 
-        coalesce(iro.expected_proficiency_cf,0) proficiency_interview_round,
-        coalesce(ir.rating,0) obtained_average_rating,
+        coalesce(ir.rating/ir.interviewer_count,0) obtained_average_rating,
         ir.interviewers
         from `tabJob Applicant` tja 
         inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
         inner join `tabJRSS CT` tjc on tjc.parent = tjo.name 
         left outer join (
-            select tir.designation, skill, expected_proficiency_cf, tir.name
-            from `tabExpected Skill Set` tess 
-            inner join `tabInterview Round` tir on tir.name = tess.parent 
-        ) iro on iro.designation = tjo.designation and iro.skill = tjc.skill
-        left outer join (
             select ti.job_applicant, ti.job_opening, ti.interview_round,
             tsa.skill, sum(ifnull(tsa.rating,0)) rating, 
-            count(tif.interviewer) interviewer_count, concat_ws(',', tif.interviewer) interviewers
+            count(tif.interviewer) interviewer_count, concat_ws(',', tif.interviewer_name_cf) interviewers
             ,tif.interview 
             from tabInterview ti 
             left outer join `tabInterview Feedback` tif on tif.interview = ti.name
@@ -86,17 +80,17 @@ def get_columns(filters):
             "width": 220,
         },
         {
-            "label": _("JRSS Proficiency Expected"),
+            "label": _("Proficiency Expected"),
             "fieldname": "proficiency_jrss",
             "fieldtype": "Int",
             "width": 175,
         },
-        {
-            "label": _("Interview Proficiency Expected"),
-            "fieldname": "proficiency_interview_round",
-            "fieldtype": "Int",
-            "width": 175,
-        },
+        # {
+        #     "label": _("Interview Proficiency Expected"),
+        #     "fieldname": "proficiency_interview_round",
+        #     "fieldtype": "Int",
+        #     "width": 175,
+        # },
         {
             "label": _(
                 "Obtained Average of all Interviewers (Obtained Average Rating)"

@@ -2,7 +2,7 @@
  "cards_label": "Quick Links",
  "category": "Modules",
  "charts": [],
- "creation": "2021-12-24 07:25:20.758408",
+ "creation": "2021-12-28 07:39:23.946190",
  "developer_mode_only": 0,
  "disable_user_customization": 1,
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "label": "NPro",
+ "label": "Candidate On Boarding",
  "links": [
   {
    "hidden": 0,
@@ -79,15 +79,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Interview Round",
-   "link_to": "Interview Round",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Skill",
    "link_to": "Skill",
    "link_type": "DocType",
@@ -97,13 +88,23 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Interview Round",
+   "link_to": "Interview Round",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Reports",
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
   },
   {
    "hidden": 0,
-   "is_query_report": 1,
+   "is_query_report": 0,
    "label": "Job Opening Analysis",
    "link_to": "Job Opening Analysis",
    "link_type": "Report",
@@ -112,7 +113,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 1,
+   "is_query_report": 0,
    "label": "Job Applicant Analysis",
    "link_to": "Job Applicant Analysis",
    "link_type": "Report",
@@ -120,10 +121,10 @@
    "type": "Link"
   }
  ],
- "modified": "2021-12-24 09:50:25.548209",
+ "modified": "2021-12-28 07:47:23.649271",
  "modified_by": "Administrator",
  "module": "NPro",
- "name": "NPro",
+ "name": "Candidate On Boarding",
  "owner": "Administrator",
  "pin_to_bottom": 0,
  "pin_to_top": 1,
