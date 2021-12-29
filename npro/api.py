@@ -3,8 +3,8 @@ import frappe, json
 from frappe.utils import getdate, add_days, today, flt
 
 
-def on_validate_opportunity(doc, method):
-    opportunity_cost_calculation(doc, method)
+def on_update_opportunity(doc, method):
+    set_status_value(doc, method)
 
     # send email for job creation
     from frappe.email.doctype.notification.notification import evaluate_alert
@@ -13,14 +13,28 @@ def on_validate_opportunity(doc, method):
         frappe.db.get_single_value("NPro Settings", "candidate_sourcing_notification")
         or ""
     )
-    evaluate_alert(doc, notification, "Custom")
 
-    for d in doc.opportunity_consulting_detail_ct_cf or []:
-        if (
-            d.stage == "NPro Candidate Sourcing"
-            and not d.email_sent_for_job_opening_creation
-        ):
-            d.email_sent_for_job_opening_creation = 1
+    job_openings = [
+        d
+        for d in doc.opportunity_consulting_detail_ct_cf
+        if d.stage == "NPro Candidate Sourcing"
+        and not d.email_sent_for_job_opening_creation
+    ]
+
+    if job_openings:
+        evaluate_alert(doc, notification, "Custom")
+        for d in job_openings:
+            frappe.db.set_value(
+                "Opportunity Consulting Detail CT",
+                d.name,
+                "email_sent_for_job_opening_creation",
+                1,
+            )
+        frappe.db.commit()
+
+
+def on_validate_opportunity(doc, method):
+    opportunity_cost_calculation(doc, method)
 
 
 @frappe.whitelist()
@@ -52,7 +66,8 @@ def opportunity_cost_calculation(self, method):
     # calculate per row amount for  Consulting
     if self.opportunity_type == "Consulting":
         for row in self.opportunity_consulting_detail_ct_cf:
-            row.amount = flt(row.duration_in_months * row.billing_per_month)
+            if row.duration_in_months and row.billing_per_month:
+                row.amount = flt(row.duration_in_months * row.billing_per_month)
 
     # calculate child table grand total amount, won and lost amount
     child_table_grand_total = 0.0

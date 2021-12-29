@@ -99,7 +99,7 @@ after_migrate = "npro.install.after_migrate"
 
 doc_events = {
     "Opportunity": {
-        "on_update": "npro.api.set_status_value",
+        "on_update": "npro.api.on_update_opportunity",
         "validate": "npro.api.on_validate_opportunity",
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
