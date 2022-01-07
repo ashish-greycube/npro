@@ -113,7 +113,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Job Opening Analysis",
    "link_to": "Job Opening Analysis",
    "link_type": "Report",
@@ -122,15 +122,51 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Job Applicant Analysis",
    "link_to": "Job Applicant Analysis",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Closed Candidate Sourcing",
+   "link_to": "Closed Candidate Sourcing",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Opening Ageing Analysis",
+   "link_to": "Job Opening Ageing Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Opening Reminder",
+   "link_to": "Job Opening Reminder",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Opening Sourcing by Days",
+   "link_to": "Job Opening Sourcing by Days",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2021-12-28 18:09:15.031412",
+ "modified": "2022-01-07 09:03:16.186502",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Candidate On Boarding",

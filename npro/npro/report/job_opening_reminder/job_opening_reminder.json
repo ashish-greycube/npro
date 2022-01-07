@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2022-01-07 07:19:15.588843",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2022-01-07 07:19:15.588843",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Job Opening Reminder",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Job Opening",
+ "report_name": "Job Opening Reminder",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales Master Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}
