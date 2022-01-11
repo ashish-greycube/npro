@@ -106,7 +106,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Reports",
+   "label": "Reports - Job Opening",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -164,9 +164,26 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports - Job Applicant",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Applicant Details",
+   "link_to": "Job Applicant Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-01-07 09:03:16.186502",
+ "modified": "2022-01-11 19:57:30.563982",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Candidate On Boarding",

@@ -11,10 +11,10 @@ from frappe.modules import scrub, get_module_path
 
 def copy_report(
     module="NPro",
-    src="Closed Candidate Sourcing",
-    tgt="Job Opening Sourcing by Days",
+    src="Job Applicant Details",
+    tgt="Rejected Candidates",
 ):
-    """usage: copy_report("NPro", "Opportunity Detail", "Won Opportunity")"""
+    """usage: copy_report("NPro", "src", "tgt")"""
 
     doc = frappe.copy_doc(frappe.get_doc("Report", src))
     doc.report_name = tgt
