@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Candidates For Future Hire"] = {
+frappe.query_reports["Interviews"] = {
   filters: [
     // {
     //   fieldname: "from_date",
