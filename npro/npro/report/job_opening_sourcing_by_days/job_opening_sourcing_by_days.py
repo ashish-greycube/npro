@@ -16,7 +16,7 @@ def get_data(filters):
         """ 
         select 
             name, npro_sourcing_owner_cf, customer_cf, job_title, location_cf, 
-            datediff(%(today)s,modified) days_until_selection 
+            datediff(closed_date_cf, creation) selected_within_days 
         from 
             `tabJob Opening` tjo 
         {where_conditions}
@@ -65,8 +65,8 @@ def get_columns(filters):
             "width": 145,
         },
         {
-            "label": "Days Untill Selection",
-            "fieldname": "days_until_selection",
+            "label": "Selected within Days",
+            "fieldname": "selected_within_days",
             "fieldtype": "Int",
             "width": 165,
         },
