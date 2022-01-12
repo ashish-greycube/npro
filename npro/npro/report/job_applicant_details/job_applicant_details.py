@@ -16,21 +16,11 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tja.name,
-            tja.applicant_name,
-            tja.source,
-            concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
-            tja.status,
-            tja.job_title,
-            job.customer_cf,
-            job.skill
+            tja.name, tja.applicant_name, tja.source, 
+            tja.status, tjo.job_title, tjo.customer_cf,
+            concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range
         from `tabJob Applicant` tja 
-        inner join (
-            select tjo.name, tjo.customer_cf, GROUP_CONCAT(tjc.skill) skill
-            from `tabJob Opening` tjo 
-            inner join `tabJRSS CT` tjc on tjc.parent = tjo.name 
-            group by tjo.name, tjo.customer_cf 
-        ) job on job.name = tja.job_title 
+        inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
     """,
         as_dict=True,
     )

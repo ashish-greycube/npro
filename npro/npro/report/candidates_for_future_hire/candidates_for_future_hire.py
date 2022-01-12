@@ -83,35 +83,6 @@ def get_columns(filters):
             "width": 180,
         },
         {
-            "label": _("Reason for not coming Onboard"),
-            "fieldname": "rejected_reason",
-            "width": 180,
-        },
-        {
-            "label": _("Link to Feedback"),
-            "fieldname": "feedback_name",
-            "fieldtype": "Link",
-            "options": "Interview Feedback",
-            "width": 130,
-        },
-        {
-            "label": _("Feedback"),
-            "fieldname": "feedback",
-            "width": 180,
-        },
-        {
-            "label": _("Interviewer"),
-            "fieldname": "interviewer_name_cf",
-            "width": 180,
-        },
-        {
-            "label": _("Interview Round"),
-            "fieldname": "interview_round",
-            "fieldtype": "Link",
-            "options": "Interview Round",
-            "width": 120,
-        },
-        {
             "label": _("Interviewer Scoring"),
             "fieldname": "interviewer_scoring",
             "fieldtype": "Int",
@@ -123,12 +94,41 @@ def get_columns(filters):
             "fieldtype": "Int",
             "width": 180,
         },
+        {
+            "label": _("Feedback"),
+            "fieldname": "feedback",
+            "width": 180,
+        },
+        {
+            "label": _("Reason for not coming Onboard"),
+            "fieldname": "rejected_reason",
+            "width": 180,
+        },
+        {
+            "label": _("Interviewer"),
+            "fieldname": "interviewer_name_cf",
+            "width": 180,
+        },
+        # {
+        #     "label": _("Interview Round"),
+        #     "fieldname": "interview_round",
+        #     "fieldtype": "Link",
+        #     "options": "Interview Round",
+        #     "width": 120,
+        # },
+        # {
+        #     "label": _("Link to Feedback"),
+        #     "fieldname": "feedback_name",
+        #     "fieldtype": "Link",
+        #     "options": "Interview Feedback",
+        #     "width": 130,
+        # },
     ]
 
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("tja.status = 'Rejected'")
+    where_clause.append("tja.status = 'Rejected' and tja.for_future_hire_cf = 1")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")

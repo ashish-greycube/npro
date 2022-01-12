@@ -11,8 +11,8 @@ from frappe.modules import scrub, get_module_path
 
 def copy_report(
     module="NPro",
-    src="Job Applicant Details",
-    tgt="Rejected Candidates",
+    src="Rejected Candidates",
+    tgt="Candidates For Future Hire",
 ):
     """usage: copy_report("NPro", "src", "tgt")"""
 

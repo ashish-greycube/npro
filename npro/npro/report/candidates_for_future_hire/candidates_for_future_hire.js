@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Rejected Candidates"] = {
+frappe.query_reports["Candidates For Future Hire"] = {
   filters: [
     // {
     //   fieldname: "from_date",
@@ -37,7 +37,6 @@ frappe.query_reports["Rejected Candidates"] = {
   ],
 
   onload: function (report) {
-    report.page.set_title("Rejected/Non Onboarded Candidates");
-
+    report.page.set_title("");
   },
 };

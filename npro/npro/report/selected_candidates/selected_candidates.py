@@ -19,7 +19,7 @@ def get_data(filters):
             tja.name, tjo.name job_name, tja.applicant_name, tja.source, 
             tja.status, tja.previous_company_cf, tja.applicant_total_experience_cf,
             tja.rejected_reason_cf,
-            tjo.job_title,
+            tjo.job_title, tjo.customer_cf,
             concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
             tif.name feedback_name, tif.interviewer_name_cf, tif.interview_round, tif.feedback,
             tif.average_rating interviewer_scoring, tjc.proficiency expected_scoring
@@ -57,6 +57,11 @@ def get_columns(filters):
             "width": 130,
         },
         {
+            "label": _("Customer"),
+            "fieldname": "customer_cf",
+            "width": 200,
+        },
+        {
             "label": _("Technology"),
             "fieldname": "job_title",
             "width": 200,
@@ -73,30 +78,8 @@ def get_columns(filters):
             "width": 120,
         },
         {
-            "label": _("Previous Company"),
-            "fieldname": "previous_company",
-            "width": 150,
-        },
-        {
             "label": _("Expected Salary Range"),
             "fieldname": "salary_range",
-            "width": 180,
-        },
-        {
-            "label": _("Reason for not coming Onboard"),
-            "fieldname": "rejected_reason",
-            "width": 180,
-        },
-        {
-            "label": _("Link to Feedback"),
-            "fieldname": "feedback_name",
-            "fieldtype": "Link",
-            "options": "Interview Feedback",
-            "width": 130,
-        },
-        {
-            "label": _("Feedback"),
-            "fieldname": "feedback",
             "width": 180,
         },
         {
@@ -105,11 +88,10 @@ def get_columns(filters):
             "width": 180,
         },
         {
-            "label": _("Interview Round"),
-            "fieldname": "interview_round",
-            "fieldtype": "Link",
-            "options": "Interview Round",
-            "width": 120,
+            "label": _("Expected Scoring"),
+            "fieldname": "expected_scoring",
+            "fieldtype": "Int",
+            "width": 180,
         },
         {
             "label": _("Interviewer Scoring"),
@@ -118,17 +100,30 @@ def get_columns(filters):
             "width": 180,
         },
         {
-            "label": _("Expected Scoring"),
-            "fieldname": "expected_scoring",
-            "fieldtype": "Int",
+            "label": _("Feedback"),
+            "fieldname": "feedback",
             "width": 180,
         },
+        #         {
+        #     "label": _("Link to Feedback"),
+        #     "fieldname": "feedback_name",
+        #     "fieldtype": "Link",
+        #     "options": "Interview Feedback",
+        #     "width": 130,
+        # },
+        # {
+        #     "label": _("Interview Round"),
+        #     "fieldname": "interview_round",
+        #     "fieldtype": "Link",
+        #     "options": "Interview Round",
+        #     "width": 120,
+        # },
     ]
 
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("tja.status = 'Rejected'")
+    where_clause.append("tja.status = 'Selected'")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")
