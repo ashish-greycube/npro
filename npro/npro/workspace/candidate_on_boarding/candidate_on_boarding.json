@@ -219,7 +219,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Upcoming Interviews",
    "link_to": "Upcoming Interviews",
    "link_type": "Report",
@@ -228,7 +228,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Interviews",
    "link_to": "Interviews",
    "link_type": "Report",
@@ -237,15 +237,24 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Previous Interviews by Status",
    "link_to": "Previous Interviews by Status",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Interview Results",
+   "link_to": "Interview Results",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-01-12 08:33:32.025138",
+ "modified": "2022-01-12 08:48:15.801956",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Candidate On Boarding",

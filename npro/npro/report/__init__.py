@@ -12,7 +12,7 @@ from frappe.modules import scrub, get_module_path
 def copy_report(
     module="NPro",
     src="Interviews",
-    tgt="Previous Interviews by Status",
+    tgt="Interview Results",
 ):
     """usage: copy_report("NPro", "src", "tgt")"""
 

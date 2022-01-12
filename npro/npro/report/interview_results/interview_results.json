@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2022-01-12 08:46:00.195949",
+ "disable_prepared_report": 1,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2022-01-12 08:46:00.195949",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Interview Results",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Job Applicant",
+ "report_name": "Interview Results",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Sales Master Manager"
+  },
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  }
+ ]
+}
