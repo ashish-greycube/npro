@@ -123,7 +123,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("tja.status = 'Selected'")
+    where_clause.append("tja.status = 'Accepted'")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")

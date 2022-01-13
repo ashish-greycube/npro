@@ -6,6 +6,7 @@ import frappe
 from frappe import _
 from frappe.utils import cint
 import pandas as pd
+import numpy as np
 
 
 def execute(filters=None):
@@ -18,7 +19,8 @@ def get_data(filters):
         select 
             tja.name, tja.applicant_name, tja.source, 
             tja.status, tjo.job_title, tjo.customer_cf,
-            concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range
+            concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
+            tja.applicant_total_experience_cf, tja.previous_company_cf
         from `tabJob Applicant` tja 
         inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
     """,
@@ -48,7 +50,7 @@ def get_data(filters):
     df2.columns = [
         frappe.scrub(d.replace("profile_url_", "")) for d in df2.columns.map("_".join)
     ]
-    df3 = pd.merge(df1, df2, on="name")
+    df3 = pd.merge(df1, df2, how="left", on=["name"]).replace(np.nan, "", regex=True)
 
     social_media_columns = [
         dict(label=frappe.unscrub(d), fieldname=d, width=150) for d in df2.columns
@@ -94,13 +96,13 @@ def get_columns(filters):
         },
         {
             "label": _("Total Experience"),
-            "fieldname": "total_experience",
+            "fieldname": "applicant_total_experience_cf",
             "fieldtype": "Float",
             "width": 120,
         },
         {
             "label": _("Previous Company"),
-            "fieldname": "previous_company",
+            "fieldname": "previous_company_cf",
             "width": 150,
         },
         {

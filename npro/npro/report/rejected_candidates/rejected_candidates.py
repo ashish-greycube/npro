@@ -68,13 +68,13 @@ def get_columns(filters):
         },
         {
             "label": _("Total Experience"),
-            "fieldname": "total_experience",
+            "fieldname": "applicant_total_experience_cf",
             "fieldtype": "Float",
             "width": 120,
         },
         {
             "label": _("Previous Company"),
-            "fieldname": "previous_company",
+            "fieldname": "previous_company_cf",
             "width": 150,
         },
         {
@@ -84,7 +84,7 @@ def get_columns(filters):
         },
         {
             "label": _("Reason for not coming Onboard"),
-            "fieldname": "rejected_reason",
+            "fieldname": "rejected_reason_cf",
             "width": 180,
         },
         {
@@ -128,7 +128,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("tja.status = 'Rejected'")
+    # where_clause.append("tja.status = 'Rejected'")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")

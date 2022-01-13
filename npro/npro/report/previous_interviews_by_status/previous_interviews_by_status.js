@@ -6,21 +6,21 @@ frappe.query_reports["Previous Interviews by Status"] = {
   filters: [
     {
       fieldname: "from_date",
-      label: __("From Date (Sales Stage Last Updated Date)"),
+      label: __("Interview From Date"),
       fieldtype: "Date",
       default: moment().startOf("month"),
       reqd: 1,
     },
     {
       fieldname: "till_date",
-      label: __("Till Date (Sales Stage Last Updated Date)"),
+      label: __("Interview Till Date"),
       fieldtype: "Date",
       default: moment(),
       reqd: 1,
     },
     {
       fieldname: "timespan",
-      label: __("Opportunity Creation Date in "),
+      label: __("Interview Date in"),
       fieldtype: "Select",
       options: npro.utils.TIMESPAN_OPTIONS,
       on_change: function (query_report) {
