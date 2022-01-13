@@ -16,7 +16,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tja.name, tjo.name job_name, tja.applicant_name, tja.source, 
+            tja.name applicant, tjo.name job_name, tja.applicant_name, tja.source, 
             tja.status, tja.previous_company_cf, tja.applicant_total_experience_cf,
             tja.rejected_reason_cf,
             tjo.job_title, tjo.customer_cf,

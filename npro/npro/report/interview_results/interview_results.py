@@ -18,7 +18,7 @@ def get_data(filters):
         select 
             tjo.customer_cf, tjo.job_title, tjo.description, tir.interview_type, 
             tif.interviewer_name_cf interviewer,
-            tja.applicant_name, tjc.skill,
+            tja.applicant_name, tjc.skill, tja.name applicant,
             tsa.rating obtained_rating, tjc.proficiency expected_rating, tif.feedback 
         from 
             tabInterview ti 

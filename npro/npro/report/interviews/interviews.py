@@ -16,7 +16,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tja.applicant_name,  ti.designation, ti.scheduled_on, 
+            tja.name applicant, tja.applicant_name,  ti.designation, ti.scheduled_on, 
             tu.full_name interviewer, tir.interview_type, tja.status, 
             ti.average_rating, tir.expected_average_rating
         from 

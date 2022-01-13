@@ -17,7 +17,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
             select 
-                tja.applicant_name, ti.designation, ti.scheduled_on, 
+                tja.name applicant, tja.applicant_name, ti.designation, ti.scheduled_on, 
                 TIME_FORMAT(ti.from_time,'%%h:%%i %%p') from_time, 
                 TIME_FORMAT(ti.to_time,'%%h:%%i %%p') to_time,
                 tu.full_name, ti.interview_round 

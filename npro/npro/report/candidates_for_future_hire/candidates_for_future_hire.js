@@ -39,4 +39,15 @@ frappe.query_reports["Candidates For Future Hire"] = {
   onload: function (report) {
     // report.page.set_title("");
   },
+
+
+  "formatter": function (value, row, column, data, default_formatter) {
+    value = default_formatter(value, row, column, data);
+
+    if (column.fieldname == "applicant_name") {
+      value = `<a href="/app/job-applicant/${data['applicant']}" data-doctype="Job Applicant">${data['applicant_name']}</a>`;
+    }
+    return value;
+  },
+
 };

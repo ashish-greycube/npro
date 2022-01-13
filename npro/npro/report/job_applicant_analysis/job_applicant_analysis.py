@@ -18,7 +18,8 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
-        select tja.applicant_name , tjo.customer_cf, tjc.skill, tjo.designation,
+        select
+        tja.name applicant, tja.applicant_name , tjo.customer_cf, tjc.skill, tjo.designation,
         tjc.proficiency proficiency_jrss, 
         coalesce(ir.rating/ir.interviewer_count,0) obtained_average_rating,
         ir.interviewers

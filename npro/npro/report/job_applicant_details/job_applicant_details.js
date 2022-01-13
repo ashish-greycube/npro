@@ -36,5 +36,15 @@ frappe.query_reports["Job Applicant Details"] = {
     // },
   ],
 
+
+  "formatter": function (value, row, column, data, default_formatter) {
+    value = default_formatter(value, row, column, data);
+
+    if (column.fieldname == "applicant_name") {
+      value = `<a href="/app/job-applicant/${data['applicant']}" data-doctype="Job Applicant">${data['applicant_name']}</a>`;
+    }
+    return value;
+  },
+
   onload: function (report) { },
 };

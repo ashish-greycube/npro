@@ -17,7 +17,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tja.name, tja.applicant_name, tja.source, 
+            tja.name applicant, tja.applicant_name, tja.source, 
             tja.status, tjo.job_title, tjo.customer_cf,
             concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
             tja.applicant_total_experience_cf, tja.previous_company_cf
@@ -27,12 +27,12 @@ def get_data(filters):
         as_dict=True,
     )
     df1 = pd.DataFrame.from_records(data)
-    df1.set_index("name")
+    df1.set_index("applicant")
 
     social_media = frappe.db.sql(
         """
     select 
-        tja.name, tsmpu.social_media_platform, tsmpu.profile_url 
+        tja.name applicant, tsmpu.social_media_platform, tsmpu.profile_url 
     from `tabSocial Media Profile URL` tsmpu 
     inner join `tabJob Applicant` tja on tja.name = tsmpu.parent ; 
     """,
@@ -41,7 +41,7 @@ def get_data(filters):
     df2 = pd.DataFrame.from_records(social_media)
     df2 = pd.pivot_table(
         df2,
-        index=["name"],
+        index=["applicant"],
         columns=["social_media_platform"],
         values=["profile_url"],
         aggfunc="first",
@@ -50,7 +50,9 @@ def get_data(filters):
     df2.columns = [
         frappe.scrub(d.replace("profile_url_", "")) for d in df2.columns.map("_".join)
     ]
-    df3 = pd.merge(df1, df2, how="left", on=["name"]).replace(np.nan, "", regex=True)
+    df3 = pd.merge(df1, df2, how="left", on=["applicant"]).replace(
+        np.nan, "", regex=True
+    )
 
     social_media_columns = [
         dict(label=frappe.unscrub(d), fieldname=d, width=150) for d in df2.columns
