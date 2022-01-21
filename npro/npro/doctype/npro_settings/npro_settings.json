@@ -7,7 +7,8 @@
  "field_order": [
   "lead_status_sort_order",
   "lead_active_status",
-  "candidate_sourcing_notification"
+  "candidate_sourcing_notification",
+  "opportunity_job_applicant_status_priority_mapping"
  ],
  "fields": [
   {
@@ -26,16 +27,25 @@
    "reqd": 1
   },
   {
+   "description": "Email fired when stage is set as NPro Candidate Sourcing in Opportunity based on this.",
    "fieldname": "candidate_sourcing_notification",
    "fieldtype": "Link",
    "label": "Candidate Sourcing Notification",
    "options": "Notification"
+  },
+  {
+   "description": "When Status of Job Applicant Status is updated > update the status of the \nOpportunity Consulting Detail CT > stage field based on priority\nPriority 1 is higher and 4 is lower",
+   "fieldname": "opportunity_job_applicant_status_priority_mapping",
+   "fieldtype": "Table",
+   "label": "Opportunity Job Applicant Status Priority Mapping",
+   "options": "Opportunity Job Applicant Status Priority Mapping",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-12-28 09:54:39.044031",
+ "modified": "2022-01-21 10:36:43.948606",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
