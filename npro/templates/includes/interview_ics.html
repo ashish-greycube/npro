@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:Interview of {{job_applicant}} for {{job_opening}}
+DTSTART:{{dtstart}}
+DTEND:{{dtend}}
+LOCATION:Online. Link will be emailed shortly.
+DESCRIPTION:Interview of {{job_applicant}} for {{job_opening}}
+ORGANIZER;CN={{modified_by}}:MAILTO:{{modified_by}}
+{{attendees}}
+STATUS:CONFIRMED
+SEQUENCE:3
+BEGIN:VALARM
+TRIGGER:-PT1D
+DESCRIPTION:Interview of {{job_applicant}} for {{job_opening}}
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR

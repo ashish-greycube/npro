@@ -104,6 +104,8 @@ doc_events = {
         "validate": "npro.api.on_validate_opportunity",
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
+    "Interview": {"on_update": "npro.api.on_update_interview"},
+    "Job Opening": {"autoname": "npro.api.autoname_job_opening"},
 }
 
 # Scheduled Tasks

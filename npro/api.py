@@ -1,6 +1,20 @@
 from __future__ import unicode_literals
 import frappe, json
-from frappe.utils import getdate, add_days, today, flt
+from frappe.utils import (
+    getdate,
+    add_days,
+    today,
+    flt,
+    get_datetime,
+    formatdate,
+    get_datetime_in_timezone,
+    get_time_zone,
+    format_datetime,
+)
+import pytz
+from frappe.model.naming import make_autoname
+
+from frappe.desk.form.load import get_attachments
 
 
 def on_update_opportunity(doc, method):
@@ -206,3 +220,56 @@ def get_contacts_for_customer(doctype, txt, searchfield, start, page_len, filter
         filters,
         as_dict=False,
     )
+
+
+def on_update_interview(doc, method):
+    def _attach_interview_ics(doc):
+        file_name = "{}-interview.ics".format(doc.name)
+
+        # remove existing ics attachment
+        for d in get_attachments("Interview", doc.name):
+            if d.file_name.startswith(file_name.replace(".ics", "")):
+                frappe.delete_doc("File", d.name)
+
+        doc.dtstart = format_datetime(
+            get_datetime("{} {}".format(doc.scheduled_on, doc.from_time)),
+            "YYYYMMDDThhmmss",
+        )
+
+        doc.dtend = format_datetime(
+            get_datetime("{} {}".format(doc.scheduled_on, doc.to_time)),
+            "YYYYMMDDThhmmss",
+        )
+
+        attendees = [
+            frappe.db.get_value("Job Applicant", doc.job_applicant, "email_id")
+        ]
+        for i in doc.interview_details:
+            attendees.append(i.interviewer)
+        doc.attendees = "\n".join(
+            [
+                f"ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED:MAILTO:{x}"
+                for x in attendees
+            ]
+        )
+        ics_file = frappe.render_template("templates/includes/interview_ics.html", doc)
+        print(ics_file)
+
+        _file = frappe.get_doc(
+            {
+                "doctype": "File",
+                "file_name": file_name,
+                "attached_to_doctype": "Interview",
+                "attached_to_name": doc.name,
+                "folder": "Home/Attachments",
+                "is_private": True,
+                "content": ics_file,
+            }
+        )
+        _file.save(ignore_permissions=True)
+
+    _attach_interview_ics(doc.as_dict())
+
+
+def autoname_job_opening(doc, method):
+    doc.name = make_autoname("JO-.YY.-.#")
