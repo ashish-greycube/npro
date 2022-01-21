@@ -4,13 +4,12 @@
 
 frappe.query_reports["Interview Results"] = {
   filters: [
-    // {
-    //   fieldname: "from_date",
-    //   label: __("From Date (Sales Stage Last Updated Date)"),
-    //   fieldtype: "Date",
-    //   default: moment().startOf("month"),
-    //   reqd: 1,
-    // },
+    {
+      label: __("Job Opening"),
+      fieldname: "job_opening",
+      fieldtype: "Link",
+      options: "Job Opening"
+    },
     // {
     //   fieldname: "till_date",
     //   label: __("Till Date (Sales Stage Last Updated Date)"),

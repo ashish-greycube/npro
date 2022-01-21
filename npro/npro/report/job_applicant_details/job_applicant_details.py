@@ -14,6 +14,8 @@ def execute(filters=None):
 
 
 def get_data(filters):
+    columns = get_columns(filters)
+
     data = frappe.db.sql(
         """
         select 
@@ -32,12 +34,17 @@ def get_data(filters):
     social_media = frappe.db.sql(
         """
     select 
-        tja.name applicant, tsmpu.social_media_platform, tsmpu.profile_url 
+        tja.name applicant, tsmpu.social_media_platform, 
+        coalesce(tsmpu.profile_url,"") profile_url 
     from `tabSocial Media Profile URL` tsmpu 
     inner join `tabJob Applicant` tja on tja.name = tsmpu.parent ; 
     """,
         as_dict=True,
     )
+
+    if not social_media:
+        return columns, df1.to_dict(orient="records")
+
     df2 = pd.DataFrame.from_records(social_media)
     df2 = pd.pivot_table(
         df2,
@@ -58,7 +65,6 @@ def get_data(filters):
         dict(label=frappe.unscrub(d), fieldname=d, width=150) for d in df2.columns
     ]
 
-    columns = get_columns(filters)
     columns[5:5] = social_media_columns
 
     return columns, df3.to_dict(orient="records")
@@ -99,7 +105,7 @@ def get_columns(filters):
         {
             "label": _("Total Experience"),
             "fieldname": "applicant_total_experience_cf",
-            "fieldtype": "Float",
+            "fieldtype": "Int",
             "width": 120,
         },
         {

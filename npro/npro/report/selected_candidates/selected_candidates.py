@@ -74,7 +74,7 @@ def get_columns(filters):
         {
             "label": _("Total Experience"),
             "fieldname": "total_experience",
-            "fieldtype": "Float",
+            "fieldtype": "Int",
             "width": 120,
         },
         {

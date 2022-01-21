@@ -41,7 +41,11 @@ frappe.query_reports["Interviews"] = {
 
     if (column.fieldname == "applicant_name") {
       value = `<a href="/app/job-applicant/${data['applicant']}" data-doctype="Job Applicant">${data['applicant_name']}</a>`;
+    } else if (column.fieldname == "job_title") {
+      value = `<a href="/app/job-opening/${data['job_name']}" data-doctype="Job Opening">${data['job_title']}</a>`;
     }
+
+
     return value;
   },
 

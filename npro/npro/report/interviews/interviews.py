@@ -18,7 +18,8 @@ def get_data(filters):
         select 
             tja.name applicant, tja.applicant_name,  ti.designation, ti.scheduled_on, 
             tu.full_name interviewer, tir.interview_type, tja.status, 
-            ti.average_rating, tir.expected_average_rating
+            ti.average_rating, tir.expected_average_rating,
+            tjo.name job_name, tjo.job_title, tjo.opportunity_cf 
         from 
             tabInterview ti 
             inner join `tabInterview Round` tir on tir.name = ti.interview_round 
@@ -39,6 +40,19 @@ def get_data(filters):
 
 def get_columns(filters):
     return [
+        {
+            "label": _("Opportunity"),
+            "fieldname": "opportunity_cf",
+            "fieldtype": "Link",
+            "options": "Opportunity",
+            "width": 180,
+        },
+        {
+            "label": _("Job Title"),
+            "fieldname": "job_title",
+            "formatter": "",
+            "width": 180,
+        },
         {
             "label": _("Applicant Name"),
             "fieldname": "applicant_name",
