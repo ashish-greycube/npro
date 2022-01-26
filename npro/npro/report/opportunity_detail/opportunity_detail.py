@@ -23,6 +23,7 @@ def get_data(filters):
                 op.modified, date(op.contact_date) contact_date, 
                 COALESCE(pr.stage, cons.stage) sales_stage, 
                 COALESCE(pr.requirement, cons.requirement) requirement, 
+                cons.expected_close_date, cons.amount, cons.location,
                 comm.content latest_comment, comp.competitor competitiors, op.opportunity_amount, op.won_amount_cf,
                 op.lost_amount_cf
             from 
@@ -34,7 +35,8 @@ def get_data(filters):
             ) pr on pr.parent = op.name and op.opportunity_type = 'Project'
             left outer join 
             (
-                select parent, stage, project_name requirement, opportunity_close_date
+                select parent, stage, project_name requirement, 
+                opportunity_close_date, expected_close_date, amount, location
                 from `tabOpportunity Consulting Detail CT`
             ) cons on cons.parent = op.name and op.opportunity_type = 'Consulting'
             left outer join
@@ -98,6 +100,23 @@ def get_columns(filters):
             "label": _("Requirement"),
             "fieldname": "requirement",
             "width": 200,
+        },
+        {
+            "label": _("Location"),
+            "fieldname": "location",
+            "width": 100,
+        },
+        {
+            "label": _("Amount"),
+            "fieldtype": "Currency",
+            "fieldname": "amount",
+            "width": 120,
+        },
+        {
+            "label": _("Expected Close Date"),
+            "fieldname": "expected_close_date",
+            "fieldtype": "Date",
+            "width": 130,
         },
         {
             "label": _("Next Contact Date"),

@@ -45,6 +45,7 @@ frappe.ui.form.on("Opportunity Consulting Detail CT", {
         $.extend(opening, {
             company: frm.doc.company,
             opportunity_cf: frm.doc.name,
+            opportunity_consulting_detail_ct_cf: cdn,
             customer_cf: frm.doc.party_name,
             customer_contact_cf: frm.doc.contact_person,
             customer_email_cf: frm.doc.contact_email,

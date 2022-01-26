@@ -276,19 +276,16 @@ def autoname_job_opening(doc, method):
 
 
 def on_update_job_opening(doc, method):
-    if doc.opportunity_cf:
-        frappe.db.sql(
-            """
-            update 
-                `tabOpportunity Consulting Detail CT`
-            set job_opening = %s
-            where parent = %s
-        """,
-            (
-                doc.name,
-                doc.opportunity_cf,
-            ),
-        )
+    if doc.opportunity_cf and doc.opportunity_consulting_detail_ct_cf:
+        # notify update to reload Opportunity in client
+        opportunity = frappe.get_doc("Opportunity", doc.opportunity_cf)
+        update = 0
+        for d in opportunity.opportunity_consulting_detail_ct_cf:
+            if False and d.name == doc.opportunity_consulting_detail_ct_cf:
+                d.job_opening = doc.name
+                update = 1
+        if update:
+            opportunity.save()
 
 
 def on_update_job_applicant(doc, method):
