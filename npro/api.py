@@ -279,11 +279,15 @@ def on_update_job_opening(doc, method):
     if doc.opportunity_cf:
         frappe.db.sql(
             """
-            update `tabOpportunity Consulting Detail CT`
+            update 
+                `tabOpportunity Consulting Detail CT`
             set job_opening = %s
             where parent = %s
-        """
-            % (doc.name, doc.opportunity_cf)
+        """,
+            (
+                doc.name,
+                doc.opportunity_cf,
+            ),
         )
 
 
