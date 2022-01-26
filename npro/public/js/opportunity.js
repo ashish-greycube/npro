@@ -20,8 +20,9 @@ frappe.ui.form.on("Opportunity", {
 
     opportunity_consulting_detail_ct_cf_on_form_rendered: function (doc, grid_row) {
         grid_row = cur_frm.open_grid_row();
-        let stage = grid_row.grid_form.fields_dict.stage.value
-        grid_row.toggle_display('create_job_opening', stage === "NPro Candidate Sourcing")
+        let stage = grid_row.grid_form.fields_dict.stage.value;
+        grid_row.toggle_display('create_job_opening', stage === "NPro Candidate Sourcing");
+        grid_row.grid_form.fields_dict.create_job_opening.$input.addClass('btn-primary');
     },
 
 })
