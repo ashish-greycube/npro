@@ -68,8 +68,8 @@ def get_columns(filters):
         },
         {
             "label": _("Total Experience"),
-            "fieldname": "total_experience",
-            "fieldtype": "Float",
+            "fieldname": "applicant_total_experience_cf",
+            "fieldtype": "Data",
             "width": 120,
         },
         {

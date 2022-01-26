@@ -69,7 +69,7 @@ def get_columns(filters):
         {
             "label": _("Total Experience"),
             "fieldname": "applicant_total_experience_cf",
-            "fieldtype": "Int",
+            "fieldtype": "Data",
             "width": 120,
         },
         {
