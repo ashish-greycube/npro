@@ -16,7 +16,14 @@ frappe.ui.form.on("Opportunity", {
     refresh: function (frm) {
         frm.set_value('opportunity_from', 'Customer', true)
 
-    }
+    },
+
+    opportunity_consulting_detail_ct_cf_on_form_rendered: function (doc, grid_row) {
+        grid_row = cur_frm.open_grid_row();
+        let stage = grid_row.grid_form.fields_dict.stage.value
+        grid_row.toggle_display('create_job_opening', stage === "NPro Candidate Sourcing")
+    },
+
 })
 
 frappe.ui.form.on("Opportunity Consulting Detail CT", {

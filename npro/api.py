@@ -273,3 +273,54 @@ def on_update_interview(doc, method):
 
 def autoname_job_opening(doc, method):
     doc.name = make_autoname("JO-.YY.-.#")
+
+
+def on_update_job_opening(doc, method):
+    if doc.opportunity_cf:
+        frappe.db.sql(
+            """
+            update `tabOpportunity Consulting Detail CT`
+            set job_opening = %s
+            where parent = %s
+        """
+            % (doc.name, doc.opportunity_cf)
+        )
+
+
+def on_update_job_applicant(doc, method):
+    new_stage = None
+    if doc.job_title:
+        for d in frappe.db.sql(
+            """
+            select name, stage 
+            from `tabOpportunity Consulting Detail CT`
+            where job_opening = %s
+                """,
+            (doc.job_title),
+            as_dict=True,
+        ):
+            stage = get_consulting_stage_for_applicant_status(doc.status, d.stage)
+            print(stage)
+
+            if stage:
+                frappe.db.sql(
+                    """update `tabOpportunity Consulting Detail CT`
+                    set stage = %s where name = %s""",
+                    (stage, d.name),
+                )
+
+
+def get_consulting_stage_for_applicant_status(job_applicant_status, stage):
+    settings = frappe.get_single("NPro Settings")
+    priority_mapping = settings.opportunity_job_applicant_status_priority_mapping
+
+    _map = {x.opportunity_consulting_stage: x.priority for x in priority_mapping}
+    _temp = [
+        x for x in priority_mapping if x.job_applicant_status == job_applicant_status
+    ]
+
+    for t in _temp:
+        if not _map.get(stage) or t.priority < _map.get(stage):
+            return t.opportunity_consulting_stage
+
+    return stage

@@ -105,7 +105,13 @@ doc_events = {
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
     "Interview": {"on_update": "npro.api.on_update_interview"},
-    "Job Opening": {"autoname": "npro.api.autoname_job_opening"},
+    "Job Opening": {
+        "autoname": "npro.api.autoname_job_opening",
+        "on_update": "npro.api.on_update_job_opening",
+    },
+    "Job Applicant": {
+        "on_update": "npro.api.on_update_job_applicant",
+    },
 }
 
 # Scheduled Tasks
