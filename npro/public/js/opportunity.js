@@ -46,10 +46,11 @@ frappe.ui.form.on("Opportunity Consulting Detail CT", {
             company: frm.doc.company,
             opportunity_cf: frm.doc.name,
             opportunity_consulting_detail_ct_cf: cdn,
+            opportunity_technology_cf: item['project_name'],
             customer_cf: frm.doc.party_name,
             customer_contact_cf: frm.doc.contact_person,
             customer_email_cf: frm.doc.contact_email,
-            npro_sourcing_owner_cf: frm.doc.opportunity_owner_cf,
+            // npro_sourcing_owner_cf: frm.doc.opportunity_owner_cf, // removed on 31-01-2022
             contract_duration_cf: item.duration_in_months,
             billing_per_month_cf: item.billing_per_month,
             location_cf: item.location

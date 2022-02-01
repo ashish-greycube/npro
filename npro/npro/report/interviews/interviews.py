@@ -54,6 +54,13 @@ def get_columns(filters):
             "width": 180,
         },
         {
+            "label": _("Job Opening"),
+            "fieldname": "job_name",
+            "fieldtype": "Link",
+            "options": "Job Opening",
+            "width": 180,
+        },
+        {
             "label": _("Applicant Name"),
             "fieldname": "applicant_name",
             "width": 180,

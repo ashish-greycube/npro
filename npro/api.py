@@ -280,11 +280,13 @@ def on_update_job_opening(doc, method):
         # notify update to reload Opportunity in client
         opportunity = frappe.get_doc("Opportunity", doc.opportunity_cf)
         update = 0
-        for d in opportunity.opportunity_consulting_detail_ct_cf:
-            if False and d.name == doc.opportunity_consulting_detail_ct_cf:
-                d.job_opening = doc.name
-                update = 1
-        if update:
+        detail = [
+            d
+            for d in opportunity.opportunity_consulting_detail_ct_cf
+            if d.name == doc.opportunity_consulting_detail_ct_cf
+        ]
+        for d in detail:
+            d.job_opening = doc.name
             opportunity.save()
 
 
