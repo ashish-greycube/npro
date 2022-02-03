@@ -36,7 +36,9 @@ def on_update_opportunity(doc, method):
     ]
 
     if job_openings:
-        evaluate_alert(doc, notification, "Custom")
+        for detail in job_openings:
+            doc.consulting_detail = detail
+            evaluate_alert(doc, notification, "Custom")
         for d in job_openings:
             frappe.db.set_value(
                 "Opportunity Consulting Detail CT",
