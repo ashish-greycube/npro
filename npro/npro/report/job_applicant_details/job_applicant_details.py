@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
+from distutils.log import debug
 import frappe
 from frappe import _
 from frappe.utils import cint
@@ -19,7 +20,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tja.name applicant, tja.applicant_name, tja.source, 
+            tja.name applicant, tja.applicant_name, tja.source, tja.current_city_cf,
             tja.status, tjo.job_title, tjo.customer_cf,
             concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
             tja.applicant_total_experience_cf, tja.previous_company_cf
@@ -99,7 +100,7 @@ def get_columns(filters):
         },
         {
             "label": _("City"),
-            "fieldname": "city",
+            "fieldname": "current_city_cf",
             "width": 200,
         },
         {

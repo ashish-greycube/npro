@@ -15,42 +15,44 @@ import pytz
 from frappe.model.naming import make_autoname
 
 from frappe.desk.form.load import get_attachments
+from frappe.email.doctype.notification.notification import evaluate_alert
 
 
 def on_update_opportunity(doc, method):
     set_status_value(doc, method)
 
     # send email for job creation
-    from frappe.email.doctype.notification.notification import evaluate_alert
 
     notification = (
         frappe.db.get_single_value("NPro Settings", "candidate_sourcing_notification")
         or ""
     )
 
-    job_openings = [
-        d
-        for d in doc.opportunity_consulting_detail_ct_cf
-        if d.stage == "NPro Candidate Sourcing"
-        and not d.email_sent_for_job_opening_creation
-    ]
+    if notification:
+        job_openings = [
+            d
+            for d in doc.opportunity_consulting_detail_ct_cf
+            if d.stage == "NPro Candidate Sourcing"
+            and not d.email_sent_for_job_opening_creation
+        ]
 
-    if job_openings:
-        for detail in job_openings:
-            doc.consulting_detail = detail
-            evaluate_alert(doc, notification, "Custom")
-        for d in job_openings:
-            frappe.db.set_value(
-                "Opportunity Consulting Detail CT",
-                d.name,
-                "email_sent_for_job_opening_creation",
-                1,
-            )
-        frappe.db.commit()
+        if job_openings:
+            for detail in job_openings:
+                doc.consulting_detail = detail
+                evaluate_alert(doc, notification, "Custom")
+            for d in job_openings:
+                frappe.db.set_value(
+                    "Opportunity Consulting Detail CT",
+                    d.name,
+                    "email_sent_for_job_opening_creation",
+                    1,
+                )
+            frappe.db.commit()
 
 
 def on_validate_opportunity(doc, method):
     opportunity_cost_calculation(doc, method)
+    notify_sales_stage_update(doc, method)
 
 
 @frappe.whitelist()
@@ -224,53 +226,96 @@ def get_contacts_for_customer(doctype, txt, searchfield, start, page_len, filter
     )
 
 
-def on_update_interview(doc, method):
-    def _attach_interview_ics(doc):
-        file_name = "{}-interview.ics".format(doc.name)
+def create_event_for_interview(doc):
+    """
+    Create an Event,
+    add interviewer if an Employee exists for that user
+    """
 
-        # remove existing ics attachment
-        for d in get_attachments("Interview", doc.name):
-            if d.file_name.startswith(file_name.replace(".ics", "")):
-                frappe.delete_doc("File", d.name)
+    job_title = frappe.db.get_value("Job Opening", doc.job_opening, "job_title")
+    subject = "Interview of {0} for {1} ({2})".format(
+        doc.job_applicant, doc.job_opening, job_title
+    )
 
-        doc.dtstart = format_datetime(
-            get_datetime("{} {}".format(doc.scheduled_on, doc.from_time)),
-            "YYYYMMDDThhmmss",
+    starts_on = get_datetime(
+        "{0} {1}".format(doc.scheduled_on.strftime("%Y-%m-%d"), doc.from_time)
+    )
+
+    ends_on = get_datetime(
+        "{0} {1}".format(doc.scheduled_on.strftime("%Y-%m-%d"), doc.to_time)
+    )
+
+    attendees = [d.interviewer for d in doc.interview_details]
+
+    event = frappe.get_doc(
+        {
+            "doctype": "Event",
+            "event_category": "Event",
+            "subject": subject,
+            "status": "Open",
+            "starts_on": starts_on,
+            "ends_on": ends_on,
+            "event_type": "Private",
+        }
+    )
+    for d in frappe.get_all("Employee", {"user_id": ["in", tuple(attendees)]}):
+        event.append(
+            "event_participants",
+            dict(reference_doctype="Employee", reference_docname=d.name),
         )
+    event.insert()
 
-        doc.dtend = format_datetime(
-            get_datetime("{} {}".format(doc.scheduled_on, doc.to_time)),
-            "YYYYMMDDThhmmss",
-        )
 
-        attendees = [
-            frappe.db.get_value("Job Applicant", doc.job_applicant, "email_id")
+def attach_interview_ics(doc):
+    file_name = "{}-interview.ics".format(doc.name)
+
+    # remove existing ics attachment
+    for d in get_attachments("Interview", doc.name):
+        if d.file_name.startswith(file_name.replace(".ics", "")):
+            frappe.delete_doc("File", d.name)
+
+    doc.dtstart = format_datetime(
+        get_datetime("{} {}".format(doc.scheduled_on, doc.from_time)),
+        "YYYYMMDDThhmmss",
+    )
+
+    doc.dtend = format_datetime(
+        get_datetime("{} {}".format(doc.scheduled_on, doc.to_time)),
+        "YYYYMMDDThhmmss",
+    )
+
+    attendees = [frappe.db.get_value("Job Applicant", doc.job_applicant, "email_id")]
+    for i in doc.interview_details:
+        attendees.append(i.interviewer)
+    doc.attendees = "\n".join(
+        [
+            f"ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED:MAILTO:{x}"
+            for x in attendees
         ]
-        for i in doc.interview_details:
-            attendees.append(i.interviewer)
-        doc.attendees = "\n".join(
-            [
-                f"ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED:MAILTO:{x}"
-                for x in attendees
-            ]
-        )
-        ics_file = frappe.render_template("templates/includes/interview_ics.html", doc)
-        print(ics_file)
+    )
+    ics_file = frappe.render_template("templates/includes/interview_ics.html", doc)
+    print(ics_file)
 
-        _file = frappe.get_doc(
-            {
-                "doctype": "File",
-                "file_name": file_name,
-                "attached_to_doctype": "Interview",
-                "attached_to_name": doc.name,
-                "folder": "Home/Attachments",
-                "is_private": True,
-                "content": ics_file,
-            }
-        )
-        _file.save(ignore_permissions=True)
+    _file = frappe.get_doc(
+        {
+            "doctype": "File",
+            "file_name": file_name,
+            "attached_to_doctype": "Interview",
+            "attached_to_name": doc.name,
+            "folder": "Home/Attachments",
+            "is_private": True,
+            "content": ics_file,
+        }
+    )
+    _file.save(ignore_permissions=True)
 
-    _attach_interview_ics(doc.as_dict())
+
+def on_update_interview(doc, method):
+    try:
+        create_event_for_interview(doc)
+        attach_interview_ics(doc.as_dict())
+    except:
+        frappe.log_error(frappe.get_traceback())
 
 
 def autoname_job_opening(doc, method):
@@ -317,6 +362,25 @@ def on_update_job_applicant(doc, method):
         if d.opportunity_cf:
             # notify so doc is reloaded in client
             frappe.get_doc("Opportunity", d.opportunity_cf).notify_update()
+
+
+def notify_sales_stage_update(doc, method):
+    """
+    Trigger notification for when Stage is updated in Opportunity > opportunity_consulting_detail_ct_cf
+    Has to be done in validation, because in on_update we will not know if stage value hsa changed
+    """
+    notification = frappe.db.get_single_value(
+        "NPro Settings", "opportunity_consulting_detail_stage_update_notification"
+    )
+
+    if notification:
+        for d in doc.opportunity_consulting_detail_ct_cf:
+            old_value = frappe.db.get_value(
+                "Opportunity Consulting Detail CT", d.name, "stage"
+            )
+            if not old_value == d.stage:
+                doc.consulting_detail = d
+                evaluate_alert(doc, notification, "Custom")
 
 
 # def __on_update_job_applicant(doc, method):

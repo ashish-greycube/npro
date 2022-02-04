@@ -128,7 +128,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("tja.status = 'Rejected' and tja.for_future_hire_cf = 1")
+    where_clause.append("tja.for_future_hire_cf = 1")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")

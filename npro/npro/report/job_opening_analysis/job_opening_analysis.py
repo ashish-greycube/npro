@@ -33,7 +33,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
     select tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation, 
-    tjo.no_of_vacancies_cf, tjo.customer_cf, 
+    tjo.customer_cf, 
     tjo.customer_contact_cf, tjo.npro_sourcing_owner_cf, tjo.sales_person_cf,
     appl.no_applied, appl.no_passed_screening, appl.no_selected, 
     appl.no_shared_with_client, appl.no_selected_by_client,
@@ -100,11 +100,11 @@ def get_columns(filters):
             "options": "User",
             "width": 145,
         },
-        {
-            "label": "No Of Vacancies",
-            "fieldname": "no_of_vacancies_cf",
-            "width": 145,
-        },
+        # {
+        #     "label": "No Of Vacancies",
+        #     "fieldname": "no_of_vacancies_cf",
+        #     "width": 145,
+        # },
         {
             "label": "Candidates Applied",
             "fieldname": "no_applied",

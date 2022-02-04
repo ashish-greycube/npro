@@ -15,10 +15,16 @@ def get_data(filters):
     data = frappe.db.sql(
         """ 
         select 
-            name, npro_sourcing_owner_cf, customer_cf, job_title, location_cf, 
-            datediff(closed_date_cf, creation) selected_within_days 
+            tjo.name, npro_sourcing_owner_cf, tjo.customer_contact_cf, tjo.job_title, tjo.location_cf, 
+            datediff(tjo.closed_date_cf, tjo.creation) selected_within_days, tja.selected_candidate
         from 
             `tabJob Opening` tjo 
+            left outer join (
+	            select concat_ws(', ',applicant_name) selected_candidate, job_title 
+	            from `tabJob Applicant`
+	            where status = 'Accepted'
+	            group by job_title
+	        ) tja on tja.job_title = tjo.name
         {where_conditions}
     """.format(
             where_conditions=get_conditions(filters)
@@ -57,17 +63,22 @@ def get_columns(filters):
             "label": "Job Title",
             "fieldname": "job_title",
             "fieldtype": "Data",
-            "width": 145,
+            "width": 230,
         },
         {
             "label": "Customer Contact",
-            "fieldname": "contact_cf",
+            "fieldname": "customer_contact_cf",
             "width": 145,
+        },
+        {
+            "label": "Selected Candidate",
+            "fieldname": "selected_candidate",
+            "width": 180,
         },
         {
             "label": "Selected within Days",
             "fieldname": "selected_within_days",
-            "fieldtype": "Int",
+            "fieldtype": "Data",
             "width": 165,
         },
     ]
