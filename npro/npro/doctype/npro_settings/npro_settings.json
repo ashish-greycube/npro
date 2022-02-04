@@ -8,6 +8,7 @@
   "lead_status_sort_order",
   "lead_active_status",
   "candidate_sourcing_notification",
+  "opportunity_consulting_detail_stage_update_notification",
   "opportunity_job_applicant_status_priority_mapping"
  ],
  "fields": [
@@ -40,12 +41,18 @@
    "label": "Opportunity Job Applicant Status Priority Mapping",
    "options": "Opportunity Job Applicant Status Priority Mapping",
    "reqd": 1
+  },
+  {
+   "fieldname": "opportunity_consulting_detail_stage_update_notification",
+   "fieldtype": "Link",
+   "label": "Opportunity Consulting Detail Stage Update Notification",
+   "options": "Notification"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-21 10:36:43.948606",
+ "modified": "2022-02-04 16:38:16.824856",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
