@@ -238,11 +238,11 @@ def create_event_for_interview(doc):
     )
 
     starts_on = get_datetime(
-        "{0} {1}".format(doc.scheduled_on.strftime("%Y-%m-%d"), doc.from_time)
+        "{0} {1}".format(getdate(doc.scheduled_on).strftime("%Y-%m-%d"), doc.from_time)
     )
 
     ends_on = get_datetime(
-        "{0} {1}".format(doc.scheduled_on.strftime("%Y-%m-%d"), doc.to_time)
+        "{0} {1}".format(getdate(doc.scheduled_on).strftime("%Y-%m-%d"), doc.to_time)
     )
 
     attendees = [d.interviewer for d in doc.interview_details]
@@ -294,7 +294,7 @@ def attach_interview_ics(doc):
         ]
     )
     ics_file = frappe.render_template("templates/includes/interview_ics.html", doc)
-    print(ics_file)
+    # print(ics_file)
 
     _file = frappe.get_doc(
         {

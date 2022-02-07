@@ -74,7 +74,7 @@ def get_columns(filters):
         },
         {
             "label": _("Previous Company"),
-            "fieldname": "previous_company",
+            "fieldname": "previous_company_cf",
             "width": 150,
         },
         {
