@@ -336,8 +336,9 @@ def on_update_job_opening(doc, method):
         for d in detail:
             d.job_opening = doc.name
             opportunity.save()
-        if doc.status == "Closed" and not doc.closed_date_cf:
-            doc.closed_date_cf = nowdate()
+    if doc.status == "Closed" and not doc.closed_date_cf:
+        doc.closed_date_cf = nowdate()
+    frappe.db.commit()
 
 
 def on_update_job_applicant(doc, method):
