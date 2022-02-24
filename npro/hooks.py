@@ -108,6 +108,7 @@ doc_events = {
     "Job Opening": {
         "autoname": "npro.api.autoname_job_opening",
         "on_update": "npro.api.on_update_job_opening",
+        "validate": "npro.api.validate_job_opening",
     },
     "Job Applicant": {
         "on_update": "npro.api.on_update_job_applicant",

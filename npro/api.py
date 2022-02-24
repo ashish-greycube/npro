@@ -323,6 +323,11 @@ def autoname_job_opening(doc, method):
     doc.name = make_autoname("JO-.YY.-.#")
 
 
+def validate_job_opening(doc, method):
+    if doc.status == "Closed" and not doc.closed_date_cf:
+        doc.closed_date_cf = nowdate()
+
+
 def on_update_job_opening(doc, method):
     if doc.opportunity_cf and doc.opportunity_consulting_detail_ct_cf:
         # notify update to reload Opportunity in client
@@ -336,9 +341,6 @@ def on_update_job_opening(doc, method):
         for d in detail:
             d.job_opening = doc.name
             opportunity.save()
-    if doc.status == "Closed" and not doc.closed_date_cf:
-        doc.closed_date_cf = nowdate()
-    frappe.db.commit()
 
 
 def on_update_job_applicant(doc, method):
