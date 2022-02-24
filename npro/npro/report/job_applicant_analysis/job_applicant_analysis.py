@@ -74,7 +74,7 @@ def get_columns(filters):
             "width": 220,
         },
         {
-            "label": _("Skill"),
+            "label": _("Selection Criteria"),
             "fieldname": "skill",
             "fieldtype": "Link",
             "options": "Skill",

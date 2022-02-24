@@ -15,8 +15,8 @@ def get_data(filters):
     data = frappe.db.sql(
         """ 
         select 
-            tjo.name, npro_sourcing_owner_cf, tjo.customer_contact_cf, tjo.job_title, tjo.location_cf, 
-            datediff(tjo.closed_date_cf, tjo.creation) selected_within_days, tja.selected_candidate
+            tjo.name, npro_sourcing_owner_cf, tjo.customer_cf, tjo.customer_contact_cf, tjo.job_title, tjo.location_cf, 
+            datediff(tjo.closed_date_cf, tjo.creation) selected_within_days, tja.selected_candidate, tjo.closed_date_cf
         from 
             `tabJob Opening` tjo 
             left outer join (
@@ -81,11 +81,18 @@ def get_columns(filters):
             "fieldtype": "Data",
             "width": 165,
         },
+        {
+            "label": "Closed Date",
+            "fieldname": "closed_date_cf",
+            "fieldtype": "Date",
+            "width": 165,
+            "hidden": 1,
+        },
     ]
 
 
 def get_conditions(filters):
-    conditions = ["tjo.status = 'Open'"]
+    conditions = ["tjo.status in ('Open','Closed') "]
     if filters.get("from_date"):
         conditions += ["tjo.creation >= %(from_date)s"]
     if filters.get("to_date"):

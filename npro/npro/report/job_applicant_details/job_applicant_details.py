@@ -23,7 +23,8 @@ def get_data(filters):
             tja.name applicant, tja.applicant_name, tja.source, tja.current_city_cf,
             tja.status, tjo.job_title, tjo.customer_cf,
             concat_ws(' - ', round(tja.lower_range), round(tja.upper_range)) salary_range,
-            tja.applicant_total_experience_cf, tja.previous_company_cf
+            tja.applicant_total_experience_cf, tja.previous_company_cf, 
+            tja.current_salary_cf, tjo.billing_per_month_cf
         from `tabJob Applicant` tja 
         inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
     """,
@@ -118,6 +119,18 @@ def get_columns(filters):
             "label": _("Expected Salary Range"),
             "fieldname": "salary_range",
             "width": 180,
+        },
+        {
+            "label": _("Current Salary"),
+            "fieldname": "current_salary_cf",
+            "fieldtype": "Currency",
+            "width": 130,
+        },
+        {
+            "label": _("Billing Amount"),
+            "fieldname": "billing_per_month_cf",
+            "fieldtype": "Currency",
+            "width": 130,
         },
     ]
 

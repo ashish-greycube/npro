@@ -25,17 +25,18 @@ def get_data(filters):
                 COALESCE(pr.requirement, cons.requirement) requirement, 
                 cons.expected_close_date, cons.amount, cons.location,
                 comm.content latest_comment, comp.competitor competitiors, op.opportunity_amount, op.won_amount_cf,
-                op.lost_amount_cf
+                op.lost_amount_cf, cons.job_opening, op.requirement_type_cf
             from 
                 tabOpportunity op
             left outer join 
             (
-                select parent, stage, project_name requirement, opportunity_close_date
+                select parent, stage, project_name requirement, 
+                opportunity_close_date
                 from `tabOpportunity Project Detail CT`
             ) pr on pr.parent = op.name and op.opportunity_type = 'Project'
             left outer join 
             (
-                select parent, stage, project_name requirement, 
+                select parent, stage, project_name requirement, job_opening,
                 opportunity_close_date, expected_close_date, amount, location
                 from `tabOpportunity Consulting Detail CT`
             ) cons on cons.parent = op.name and op.opportunity_type = 'Consulting'
@@ -97,8 +98,20 @@ def get_columns(filters):
             "width": 200,
         },
         {
+            "label": _("Job Opening"),
+            "fieldname": "job_opening",
+            "fieldtype": "Link",
+            "options": "Job Opening",
+            "width": 200,
+        },
+        {
             "label": _("Requirement"),
             "fieldname": "requirement",
+            "width": 200,
+        },
+        {
+            "label": _("Requirement Type"),
+            "fieldname": "requirement_type_cf",
             "width": 200,
         },
         {

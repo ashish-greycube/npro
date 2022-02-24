@@ -10,6 +10,7 @@ from frappe.utils import (
     get_datetime_in_timezone,
     get_time_zone,
     format_datetime,
+    nowdate,
 )
 import pytz
 from frappe.model.naming import make_autoname
@@ -335,6 +336,8 @@ def on_update_job_opening(doc, method):
         for d in detail:
             d.job_opening = doc.name
             opportunity.save()
+        if doc.status == "Closed" and not doc.closed_date_cf:
+            doc.closed_date_cf = nowdate()
 
 
 def on_update_job_applicant(doc, method):
