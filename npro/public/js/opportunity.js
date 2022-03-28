@@ -47,6 +47,7 @@ frappe.ui.form.on("Opportunity Consulting Detail CT", {
             opportunity_cf: frm.doc.name,
             opportunity_consulting_detail_ct_cf: cdn,
             opportunity_technology_cf: item['project_name'],
+            job_title: item['project_name'],
             customer_cf: frm.doc.party_name,
             customer_contact_cf: frm.doc.contact_person,
             customer_email_cf: frm.doc.contact_email,
