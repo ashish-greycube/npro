@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_events_in_timeline": 1,
+ "allow_rename": 1,
+ "autoname": "NPRO-CSM-.YY.MM.DD.-#",
+ "creation": "2022-03-30 14:02:30.856991",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "discussion",
+  "cb_1",
+  "meeting_date_time",
+  "next_action_steps",
+  "section_break_6",
+  "attendees",
+  "nc_sb",
+  "next_contact_date",
+  "cb_2",
+  "next_contact_by",
+  "to_discuss"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "discussion",
+   "fieldtype": "Small Text",
+   "label": "Discussion"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Now",
+   "fieldname": "meeting_date_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Meeting Date Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "next_action_steps",
+   "fieldtype": "Small Text",
+   "label": "Next Action Steps"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "attendees",
+   "fieldtype": "Table",
+   "label": "Attendees",
+   "options": "NPro Meeting Attendees"
+  },
+  {
+   "fieldname": "nc_sb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "next_contact_date",
+   "fieldtype": "Date",
+   "label": "Next Contact Date"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "next_contact_by",
+   "fieldtype": "Link",
+   "label": "Next Contact By",
+   "options": "User"
+  },
+  {
+   "fieldname": "to_discuss",
+   "fieldtype": "Small Text",
+   "label": "To Discuss"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-03-30 14:02:30.856991",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Consultant Meeting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "project"
+}

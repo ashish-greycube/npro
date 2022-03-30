@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "allow_events_in_timeline": 1,
+ "allow_rename": 1,
+ "autoname": "NPRO-CM-.#",
+ "creation": "2022-03-30 13:47:59.089725",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "client",
+  "project",
+  "cb_1",
+  "meeting_date_time",
+  "sb_attendees",
+  "attendees",
+  "points_discussed",
+  "meeting_action_points"
+ ],
+ "fields": [
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Now",
+   "fieldname": "meeting_date_time",
+   "fieldtype": "Datetime",
+   "label": "Meeting Date Time"
+  },
+  {
+   "fieldname": "sb_attendees",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "attendees",
+   "fieldtype": "Table",
+   "label": "Attendees",
+   "options": "NPro Meeting Attendees"
+  },
+  {
+   "fieldname": "points_discussed",
+   "fieldtype": "Small Text",
+   "label": "Points Discussed"
+  },
+  {
+   "fieldname": "meeting_action_points",
+   "fieldtype": "HTML",
+   "label": "Meeting Action Points"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-03-30 14:03:20.802290",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Client Meeting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "client",
+ "track_changes": 1
+}
