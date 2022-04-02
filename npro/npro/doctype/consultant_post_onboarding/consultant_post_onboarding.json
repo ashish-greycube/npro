@@ -18,8 +18,6 @@
   "consultant_post_onboarding_template",
   "activities",
   "notify_users_by_email",
-  "section_break_14",
-  "exit_interview",
   "amended_from"
  ],
  "fields": [
@@ -109,15 +107,6 @@
    "label": "Notify users by email"
   },
   {
-   "fieldname": "section_break_14",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "exit_interview",
-   "fieldtype": "Text Editor",
-   "label": "Exit Interview Summary"
-  },
-  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
@@ -129,7 +118,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2022-03-30 10:17:59.251963",
+ "modified": "2022-03-31 15:50:39.443508",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Consultant Post Onboarding",

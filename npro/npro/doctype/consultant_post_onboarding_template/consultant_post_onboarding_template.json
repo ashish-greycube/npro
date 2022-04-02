@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "NPRO-CPOBT-.#",
+ "autoname": "Prompt",
  "creation": "2022-03-30 10:16:34.486427",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -51,7 +51,7 @@
   }
  ],
  "links": [],
- "modified": "2022-03-30 10:18:13.782568",
+ "modified": "2022-03-31 08:57:33.628291",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Consultant Post Onboarding Template",

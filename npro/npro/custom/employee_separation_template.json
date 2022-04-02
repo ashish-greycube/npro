@@ -1,0 +1,32 @@
+{
+ "custom_fields": [],
+ "custom_perms": [],
+ "doctype": "Employee Separation Template",
+ "property_setters": [
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "creation": "2022-03-31 08:56:57.748431",
+   "default_value": null,
+   "doc_type": "Employee Separation Template",
+   "docstatus": 0,
+   "doctype_or_field": "DocType",
+   "field_name": null,
+   "idx": 0,
+   "modified": "2022-03-31 08:56:57.748431",
+   "modified_by": "Administrator",
+   "name": "Employee Separation Template-main-autoname",
+   "owner": "Administrator",
+   "parent": null,
+   "parentfield": null,
+   "parenttype": null,
+   "property": "autoname",
+   "property_type": "Data",
+   "row_name": null,
+   "value": "Prompt"
+  }
+ ],
+ "sync_on_migrate": 1
+}
