@@ -38,6 +38,7 @@ doctype_js = {
     "Opportunity": "public/js/opportunity.js",
     "Contact": "public/js/contact.js",
     "Job Opening": "public/js/job_opening.js",
+    "Job Offer": "public/js/job_offer.js",
     "Interview": "public/js/interview.js",
 }
 doctype_list_js = {"Job Applicant": "public/js/job_applicant_list.js"}
@@ -90,9 +91,10 @@ after_migrate = "npro.install.after_migrate"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    # 	"ToDo": "custom_app.overrides.CustomToDo"
+    "Interview": "npro.overrides.custom_interview.CustomInterview"
+}
 
 # Document Events
 # ---------------
