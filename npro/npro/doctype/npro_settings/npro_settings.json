@@ -10,7 +10,10 @@
   "candidate_sourcing_notification",
   "opportunity_consulting_detail_stage_update_notification",
   "opportunity_job_applicant_status_priority_mapping",
-  "business_module_website_service_mapping"
+  "business_module_website_service_mapping",
+  "tm_sb",
+  "teramind_instance",
+  "teramind_access_token"
  ],
  "fields": [
   {
@@ -54,12 +57,27 @@
    "fieldtype": "Table",
    "label": "Business Module Website Service Mapping",
    "options": "Business Module Website Service Mapping"
+  },
+  {
+   "fieldname": "tm_sb",
+   "fieldtype": "Section Break",
+   "label": "Teramind Details"
+  },
+  {
+   "fieldname": "teramind_instance",
+   "fieldtype": "Data",
+   "label": "Teramind Instance"
+  },
+  {
+   "fieldname": "teramind_access_token",
+   "fieldtype": "Password",
+   "label": "Teramind Access Token"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-03-20 12:29:11.831713",
+ "modified": "2022-04-06 07:01:37.455205",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
