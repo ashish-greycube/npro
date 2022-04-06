@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "NPCWR.#",
+ "creation": "2022-04-06 12:22:25.743058",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "week_start_date",
+  "npro_technical_manager",
+  "project",
+  "cb_1",
+  "week_end_date",
+  "customer",
+  "client_manager_project_owner",
+  "section_break_8",
+  "schedule_adherence",
+  "code_review_count",
+  "task_resolved_in_week",
+  "task_resolved_expectation",
+  "project_status",
+  "client_specific_issue",
+  "cb_2",
+  "sla_adherence",
+  "tec_doc_rev",
+  "task_incomplete",
+  "rework_done",
+  "extra_achievement_of_week",
+  "outstanding_invoices"
+ ],
+ "fields": [
+  {
+   "fieldname": "week_start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Week Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "npro_technical_manager",
+   "fieldtype": "Link",
+   "label": "NPro Technical Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "week_end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Week End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "client_manager_project_owner",
+   "fieldtype": "Data",
+   "label": "Client Manager Project Owner",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "schedule_adherence",
+   "fieldtype": "Data",
+   "label": "Schedule Adherence"
+  },
+  {
+   "fieldname": "code_review_count",
+   "fieldtype": "Data",
+   "label": "No of Code Reviews Conducted"
+  },
+  {
+   "fieldname": "task_resolved_in_week",
+   "fieldtype": "Data",
+   "label": "No of Tasks Issues Resolved in the week"
+  },
+  {
+   "fieldname": "task_resolved_expectation",
+   "fieldtype": "Data",
+   "label": "No of Tasks Issues Resolved above expectation"
+  },
+  {
+   "fieldname": "project_status",
+   "fieldtype": "Select",
+   "label": "Overall Project status",
+   "options": "\nRed\nAmber\nGreenx"
+  },
+  {
+   "fieldname": "client_specific_issue",
+   "fieldtype": "Data",
+   "label": "Any specific issues which needs clients attention"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sla_adherence",
+   "fieldtype": "Data",
+   "label": "SLA Adherence"
+  },
+  {
+   "fieldname": "tec_doc_rev",
+   "fieldtype": "Data",
+   "label": "Technical Documentation Reviewed"
+  },
+  {
+   "fieldname": "task_incomplete",
+   "fieldtype": "Data",
+   "label": "No of Tasks Issues planned not completed"
+  },
+  {
+   "fieldname": "rework_done",
+   "fieldtype": "Data",
+   "label": "Rework Done"
+  },
+  {
+   "fieldname": "extra_achievement_of_week",
+   "fieldtype": "Data",
+   "label": "Any over and above achievement for the week"
+  },
+  {
+   "fieldname": "outstanding_invoices",
+   "fieldtype": "Data",
+   "label": "Outstanding issues which needs Nahil attention"
+  }
+ ],
+ "links": [],
+ "modified": "2022-04-06 12:22:25.743058",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Npro Client Weekly Status",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Employee",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

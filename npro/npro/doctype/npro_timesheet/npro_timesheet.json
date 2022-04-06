@@ -9,11 +9,12 @@
   "consultant",
   "from_date",
   "role",
-  "approved",
+  "npro_technical_manager",
   "cb_1",
   "project",
   "to_date",
   "client_manager",
+  "approved",
   "tsd_sb",
   "npro_timesheet_detail"
  ],
@@ -80,11 +81,18 @@
    "fieldtype": "Table",
    "label": "NPro Timesheet Detail",
    "options": "NPro Timesheet Detail"
+  },
+  {
+   "fetch_from": "consultant.npro_technical_manager_cf",
+   "fieldname": "npro_technical_manager",
+   "fieldtype": "Link",
+   "label": "NPro Technical Manager",
+   "options": "User"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-03-30 14:11:31.809044",
+ "modified": "2022-04-06 10:13:55.996769",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Timesheet",

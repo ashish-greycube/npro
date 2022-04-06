@@ -1,0 +1,139 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "NPMR.#",
+ "creation": "2022-04-06 12:29:27.408521",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "month_start_date",
+  "overall_delivery_status",
+  "delivery_urgent_issues",
+  "delivery_quality_status",
+  "project_risk_and_mitigation_plan",
+  "cb_1",
+  "month_end_date",
+  "schedule_adherence",
+  "sla_adherence",
+  "major_achievements_for_the_month",
+  "action_items_from_previous_meeting"
+ ],
+ "fields": [
+  {
+   "fieldname": "overall_delivery_status",
+   "fieldtype": "Data",
+   "label": "Overall Delivery Status"
+  },
+  {
+   "fieldname": "delivery_urgent_issues",
+   "fieldtype": "Data",
+   "label": "Any Delivery Issues needs Mgmt Attention"
+  },
+  {
+   "fieldname": "delivery_quality_status",
+   "fieldtype": "Data",
+   "label": "Delivery Quality Status"
+  },
+  {
+   "fieldname": "project_risk_and_mitigation_plan",
+   "fieldtype": "Data",
+   "label": "Project Risk and Mitigation Plan"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "schedule_adherence",
+   "fieldtype": "Data",
+   "label": "Schedule Adherence"
+  },
+  {
+   "fieldname": "sla_adherence",
+   "fieldtype": "Data",
+   "label": "SLA Adherence"
+  },
+  {
+   "fieldname": "major_achievements_for_the_month",
+   "fieldtype": "Data",
+   "label": "Major Achievements for the month"
+  },
+  {
+   "fieldname": "action_items_from_previous_meeting",
+   "fieldtype": "Small Text",
+   "label": "Action Items from Previous Meeting"
+  },
+  {
+   "fieldname": "month_start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Month Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "month_end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Month End Date",
+   "reqd": 1
+  }
+ ],
+ "links": [],
+ "modified": "2022-04-06 12:29:39.992302",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Npro Monthly Status",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Employee",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
