@@ -83,7 +83,7 @@ def get_columns(filters):
             "width": 250,
         },
         {
-            "label": _("Name"),
+            "label": _("App/Site Name"),
             "fieldname": "name",
             "fieldtype": "Data",
             "width": 250,
