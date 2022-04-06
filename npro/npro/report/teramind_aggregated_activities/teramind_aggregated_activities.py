@@ -66,7 +66,7 @@ def get_columns(filters):
         {
             "label": _("Idle"),
             "fieldname": "idle",
-            "fieldtype": "Check",
+            "fieldtype": "Int",
             "width": 90,
         },
         {
