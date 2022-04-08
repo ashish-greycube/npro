@@ -1,6 +1,31 @@
 frappe.ui.form.on('Job Offer', {
     refresh: function (frm) {
-        frm.events.set_exchange_rate(frm);
+        if (frm.doc.docstatus == 0)
+            frm.events.set_exchange_rate(frm);
+
+
+        frm.events.add_custom_buttons(frm);
+    },
+
+    add_custom_buttons(frm) {
+        frm.remove_custom_button('Create Employee')
+
+        if ((!frm.doc.__islocal) && (frm.doc.status == 'Accepted')
+            && (frm.doc.docstatus === 1) && (!frm.doc.__onload || !frm.doc.__onload.employee)) {
+            frm.add_custom_button(__('Create Consultant'),
+                function () {
+                    frm.trigger("make_consultant")
+                }
+            );
+        }
+
+        if (frm.doc.__onload && frm.doc.__onload.employee) {
+            frm.add_custom_button(__('Show Consultant'),
+                function () {
+                    frappe.set_route("Form", "Employee", frm.doc.__onload.employee);
+                }
+            );
+        }
     },
 
     consultancy_fees_offered_cf: function (frm) {
@@ -23,5 +48,14 @@ frappe.ui.form.on('Job Offer', {
                 }
             }
         });
+    },
+
+    make_consultant: function (frm) {
+        frappe.model.open_mapped_doc({
+            method: "npro.utils.make_consultant_from_job_offer",
+            frm: frm
+        });
     }
 });
+
+
