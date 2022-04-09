@@ -15,6 +15,13 @@ def execute(filters=None):
 
 
 def get_data(filters):
+    """
+    Teramind instance aggregated activity report
+    [
+        { "date": "2022-04-06", "total": 6, "idle": 0, "agent_id": 27,
+        "name": "shellexperiencehost.exe", "app": true, "classify": 0, },
+    ]
+    """
     out = []
     settings = frappe.get_single("NPro Settings")
 
@@ -22,9 +29,17 @@ def get_data(filters):
     url = "{}tm-api/v1/activity/aggregated?from={}&to={}".format(
         settings.teramind_instance, filters.get("from_date"), filters.get("to_date")
     )
-    response = requests.request("GET", url, headers=headers)
-    # { "date": "2022-04-06", "total": 6, "idle": 0, "agent_id": 27,
-    # "name": "shellexperiencehost.exe", "app": true, "classify": 0, },
+    try:
+        response = requests.request("GET", url, headers=headers, timeout=(5, 30))
+    except requests.exceptions.ConnectionError:
+        frappe.msgprint("Could not connect to teramind instance.")
+        return []
+    except requests.exceptions.ReadTimeout:
+        frappe.msgprint("Received no response from teramind instance.")
+        return []
+    except requests.exceptions.Timeout:
+        frappe.msgprint("Timeout waiting for response from teramind instance.")
+        return []
 
     employee_dict = frappe.db.sql(
         """
