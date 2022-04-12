@@ -40,18 +40,22 @@ def get_data(filters):
     appl.no_rejected_by_client
     from `tabJob Opening` tjo   
     left outer join (
-        select  job_title, 
-        count(*) no_applied,
-        sum(case 
-            when status like 'CV%%' 
-            or status in ('Rejected', 'Accepted', 'Hold', 'Interview Scheduled') 
-        then 1 else 0 end) no_passed_screening,
-        sum(if(status='Accepted',1,0)) no_selected,
-        sum(if(status='CV Shared with Client',1,0)) no_shared_with_client,
-        sum(if(status='CV Selected for Interview',1,0)) no_selected_by_client,
-        sum(if(status='CV Rejected',1,0)) no_rejected_by_client
+        select tja.job_title ,
+            count(distinct if(tnsl.old_value is NULL,tja.applicant_name,null)) no_applied ,
+            count(distinct if(tnsl.new_value ='Accepted',tja.applicant_name,null)) no_selected ,
+            count(distinct if(tnsl.new_value ='CV Shared with Client',tja.applicant_name,null)) no_shared_with_client ,
+            count(distinct if(tnsl.new_value ='CV Selected for Interview',tja.applicant_name,null)) no_selected_by_client ,
+            count(distinct if(tnsl.new_value ='Rejected by Client',tja.applicant_name,null)) no_rejected_by_client ,
+            count(distinct 
+                if(tnsl.new_value like 'CV%%' 
+                or tnsl.new_value in ('Rejected', 'Accepted', 'Hold', 'Interview Scheduled'),
+                tja.job_title,null)) no_passed_screening 
         from `tabJob Applicant` tja 
-        group by job_title
+        left outer join `tabNPro Status Log` tnsl on tnsl.doc_type = 'Job Applicant'
+            and tnsl.docfield_name = 'status' and tnsl.doc_name = tja.name 
+        	and date(tnsl.creation) >= %(from_date)s and date(tnsl.creation) <= %(to_date)s
+        where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
+        group by tja.job_title 
     ) appl on appl.job_title = tjo.name
     {where_conditions}
 """.format(
@@ -59,6 +63,7 @@ def get_data(filters):
         ),
         filters,
         as_dict=True,
+        debug=True,
     )
     return data
 

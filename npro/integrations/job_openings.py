@@ -4,7 +4,7 @@ from werkzeug.wrappers import Response
 from frappe.utils.response import as_json
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=False)
 def job_opening():
     """List of current Job Openings in Open status."""
 
