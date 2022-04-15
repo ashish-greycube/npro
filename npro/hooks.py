@@ -41,6 +41,7 @@ doctype_js = {
     "Job Offer": "public/js/job_offer.js",
     "Job Applicant": "public/js/job_applicant.js",
     "Interview": "public/js/interview.js",
+    "Employee": "public/js/employee.js",
 }
 doctype_list_js = {"Job Applicant": "public/js/job_applicant_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -108,6 +109,9 @@ doc_events = {
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
     "Interview": {"on_update": "npro.api.on_update_interview"},
+    "Job Offer": {
+        "on_submit": "npro.npro.doc_events.on_submit_job_offer",
+    },
     "Job Opening": {
         "autoname": "npro.api.autoname_job_opening",
         "on_update": "npro.api.on_update_job_opening",
@@ -116,6 +120,9 @@ doc_events = {
     "Job Applicant": {
         "on_update": "npro.api.on_update_job_applicant",
         "validate": "npro.npro.doc_events.on_validate_job_applicant",
+    },
+    "Employee": {
+        "validate": "npro.npro.doc_events.on_validate_employee",
     },
 }
 

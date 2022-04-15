@@ -63,7 +63,7 @@ def get_data(filters):
         ),
         filters,
         as_dict=True,
-        debug=True,
+        # debug=True,
     )
     return data
 

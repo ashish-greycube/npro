@@ -4,10 +4,12 @@ frappe.ui.form.on('Job Offer', {
     },
 
     add_custom_buttons(frm) {
-        frm.remove_custom_button('Create Employee')
+        frm.remove_custom_button('Create Employee');
+        frm.remove_custom_button(__('Show Employee'));
 
         if ((!frm.doc.__islocal) && (frm.doc.status == 'Accepted')
-            && (frm.doc.docstatus === 1) && (!frm.doc.__onload || !frm.doc.__onload.employee)) {
+            && (frm.doc.docstatus === 1) && (!frm.doc.__onload || !frm.doc.__onload.employee)
+        ) {
             frm.add_custom_button(__('Create Consultant'),
                 function () {
                     frm.trigger("make_consultant")

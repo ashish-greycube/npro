@@ -22,6 +22,7 @@ def make_consultant_from_job_offer(source_name, target_doc=None):
                 "current_salary_usd_cf",
             ],
             filters={"name": source.job_applicant},
+            limit=1,
         ):
             target.personal_email = d.email_id
             target.first_name = d.applicant_name
@@ -38,6 +39,7 @@ def make_consultant_from_job_offer(source_name, target_doc=None):
                     "applicant_name": "employee_name",
                     "designation": "designation",
                     "company": "company",
+                    "expected_doj_cf": "date_of_joining",
                 },
             }
         },
