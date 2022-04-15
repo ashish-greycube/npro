@@ -1,0 +1,49 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-04-14 11:09:17.853484",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cost_type",
+  "amount_in_inr",
+  "amount_in_usd"
+ ],
+ "fields": [
+  {
+   "fieldname": "cost_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Cost Type",
+   "options": "Npro Other Cost Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount_in_inr",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Amount in INR",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount_in_usd",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Amount in USD",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2022-04-14 11:09:17.853484",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Npro Consultant Other Cost",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
