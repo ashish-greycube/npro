@@ -102,3 +102,4 @@ Object.assign(npro.utils, {
     // report.add_chart_buttons_to_toolbar(true);
   },
 });
+

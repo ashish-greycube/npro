@@ -7,7 +7,7 @@
  "docstatus": 0,
  "doctype": "Workspace",
  "extends_another_page": 0,
- "hide_custom": 0,
+ "hide_custom": 1,
  "icon": "setting-gear",
  "idx": 0,
  "is_default": 0,
@@ -61,35 +61,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "NPro Status Log",
-   "link_to": "NPro Status Log",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Npro Monthly Status",
-   "link_to": "Npro Monthly Status",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "NPro Consultant Meeting",
    "link_to": "NPro Consultant Meeting",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Npro Timesheet Status",
-   "link_to": "Npro Timesheet Status",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -128,9 +101,36 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NPro Status Log",
+   "link_to": "NPro Status Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Npro Monthly Status",
+   "link_to": "Npro Monthly Status",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Npro Timesheet Status",
+   "link_to": "Npro Timesheet Status",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-04-15 08:36:48.228442",
+ "modified": "2022-04-15 15:45:41.024076",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Consultant On Boarding",

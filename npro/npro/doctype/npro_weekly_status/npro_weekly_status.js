@@ -3,6 +3,6 @@
 
 frappe.ui.form.on('NPro Weekly Status', {
 	week_start_date: function (frm) {
-		frm.set_value('week_end_date', frappe.datetime.add_days(frm.doc.week_start_date, 7));
+		frm.set_value('week_end_date', frappe.datetime.add_days(frm.doc.week_start_date, 6));
 	}
 });
