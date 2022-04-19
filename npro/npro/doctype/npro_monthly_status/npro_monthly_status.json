@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "month_start_date",
+  "project",
   "overall_delivery_status",
   "delivery_urgent_issues",
   "delivery_quality_status",
@@ -77,10 +78,16 @@
    "in_list_view": 1,
    "label": "Month End Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
   }
  ],
  "links": [],
- "modified": "2022-04-06 12:29:39.992302",
+ "modified": "2022-04-18 09:47:23.291845",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Npro Monthly Status",
