@@ -13,7 +13,9 @@
   "business_module_website_service_mapping",
   "tm_sb",
   "teramind_instance",
-  "teramind_access_token"
+  "teramind_access_token",
+  "consultant_on_boarding_section",
+  "default_timesheet_status"
  ],
  "fields": [
   {
@@ -72,12 +74,23 @@
    "fieldname": "teramind_access_token",
    "fieldtype": "Password",
    "label": "Teramind Access Token"
+  },
+  {
+   "fieldname": "consultant_on_boarding_section",
+   "fieldtype": "Section Break",
+   "label": "Consultant On Boarding"
+  },
+  {
+   "fieldname": "default_timesheet_status",
+   "fieldtype": "Link",
+   "label": "Default Timesheet Status",
+   "options": "Npro Timesheet Status"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-04-06 07:01:37.455205",
+ "modified": "2022-04-19 15:06:09.380294",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
