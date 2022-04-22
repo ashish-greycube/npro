@@ -84,13 +84,14 @@
    "fieldname": "default_timesheet_status",
    "fieldtype": "Link",
    "label": "Default Timesheet Status",
-   "options": "Npro Timesheet Status"
+   "options": "Npro Timesheet Status",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-04-19 15:06:09.380294",
+ "modified": "2022-04-22 07:11:57.524195",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",

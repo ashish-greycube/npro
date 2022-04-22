@@ -211,7 +211,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Candidate Reports - Interview Schedule",
+   "label": "Candidate Reports - Interview",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -259,6 +259,15 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Consultant On Boarding",
+   "link_to": "Employee Onboarding",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -377,7 +386,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Onboarding Candidates",
    "link_to": "Onboarding Candidates",
    "link_type": "Report",
@@ -386,7 +395,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Onboarding Activities Status",
    "link_to": "Onboarding Activities Status",
    "link_type": "Report",
@@ -395,7 +404,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Candidate Onboarded",
    "link_to": "Candidate Onboarded",
    "link_type": "Report",
@@ -404,7 +413,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Consultant Details",
    "link_to": "Consultant Details",
    "link_type": "Report",
@@ -413,7 +422,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Post Onboarding Activities",
    "link_to": "Post Onboarding Activities",
    "link_type": "Report",
@@ -422,7 +431,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Consultant Contract Details",
    "link_to": "Consultant Contract Details",
    "link_type": "Report",
@@ -431,7 +440,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Consultant Feedback",
    "link_to": "Consultant Feedback",
    "link_type": "Report",
@@ -440,7 +449,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Consultant Leaves Report",
    "link_to": "Consultant Leaves Report",
    "link_type": "Report",
@@ -449,7 +458,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Technical Manager Deliverables",
    "link_to": "Technical Manager Deliverables",
    "link_type": "Report",
@@ -458,7 +467,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "NPro Timesheet Report",
    "link_to": "NPro Timesheet Report",
    "link_type": "Report",
@@ -467,7 +476,7 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
+   "is_query_report": 1,
    "label": "Resigned Consultant Activities",
    "link_to": "Resigned Consultant Activities",
    "link_type": "Report",
@@ -475,7 +484,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-04-21 21:00:13.221408",
+ "modified": "2022-04-22 06:48:53.249184",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
