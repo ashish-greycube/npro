@@ -30,8 +30,8 @@ frappe.query_reports["Onboarding Activities Status"] = {
 
     if (column.fieldname == "job_applicant") {
       value = `<a href="/app/job-applicant/${data['job_applicant']}" data-doctype="Job Applicant">${data['employee_name']}</a>`;
-    } else if (column.fieldname == "job_title") {
-      value = `<a href="/app/job-opening/${data['job_name']}" data-doctype="Job Opening">${data['job_title']}</a>`;
+    } else if (column.fieldname == "subject") {
+      value = `<a href="/app/task/${data['task_name']}" data-doctype="Task">${data['subject']}</a>`;
     }
     return value;
   },

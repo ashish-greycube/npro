@@ -16,9 +16,9 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-        te.name , te.employee_name , tja.customer_cf , tcpo.post_boarding_status ,
+        te.name employee, te.employee_name , tja.customer_cf , tcpo.post_boarding_status ,
         te.date_of_joining , te.billing_start_date_cf , te.npro_technical_manager_cf ,
-        teba.`user` , tt.subject , tt.status task_status , tt.completed_on 
+        tt.subject , tt.status task_status , tt.completed_on , tt.name task_name , tt.task_owner_cf
         from `tabConsultant Post Onboarding` tcpo 
         inner join `tabEmployee Boarding Activity` teba on teba.parent = tcpo.name and teba.parenttype = 'Consultant Post Onboarding'
         inner join tabEmployee te on te.name = tcpo.employee 
@@ -39,8 +39,8 @@ def get_data(filters):
 def get_columns(filters):
     return [
         {
-            "label": _("Candidate Name"),
-            "fieldname": "job_applicant",
+            "label": _("Consultant Name"),
+            "fieldname": "employee_name",
             "fieldtype": "Data",
             "width": 180,
         },
@@ -69,8 +69,13 @@ def get_columns(filters):
             "width": 130,
         },
         {
+            "label": _("Activites"),
+            "fieldname": "subject",
+            "width": 280,
+        },
+        {
             "label": _("User"),
-            "fieldname": "full_name",
+            "fieldname": "task_owner_cf",
             "width": 130,
         },
         {

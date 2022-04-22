@@ -20,16 +20,16 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tt.name, tt.subject , tt.exp_start_date , tt.exp_end_date , tt.status , tt.priority ,
+            tt.name, tt.subject , tt.exp_start_date , tt.exp_end_date , tt.status task_status , tt.priority ,
             tt.completed_on , tt.progress , tt.task_owner_cf , tt.project ,
             case when tt.completed_on 
-                then TIMESTAMPDIFF(DAY,tt.completed_on, tt.exp_end_date)
+                then TIMESTAMPDIFF(DAY,tt.exp_end_date , tt.completed_on)
             when tt.status = 'Completed'
                 then 0
             when tt.exp_end_date 
-                then TIMESTAMPDIFF(DAY,NOW() , tt.exp_end_date)
+                then TIMESTAMPDIFF(DAY, tt.exp_end_date, NOW())
             else 0 end delay ,
-            t1.job_applicant , te2.npro_technical_manager_cf , tp.status 
+            t1.job_applicant , te2.npro_technical_manager_cf , tp.status project_status
         from tabTask tt 
         inner join tabProject tp on tp.name = tt.project 
         left outer join (
@@ -72,9 +72,15 @@ def get_columns(filters):
             "width": 150,
         },
         {
-            "fieldname": "status",
+            "fieldname": "project_status",
             "fieldtype": "Data",
-            "label": _("Status"),
+            "label": _("Project Status"),
+            "width": 100,
+        },
+        {
+            "fieldname": "task_status",
+            "fieldtype": "Data",
+            "label": _("Task Status"),
             "width": 100,
         },
         {
@@ -85,7 +91,6 @@ def get_columns(filters):
             "width": 150,
         },
         {"fieldname": "subject", "fieldtype": "Data", "label": "Subject", "width": 200},
-        {"fieldname": "status", "fieldtype": "Data", "label": "Status", "width": 100},
         {
             "fieldname": "priority",
             "fieldtype": "Data",

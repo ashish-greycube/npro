@@ -15,7 +15,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
     select 
-	    te.job_applicant , te.employee_name , tja.customer_cf , 
+	    te.job_applicant , te.name employee , te.employee_name , tja.customer_cf , 
 	    tjo.billing_per_month_cf , tjo.sales_person_cf, te.contract_start_date_cf
 		, te.contract_end_date , te.client_contract_start_date_cf , te.client_contract_end_date_cf 
     from tabEmployee te 
@@ -36,7 +36,7 @@ def get_data(filters):
 def get_columns(filters):
     return [
         {
-            "label": _("Candidate Name"),
+            "label": _("Consultant Name"),
             "fieldname": "employee_name",
             "fieldtype": "Data",
             "width": 280,
@@ -56,19 +56,19 @@ def get_columns(filters):
         },
         {
             "label": _("Client Contract Start Date"),
-            "fieldname": "date_of_joining",
-            "fieldtype": "Date",
-            "width": 150,
-        },
-        {
-            "label": _("Client Contract End Date"),
             "fieldname": "client_contract_start_date_cf",
             "fieldtype": "Date",
             "width": 150,
         },
         {
+            "label": _("Client Contract End Date"),
+            "fieldname": "client_contract_end_date_cf",
+            "fieldtype": "Date",
+            "width": 150,
+        },
+        {
             "label": _("Consultant Contract Start Date"),
-            "fieldname": "contract_start_date",
+            "fieldname": "contract_start_date_cf",
             "fieldtype": "Date",
             "width": 150,
         },

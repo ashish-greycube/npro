@@ -26,3 +26,27 @@ def on_validate_employee(doc, method):
                 _file.attached_to_doctype = "Employee"
                 _file.attached_to_name = doc.name
                 _file.save(ignore_permissions=True)
+
+
+def on_update_task(doc, method):
+    """
+    Update status of Consultant Onboarding, Post Onboarding
+    so that it executes after project has been updated by erpnext
+    """
+    if (
+        doc.status == "Completed"
+        and doc.project
+        and frappe.db.get_value("Project", doc.project, "status") == "Completed"
+    ):
+        for dt in ("Employee Onboarding", "Consultant Post Onboarding"):
+            for d in frappe.db.get_all(dt, {"project": doc.project}):
+                onboarding = frappe.get_doc(dt, d.name)
+                if dt == "Employee Onboarding":
+                    if not onboarding.boarding_status == "Completed":
+                        onboarding.boarding_status = "Completed"
+                        onboarding.save()
+                elif dt == "Consultant Post Onboarding":
+                    if not onboarding.post_boarding_status == "Completed":
+                        onboarding.post_boarding_status = "Completed"
+                        onboarding.save()
+        frappe.db.commit()

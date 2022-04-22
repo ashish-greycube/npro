@@ -28,10 +28,10 @@ frappe.query_reports["Post Onboarding Activities"] = {
   "formatter": function (value, row, column, data, default_formatter) {
     value = default_formatter(value, row, column, data);
 
-    if (column.fieldname == "job_applicant") {
-      value = `<a href="/app/job-applicant/${data['job_applicant']}" data-doctype="Job Applicant">${data['employee_name']}</a>`;
-    } else if (column.fieldname == "job_title") {
-      value = `<a href="/app/job-opening/${data['job_name']}" data-doctype="Job Opening">${data['job_title']}</a>`;
+    if (column.fieldname == "employee_name") {
+      value = `<a href="/app/employee/${data['employee']}" data-doctype="Employee">${data['employee_name']}</a>`;
+    } else if (column.fieldname == "subject") {
+      value = `<a href="/app/task/${data['task_name']}" data-doctype="Task">${data['subject']}</a>`;
     }
     return value;
   },

@@ -17,7 +17,8 @@ def get_data(filters):
         """
         select  
             ta.employee , ta.employee_name , te.npro_technical_manager_cf , ta.remarks ,
-            tag.kra , tag.score , tag.score_earned , tja.customer_cf 
+            tag.kra , tag.score , tag.score_earned , tja.customer_cf , 
+            ta.name , ta.start_date , ta.end_date
         from tabAppraisal ta 
         inner join `tabAppraisal Goal` tag on tag.parent = ta.name
         inner join tabEmployee te on te.name = ta.employee 
@@ -39,7 +40,7 @@ def get_columns(filters):
             "label": _("Consultant Name"),
             "fieldname": "employee_name",
             "fieldtype": "Data",
-            "width": 280,
+            "width": 200,
         },
         {
             "label": _("Client"),
@@ -51,7 +52,26 @@ def get_columns(filters):
         {
             "label": _("NPro Technical Manager"),
             "fieldname": "npro_technical_manager_cf",
-            "width": 120,
+            "width": 190,
+        },
+        {
+            "label": _("Appraisal"),
+            "fieldname": "name",
+            "fieldtype": "Link",
+            "options": "Appraisal",
+            "width": 155,
+        },
+        {
+            "label": _("Start Date"),
+            "fieldname": "start_date",
+            "fieldtype": "Date",
+            "width": 100,
+        },
+        {
+            "label": _("End Date"),
+            "fieldname": "end_date",
+            "fieldtype": "Date",
+            "width": 100,
         },
         {
             "label": _("Score Earned"),

@@ -124,6 +124,9 @@ doc_events = {
     "Employee": {
         "validate": "npro.npro.doc_events.on_validate_employee",
     },
+    "Task": {
+        "on_update": "npro.npro.doc_events.on_update_task",
+    },
 }
 
 # Scheduled Tasks

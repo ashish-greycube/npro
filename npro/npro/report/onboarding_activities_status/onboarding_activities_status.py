@@ -17,16 +17,14 @@ def get_data(filters):
         """
             select 
                 teo.job_applicant , teo.employee , teo.employee_name , teo.date_of_joining , teo.boarding_status ,
-                tja.customer_cf , teba.user , tu.full_name ,
-                tjo.opportunity_technology_cf , tjo.location_cf ,
-                tt.subject , tt.status task_status , tt.completed_on 
+                tja.customer_cf , tjo.opportunity_technology_cf , tjo.location_cf ,
+                tt.subject , tt.status task_status , tt.completed_on , tt.name task_name ,  tt.task_owner_cf
             from `tabEmployee Onboarding` teo 
             inner join `tabEmployee Boarding Activity` teba on teba.parent = teo.name and teba.parenttype = 'Employee Onboarding'
             inner join `tabJob Applicant` tja on tja.name = teo.job_applicant 
             inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
             inner join tabProject tp on tp.name = teo.project 
             left outer join tabTask tt on tt.project = teo.project and tt.subject like  concat(teba.activity_name,' : ','%%') 
-            left outer join tabUser tu on tu.name = teba.`user` 
         {where_conditions}
         """.format(
             where_conditions=get_conditions(filters),
@@ -54,9 +52,9 @@ def get_columns(filters):
             "width": 180,
         },
         {
-            "label": _("Status"),
+            "label": _("Onboarding Status"),
             "fieldname": "boarding_status",
-            "width": 100,
+            "width": 130,
         },
         {
             "label": _("Technology"),
@@ -76,8 +74,13 @@ def get_columns(filters):
             "width": 180,
         },
         {
+            "label": _("Activites"),
+            "fieldname": "subject",
+            "width": 280,
+        },
+        {
             "label": _("User"),
-            "fieldname": "full_name",
+            "fieldname": "task_owner_cf",
             "width": 130,
         },
         {

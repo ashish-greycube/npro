@@ -51,54 +51,55 @@ frappe.query_reports["Job Opening Analysis"] = {
 			// default: moment(),
 			reqd: 1,
 		},
+		{
+			fieldname: "legend",
+			fieldtype: "Button",
+			label: "Show Stage Status Mapping",
+			onclick: function () {
+				show_legend();
+			}
+		}
 	],
 	onload: function (report) {
 		report.get_filter('timespan').onchange();
-		report.show_footer_message = function (report) {
-			this.$report_footer && this.$report_footer.remove();
-			this.$report_footer = $(`<div class="report-footer text-muted"></div>`).appendTo(this.page.main);
-
-			const message = __(`
-			<table cellpadding="2">
-			<tr>
-				<th>Stage </th>
-				<th>Status </th>
-			</tr>
-			<tr>
-				<td>Applied</td>
-				<td>Applied within selected dates.</td>
-			</tr>
-			<tr>
-				<td>Passed NPro Screening</td>
-				<td>'Rejected', 'Accepted', 'Hold', 'Interview Scheduled' or status like 'CV*'</td>
-			</tr>
-			<tr>
-				<td>Selected By client</td>
-				<td>CV Selected for Interview</td>
-			</tr>
-			<tr>
-				<td>Rejected By client</td>
-				<td>Rejected by Client</td>
-			</tr>
-			<tr>
-				<td>CV Shared</td>
-				<td>CV Shared with Client</td>
-			</tr>
-			<tr>
-				<td>Selected</td>
-				<td>Accepted</td>
-			</tr>
-
-		</table>
-
-			`);
-			const execution_time_msg = __('Execution Time: {0} sec', [this.execution_time || 0.1]);
-
-			this.$report_footer.append(`<div class="col-md-12">
-			<span">${message}</span><span class="pull-right">${execution_time_msg}</span>
-		</div>`);
-		}
 	}
 
 
 };
+
+const legend = [
+	{ stage: "Applied", description: "Applied within selected dates." },
+	{ stage: "Passed NPro Screening", description: "'Rejected', 'Accepted', 'Hold', 'Interview Scheduled' <br> or status like 'CV*'," },
+	{ stage: "Selected By client", description: "CV Selected for Interview" },
+	{ stage: "Rejected By client", description: "Rejected by Client" },
+	{ stage: "CV Shared", description: "CV Shared with Client" },
+	{ stage: "Selected", description: "Accepted" }
+]
+
+function show_legend() {
+	const dialog = new frappe.ui.Dialog({
+		title: __("Stagewise Status"),
+		fields: [
+			{
+				fieldname: "stage_legend",
+				fieldtype: "HTML",
+			}
+		],
+	});
+
+	let html = frappe.render_template(`
+	<table class="table">
+		<thead>
+			<th>Stage</th>
+			<th>Status Included</th>
+		</thead>
+		{% for(var i=0, l=data.length; i<l; i++) { %}
+			<tr>
+				<td>{{data[i].stage}}</td>
+				<td>{{data[i].description}}</td>
+			</tr>
+		{% } %}
+	</table>`, { data: legend });
+	dialog.get_field("stage_legend").$wrapper.append(html);
+	dialog.show();
+}
