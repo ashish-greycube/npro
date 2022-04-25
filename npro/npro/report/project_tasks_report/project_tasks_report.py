@@ -16,7 +16,7 @@ def get_data(filters):
         """
 select 
 	tpu.candidate_name , tp.name project, tja.customer_cf , tp.customer_reporting_mgr_cf ,
-	tp.project_name , tp.status project_status , tp.actual_start_date , tp.percent_complete , 
+	tp.project_name , tp.status project_status , tp.expected_start_date , tp.percent_complete , 
 	tt.name task_name, tt.subject , coalesce(tt.parent_task,'') parent_task , ptt.subject parent_subject , 
     tp.npro_technical_manager_cf , tt.status task_status , tt.task_owner_cf ,
 	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf
@@ -72,7 +72,7 @@ def get_columns(filters):
         },
         {
             "label": _("Project Start Date"),
-            "fieldname": "actual_start_date",
+            "fieldname": "expected_start_date",
             "fieldtype": "Date",
             "width": 120,
         },
@@ -87,8 +87,8 @@ def get_columns(filters):
             "width": 195,
         },
         {
-            "label": _("Owner"),
-            "fieldname": "npro_task_owner_cf",
+            "label": _("Task Owner"),
+            "fieldname": "task_owner_cf",
             "fieldtype": "Link",
             "options": "User",
             "width": 100,
