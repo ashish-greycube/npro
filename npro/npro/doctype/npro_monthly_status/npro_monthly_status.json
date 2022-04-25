@@ -9,6 +9,7 @@
  "field_order": [
   "month_start_date",
   "project",
+  "customer",
   "overall_delivery_status",
   "delivery_urgent_issues",
   "delivery_quality_status",
@@ -84,10 +85,17 @@
    "fieldtype": "Link",
    "label": "Project",
    "options": "Project"
+  },
+  {
+   "fetch_from": "project.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
   }
  ],
  "links": [],
- "modified": "2022-04-18 09:47:23.291845",
+ "modified": "2022-04-25 05:02:23.275065",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Npro Monthly Status",
