@@ -317,6 +317,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Npro Monthly Status",
+   "link_to": "Npro Monthly Status",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Consultant On Boarding Setup",
    "link_type": "DocType",
    "onboard": 0,
@@ -354,15 +363,6 @@
    "is_query_report": 0,
    "label": "NPro Status Log",
    "link_to": "NPro Status Log",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Npro Monthly Status",
-   "link_to": "Npro Monthly Status",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -528,7 +528,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-04-23 23:21:46.146958",
+ "modified": "2022-04-25 11:50:05.058396",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",

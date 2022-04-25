@@ -15,7 +15,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            '' customer_cf ,
+            tnms.customer ,
             tnms.overall_delivery_status , schedule_adherence , sla_adherence , major_achievements_for_the_month ,
             tp.project_name , tp.npro_technical_manager_cf , tpu.consultants 
         from `tabNpro Monthly Status` tnms 
@@ -38,7 +38,7 @@ def get_columns(filters):
     return [
         {
             "label": _("Client Name"),
-            "fieldname": "customer_cf",
+            "fieldname": "customer",
             "fieldtype": "Link",
             "options": "Customer",
             "width": 150,
