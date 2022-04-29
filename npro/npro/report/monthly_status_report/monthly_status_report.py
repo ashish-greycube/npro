@@ -17,18 +17,20 @@ def get_data(filters):
         select 
             tnms.customer ,
             tnms.overall_delivery_status , schedule_adherence , sla_adherence , major_achievements_for_the_month ,
-            tp.project_name , tp.npro_technical_manager_cf , tpu.consultants 
+            tp.project_name , tp.npro_technical_manager_cf , tpu.consultants , tp.customer_reporting_mgr_cf ,
+            tnms.month_start_date , tnms.month_end_date
         from `tabNpro Monthly Status` tnms 
         inner join tabProject tp on tp.name = tnms.project 
         left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) consultants from `tabProject User` tpu 
         group by tpu.parent ) tpu on tpu.parent = tp.name 
-        order by tp.name 
         {where_conditions}
+        order by tp.name 
         """.format(
             where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
+        # debug=True,
     )
 
     return data
@@ -60,8 +62,8 @@ def get_columns(filters):
             "width": 150,
         },
         {
-            "label": _("Project Owner"),
-            "fieldname": "client_manager_project_owner",
+            "label": _("Customer Reporting Manager"),
+            "fieldname": "customer_reporting_mgr_cf",
             "fieldtype": "Link",
             "options": "User",
             "width": 130,
@@ -86,13 +88,28 @@ def get_columns(filters):
             "fieldname": "major_achievements_for_the_month",
             "width": 260,
         },
+        {
+            "label": _("Month Start Date"),
+            "fieldname": "month_start_date",
+            "fieldtype": "Date",
+            "width": 140,
+        },
+        {
+            "label": _("Month End Date"),
+            "fieldname": "month_end_date",
+            "fieldtype": "Date",
+            "width": 140,
+        },
     ]
 
 
 def get_conditions(filters):
     where_clause = []
 
-    # if filters.get("from_date"):
-    #     where_clause.append("op.transaction_date >= %(from_date)s")
+    if filters.get("from_date"):
+        where_clause.append("tnms.month_start_date >= %(from_date)s")
+
+    if filters.get("till_date"):
+        where_clause.append("tnms.month_end_date <= %(till_date)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

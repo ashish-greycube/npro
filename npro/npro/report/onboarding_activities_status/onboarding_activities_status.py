@@ -100,7 +100,7 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
-    where_clause.append("teo.boarding_status in ('Pending','In Process') ")
+    # where_clause.append("teo.boarding_status in ('Pending','In Process') ")
 
     if filters.get("job_applicant"):
         where_clause.append("teo.job_applicant = %(job_applicant)s")
@@ -110,5 +110,8 @@ def get_conditions(filters):
 
     if filters.get("task_status"):
         where_clause.append("tt.status = %(task_status)s")
+
+    if filters.get("boarding_status"):
+        where_clause.append("teo.boarding_status = %(boarding_status)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

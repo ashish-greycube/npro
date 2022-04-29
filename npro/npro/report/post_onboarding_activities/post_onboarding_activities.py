@@ -12,7 +12,6 @@ def execute(filters=None):
 
 
 def get_data(filters):
-    filters["today"] = today()
     data = frappe.db.sql(
         """
         select 
@@ -20,17 +19,20 @@ def get_data(filters):
         te.date_of_joining , te.billing_start_date_cf , te.npro_technical_manager_cf ,
         tt.subject , tt.status task_status , tt.completed_on , tt.name task_name , tt.task_owner_cf
         from `tabConsultant Post Onboarding` tcpo 
-        inner join `tabEmployee Boarding Activity` teba on teba.parent = tcpo.name and teba.parenttype = 'Consultant Post Onboarding'
+        inner join `tabEmployee Boarding Activity` teba on teba.parent = tcpo.name 
+            and teba.parenttype = 'Consultant Post Onboarding'
         inner join tabEmployee te on te.name = tcpo.employee 
         inner join `tabJob Applicant` tja on tja.name = te.job_applicant 
         inner join tabProject tp on tp.name = tcpo.project 
-        left outer join tabTask tt on tt.project = tcpo.project and tt.subject like  concat(teba.activity_name,' : ','%%') 
+        left outer join tabTask tt on tt.project = tcpo.project 
+            and tt.subject like  concat(teba.activity_name,' : ','%%') 
         {where_conditions}
         """.format(
             where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
+        # debug=True,
     )
 
     return data
@@ -84,6 +86,11 @@ def get_columns(filters):
             "width": 110,
         },
         {
+            "label": _("Post Boarding Status"),
+            "fieldname": "post_boarding_status",
+            "width": 110,
+        },
+        {
             "label": _("Date Completed"),
             "fieldname": "completed_on",
             "fieldtype": "Date",
@@ -95,7 +102,7 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
-    where_clause.append("tcpo.post_boarding_status in ('Pending','In Process') ")
+    # where_clause.append("tcpo.post_boarding_status in ('Pending','In Process') ")
 
     if filters.get("job_applicant"):
         where_clause.append("te.job_applicant = %(job_applicant)s")
@@ -105,5 +112,8 @@ def get_conditions(filters):
 
     if filters.get("task_status"):
         where_clause.append("tt.status = %(task_status)s")
+
+    if filters.get("post_boarding_status"):
+        where_clause.append("tcpo.post_boarding_status = %(post_boarding_status)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

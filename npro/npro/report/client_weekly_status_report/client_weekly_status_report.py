@@ -16,7 +16,7 @@ def get_data(filters):
         """
 select 
 tncws.name, tncws.week_start_date, tncws.npro_technical_manager, tncws.project, tncws.week_end_date, 
-tncws.customer, tncws.client_manager_project_owner, tncws.schedule_adherence, tncws.code_review_count, tncws.
+tncws.customer, tp.customer_reporting_mgr_cf , tncws.schedule_adherence, tncws.code_review_count, tncws.
 task_resolved_in_week, tncws.task_resolved_expectation, tncws.project_status, tncws.
 client_specific_issue, tncws.sla_adherence, tncws.tec_doc_rev, tncws.task_incomplete, tncws.
 rework_done, tncws.extra_achievement_of_week, tncws.outstanding_invoices ,
@@ -49,8 +49,8 @@ def get_columns(filters):
             "width": 150,
         },
         {
-            "label": _("Project Owner"),
-            "fieldname": "client_manager_project_owner",
+            "label": _("Customer Reporting Manager"),
+            "fieldname": "customer_reporting_mgr_cf",
             "fieldtype": "Data",
             "width": 150,
         },

@@ -22,6 +22,12 @@ frappe.query_reports["Post Onboarding Activities"] = {
       fieldtype: "Select",
       options: "\nOpen\nWorking\nPending Review\nOverdue\nTemplate\nCompleted\nCancelled "
     },
+    {
+      fieldname: "post_boarding_status",
+      label: __("Post Boarding Status"),
+      fieldtype: "Select",
+      options: "\nPending\nIn Process\nCompleted"
+    },
 
   ],
 

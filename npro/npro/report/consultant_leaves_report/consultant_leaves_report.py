@@ -14,23 +14,25 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
-        select 
-            te.name employee, te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
-            tja.customer_cf , count(tntd.name) leaves_utilised
-        from tabEmployee te 
-        inner join `tabJob Applicant` tja on tja.name = te.job_applicant 
-        inner join `tabNPro Timesheet` tnt on tnt.project in (
-            select project from `tabEmployee Onboarding` teo where teo.job_applicant = te.job_applicant
-        )
-        left outer join `tabNPro Timesheet Detail` tntd  on tntd.parent = tnt.name and tntd.status like '%%leave%%'
-        {where_conditions}
-        group by te.name , te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
-        tja.customer_cf 
+            select 
+                te.name employee, te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
+                tp.customer , count(tntd.name) leaves_utilised
+            from tabEmployee te 
+            inner join `tabNPro Timesheet` tnt on tnt.consultant = te.name
+            inner join tabProject tp on tp.name = tnt.project
+            left outer join `tabNPro Timesheet Detail` tntd  on tntd.parent = tnt.name and tntd.status like '%%leave%%'
+            {where_conditions}
+            group by te.name , te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
+            tp.customer
+
+
+
         """.format(
             where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
+        # debug=True,
     )
 
     for d in data:
@@ -49,7 +51,7 @@ def get_columns(filters):
         },
         {
             "label": _("Client"),
-            "fieldname": "customer_cf",
+            "fieldname": "customer",
             "fieldtype": "Link",
             "options": "Customer",
             "width": 200,

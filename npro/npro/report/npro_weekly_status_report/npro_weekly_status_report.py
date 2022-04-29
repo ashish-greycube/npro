@@ -15,16 +15,16 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tnws.customer , tnws.client_manager_project_owner , tnws.project ,
+            tnws.customer , tp.customer_reporting_mgr_cf , tnws.project ,
             tp.project_name , tpu.consultants , tnws.npro_technical_manager , 
             tnws.escalation_mgmt_count , tnws.issues_needs_attention , tnws.total_expected_hours , 
-            tnws.total_hours_worked , tnws.status_rag , tnws .week_start_date , tnws.week_end_date 
+            tnws.total_hours_worked , tnws.status_rag , tnws.week_start_date , tnws.week_end_date 
         from `tabNPro Weekly Status` tnws 
         inner join tabProject tp on tp.name = tnws.project 
         left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) consultants from `tabProject User` tpu 
-        group by tpu.parent ) tpu on tpu.parent = tp.name 
-        order by tnws.week_start_date , tnws.project 
+        group by tpu.parent) tpu on tpu.parent = tp.name 
         {where_conditions}
+        order by tnws.week_start_date , tnws.project 
         """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -45,8 +45,8 @@ def get_columns(filters):
             "width": 150,
         },
         {
-            "label": _("Project Owner"),
-            "fieldname": "client_manager_project_owner",
+            "label": _("Customer Reporting Manager"),
+            "fieldname": "customer_reporting_mgr_cf",
             "fieldtype": "Link",
             "options": "User",
             "width": 130,
@@ -112,7 +112,10 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
-    # if filters.get("from_date"):
-    #     where_clause.append("op.transaction_date >= %(from_date)s")
+    if filters.get("from_date"):
+        where_clause.append("tnws.week_start_date >= %(from_date)s")
+
+    if filters.get("till_date"):
+        where_clause.append("tnws.week_end_date <= %(till_date)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

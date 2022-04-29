@@ -20,7 +20,7 @@ Object.assign(npro.utils, {
     } else if (timespan.startsWith('this ')) {
       timespan = timespan.replace('this ', '')
       return [
-        moment().startOf(timespan).format(), current_date
+        moment().startOf(timespan).format(), moment().endOf(timespan).format(),
       ]
     } else if (timespan.startsWith('last ')) {
       timespan = timespan.replace('last ', '')

@@ -15,7 +15,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
 select 
-	tpu.candidate_name , tp.name project, tp.customer , tp.customer_reporting_mgr_cf ,
+	tpu.candidate_name , tp.name project, tja.customer_cf , tp.customer_reporting_mgr_cf ,
 	tp.project_name , tp.status project_status , tp.expected_start_date , tp.percent_complete , 
 	tt.name task_name, tt.subject , coalesce(tt.parent_task,'') parent_task , ptt.subject parent_subject , 
     tp.npro_technical_manager_cf , tt.status task_status , tt.task_owner_cf ,
@@ -25,14 +25,21 @@ left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) candidate_name fro
 group by tpu.parent ) tpu on tpu.parent = tp.name 
 inner join tabTask tt on tt.project = tp.name 
 left outer join tabTask ptt on ptt.name = tt.parent_task
-{where_conditions}
+inner join (
+select teo.employee , teo.project
+from `tabEmployee Onboarding` teo 
+union all
+select tcpo.employee , tcpo.project
+from `tabConsultant Post Onboarding` tcpo ) onboarding on onboarding.project = tp.name 
+inner join tabEmployee te on te.name = onboarding.employee
+inner join `tabJob Applicant` tja on tja.name = te.job_applicant
 order by tp.name, tt.name 
+        {where_conditions}
         """.format(
             where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
-        debug=True,
     )
 
     return data
@@ -48,7 +55,7 @@ def get_columns(filters):
         },
         {
             "label": _("Client"),
-            "fieldname": "customer",
+            "fieldname": "customer_cf",
             "fieldtype": "Link",
             "options": "Customer",
             "width": 200,
