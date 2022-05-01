@@ -14,27 +14,20 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
-select 
-	tpu.candidate_name , tp.name project, tja.customer_cf , tp.customer_reporting_mgr_cf ,
-	tp.project_name , tp.status project_status , tp.expected_start_date , tp.percent_complete , 
-	tt.name task_name, tt.subject , coalesce(tt.parent_task,'') parent_task , ptt.subject parent_subject , 
-    tp.npro_technical_manager_cf , tt.status task_status , tt.task_owner_cf ,
-	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf
-from tabProject tp 
-left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) candidate_name from `tabProject User` tpu 
-group by tpu.parent ) tpu on tpu.parent = tp.name 
-inner join tabTask tt on tt.project = tp.name 
-left outer join tabTask ptt on ptt.name = tt.parent_task
-inner join (
-select teo.employee , teo.project
-from `tabEmployee Onboarding` teo 
-union all
-select tcpo.employee , tcpo.project
-from `tabConsultant Post Onboarding` tcpo ) onboarding on onboarding.project = tp.name 
-inner join tabEmployee te on te.name = onboarding.employee
-inner join `tabJob Applicant` tja on tja.name = te.job_applicant
-order by tp.name, tt.name 
-        {where_conditions}
+            select
+            tt.employee_name , tt.employee , tp.customer , tp.customer_reporting_mgr_cf ,
+            ttd.project , tp.project_name , DATE(tp.actual_start_date) actual_start_date , 
+            DATE(ttd.from_time) ttd_date , ttd.task , ttk.subject ,
+            sum(ttd.hours) hours , ttk.no_of_issues_escalated_cf , ttk.issues_escalated_desc_cf 
+                from tabTimesheet tt 
+            left outer join `tabTimesheet Detail` ttd on ttd.parent = tt.name 
+            left outer join tabProject tp on tp.name = ttd.project 
+            left outer join tabTask ttk on ttk.name = ttd.task 
+            {where_conditions}
+            group by tt.employee_name , tt.employee , tp.customer , 
+            ttd.project , tp.project_name , DATE(tp.actual_start_date) , 
+            DATE(ttd.from_time) , ttd.task , ttk.subject ,
+            ttk.no_of_issues_escalated_cf , ttk.issues_escalated_desc_cf 
         """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -48,14 +41,14 @@ order by tp.name, tt.name
 def get_columns(filters):
     return [
         {
-            "label": _("Candidate Name"),
-            "fieldname": "candidate_name",
+            "label": _("Consultant Name"),
+            "fieldname": "employee_name",
             "fieldtype": "Data",
             "width": 200,
         },
         {
             "label": _("Client"),
-            "fieldname": "customer_cf",
+            "fieldname": "customer",
             "fieldtype": "Link",
             "options": "Customer",
             "width": 200,
@@ -72,7 +65,13 @@ def get_columns(filters):
         },
         {
             "label": _("Project Start Date"),
-            "fieldname": "expected_start_date",
+            "fieldname": "actual_start_date",
+            "fieldtype": "Date",
+            "width": 120,
+        },
+        {
+            "label": _("Date"),
+            "fieldname": "ttd_date",
             "fieldtype": "Date",
             "width": 120,
         },
@@ -82,44 +81,23 @@ def get_columns(filters):
             "width": 255,
         },
         {
-            "label": _("Parent Task"),
-            "fieldname": "parent_subject",
-            "width": 195,
-        },
-        {
-            "label": _("Task Owner"),
-            "fieldname": "task_owner_cf",
-            "fieldtype": "Link",
-            "options": "User",
-            "width": 100,
-        },
-        {
-            "label": _("Task Status"),
-            "fieldname": "task_status",
-            "width": 100,
-        },
-        {
-            "label": _("Task Start Date"),
-            "fieldname": "enp_start_date",
-            "fieldtype": "Date",
-            "width": 120,
-        },
-        {
-            "label": _("Task End Date"),
-            "fieldname": "exp_end_date",
-            "fieldtype": "Date",
-            "width": 120,
-        },
-        {
-            "label": _("% Progress"),
-            "fieldname": "percent_progress",
-            "fieldtype": "Percent",
+            "label": _("No. of hrs worked"),
+            "fieldtype": "Float",
+            "fieldname": "hours",
             "width": 110,
         },
         {
-            "label": _("Issues"),
-            "fieldname": "task_issue_cf",
-            "width": 200,
+            "label": _("No of Critical issues not addressed and escalations by Client"),
+            "fieldname": "no_of_issues_escalated_cf",
+            "fieldtype": "Int",
+            "width": 150,
+        },
+        {
+            "label": _(
+                "Critical Issues not addressed & escalation by Client- Description"
+            ),
+            "fieldname": "issues_escalated_desc_cf",
+            "width": 100,
         },
     ]
 
@@ -127,7 +105,19 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
-    # if filters.get("from_date"):
-    #     where_clause.append("op.transaction_date >= %(from_date)s")
+    if filters.get("from_date"):
+        where_clause.append("ttd.from_time >= %(from_date)s")
+
+    if filters.get("till_date"):
+        where_clause.append("ttd.from_time <= %(till_date)s")
+
+    if filters.get("candidate"):
+        where_clause.append("tt.employee = %(candidate)s")
+
+    if filters.get("project"):
+        where_clause.append("tp.name = %(project)s")
+
+    if filters.get("client"):
+        where_clause.append("tp.customer = %(client)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

@@ -562,9 +562,18 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NPro Consultant Deliverable Report",
+   "link_to": "NPro Consultant Deliverable Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-04-29 16:34:09.612214",
+ "modified": "2022-04-30 08:56:55.561366",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
