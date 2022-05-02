@@ -76,7 +76,7 @@ def get_columns(filters):
             "width": 280,
         },
         {
-            "label": _("User"),
+            "label": _("Task Owner"),
             "fieldname": "task_owner_cf",
             "width": 130,
         },

@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 import frappe
+from frappe.desk.page.setup_wizard.setup_wizard import make_records
 
 
 def after_migrate():
@@ -18,3 +19,8 @@ def after_migrate():
     ]:
         frappe.db.sql("delete from tabReport where name = %s", (report,))
     frappe.db.commit()
+
+
+def add_fixtures():
+    notifications = []
+    make_records(notifications)
