@@ -1233,7 +1233,7 @@
    "in_preview": 0,
    "in_standard_filter": 0,
    "insert_after": "job_opening_qualification_cf",
-   "label": "is JRSS approved by Customer in Writing ?",
+   "label": "Is JRSS approved by Customer in Writing ?",
    "length": 0,
    "mandatory_depends_on": null,
    "modified": "2022-04-29 08:03:17.875181",

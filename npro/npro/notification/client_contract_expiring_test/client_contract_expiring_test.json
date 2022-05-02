@@ -1,0 +1,29 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "",
+ "creation": "2022-05-02 14:03:31.961842",
+ "date_changed": "client_contract_end_date_cf",
+ "days_in_advance": 20,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Employee",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Client Contract Expiring for Consultant {{ doc.employee_name }} \n\n<br>\n<br><br>\nContract Start Date : {{doc.contract_start_date_cf}}<br>\nContract End Date : {{doc.contract_start_date_cf}}<br>\n<br><br>\nPlease take necessary action.\n",
+ "modified": "2022-05-02 14:03:31.961842",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Client Contract Expiring Test",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "HR User"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "subject": "Client Contract Expiring for Consultant {{ doc.employee_name }} "
+}
