@@ -1,0 +1,29 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status == \"Offer Approved\"",
+ "creation": "2022-04-06 07:29:11.540660",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Job Offer",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Hello,\n<br>\n<br>\n The below job offer is approved\n<br>\n<ul>\n<li> Job Offer : {{doc.name}} </li>\n<li> Applicant : {{doc.applicant_name}} </li\n<li> Job Title : {{doc.job_title_cf}} </li>\n<li> Customer  : {{doc.customer_cf}} </li>\n<li> Expected DOJ : {{doc.expected_doj_cf}} </li>\n<li> Offer Received for Approval On : {{doc.offer_sent_for_approval_date_cf}} </li>\n<li> Offer Approved By : {{doc.offer_approved_by_cf}} </li>\n<li> Offer Approved On : {{doc.offer_approved_on_date_cf}} </li>\n</ul>",
+ "modified": "2022-05-02 14:22:44.491631",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Job Offer Approved",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "owner"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "subject": "{{doc.name}} Job Offer Approved",
+ "value_changed": "status"
+}

@@ -1,0 +1,34 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.boarding_status ==  \"Completed\"",
+ "creation": "2022-04-06 09:21:16.954067",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Employee Onboarding",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Consultant Onboarding Activities are completed for {{doc.employee_name}}\n",
+ "modified": "2022-05-02 14:23:04.561890",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Consultant Onboarding Completed",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "HR Manager"
+  },
+  {
+   "receiver_by_role": "HR User"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "",
+ "sender_email": "",
+ "subject": "Consultant Onboarding Completed for {{doc.employee_name}}",
+ "value_changed": "boarding_status"
+}

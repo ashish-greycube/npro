@@ -1,0 +1,31 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "(doc.status != \"Completed\") or (doc.status != \n\"Template\")",
+ "creation": "2022-04-06 07:38:24.699291",
+ "date_changed": "exp_end_date",
+ "days_in_advance": 1,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Task",
+ "enabled": 1,
+ "event": "Days After",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "The Task {{doc.name}} is overdue.\n<br>\nIt was expected to be completed by {{doc.exp_end_date}}\n<br>\n",
+ "modified": "2022-05-02 14:24:01.287118",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Task Overdue Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "task_owner_cf"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "",
+ "sender_email": "",
+ "subject": "Task Overdue {{doc.name}}"
+}
