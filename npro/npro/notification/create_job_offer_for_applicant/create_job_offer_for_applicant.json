@@ -1,0 +1,31 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status == \"Accepted\"",
+ "creation": "2022-05-06 12:01:38.379184",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Job Applicant",
+ "enabled": 0,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Dear HR, <br>\n\nPlease create a Job Offer for the Job Applicant : {{ frappe.utils.get_url_to_form(doc.doctype,doc.name) }} <br>\n\n\n\n",
+ "modified": "2022-05-06 12:01:38.379184",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "Create Job Offer for Applicant",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "HR User"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "",
+ "sender_email": "",
+ "subject": "Create Job Offer for {{doc.applicant_name}}",
+ "value_changed": "status"
+}

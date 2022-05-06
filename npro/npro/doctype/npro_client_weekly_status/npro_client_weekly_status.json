@@ -8,10 +8,11 @@
  "engine": "InnoDB",
  "field_order": [
   "week_start_date",
-  "npro_technical_manager",
   "project",
+  "npro_technical_manager",
   "cb_1",
   "week_end_date",
+  "project_name",
   "customer",
   "client_manager_project_owner",
   "section_break_8",
@@ -38,6 +39,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "project.npro_technical_manager_cf",
    "fieldname": "npro_technical_manager",
    "fieldtype": "Link",
    "label": "NPro Technical Manager",
@@ -101,7 +103,7 @@
    "fieldname": "project_status",
    "fieldtype": "Select",
    "label": "Overall Project status",
-   "options": "\nRed\nAmber\nGreenx"
+   "options": "\nRed\nAmber\nGreen"
   },
   {
    "fieldname": "client_specific_issue",
@@ -140,11 +142,18 @@
   {
    "fieldname": "outstanding_invoices",
    "fieldtype": "Data",
-   "label": "Outstanding issues which needs Nahil attention"
+   "label": "Outstanding issues which needs attention"
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "label": "Project Name",
+   "read_only": 1
   }
  ],
  "links": [],
- "modified": "2022-04-29 09:26:30.711559",
+ "modified": "2022-05-06 09:39:48.087882",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Npro Client Weekly Status",

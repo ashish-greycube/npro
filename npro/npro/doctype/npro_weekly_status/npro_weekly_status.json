@@ -8,8 +8,8 @@
  "engine": "InnoDB",
  "field_order": [
   "week_start_date",
-  "npro_technical_manager",
   "project",
+  "npro_technical_manager",
   "cb_1",
   "week_end_date",
   "customer",
@@ -35,10 +35,12 @@
    "reqd": 1
   },
   {
+   "fetch_from": "project.npro_technical_manager_cf",
    "fieldname": "npro_technical_manager",
    "fieldtype": "Link",
    "label": "NPro Technical Manager",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "project",
@@ -62,7 +64,8 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer"
+   "options": "Customer",
+   "read_only": 1
   },
   {
    "fieldname": "client_manager_project_owner",
@@ -125,7 +128,7 @@
   }
  ],
  "links": [],
- "modified": "2022-04-14 11:14:35.557494",
+ "modified": "2022-05-06 09:43:20.806778",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Weekly Status",
