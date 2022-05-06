@@ -5,4 +5,16 @@ frappe.ui.form.on('NPro Consultant Meeting', {
 	// refresh: function(frm) {
 
 	// }
+
+	setup: function (frm) {
+		frm.set_query('project', () => {
+			return {
+				filters: {
+					project_type: ['in', ["Internal"]]
+				}
+			}
+		})
+	},
+
+
 });

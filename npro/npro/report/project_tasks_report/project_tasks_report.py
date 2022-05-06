@@ -32,7 +32,7 @@ order by tp.name, tt.name
         ),
         filters,
         as_dict=True,
-        debug=True,
+        # debug=True,
     )
 
     return data
@@ -120,7 +120,7 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
-    # if filters.get("from_date"):
-    #     where_clause.append("op.transaction_date >= %(from_date)s")
+    if filters.get("project_type"):
+        where_clause.append("tp.project_type = %(project_type)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""

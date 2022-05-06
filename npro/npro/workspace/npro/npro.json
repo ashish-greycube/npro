@@ -290,6 +290,45 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Project",
+   "link_to": "Project",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Expense Claim",
+   "link_to": "Expense Claim",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NPro Client Meeting",
+   "link_to": "NPro Client Meeting",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Consultant On Boarding",
    "link_to": "Employee Onboarding",
    "link_type": "DocType",
@@ -573,7 +612,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-05-01 05:30:55.913285",
+ "modified": "2022-05-06 15:04:38.237102",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",

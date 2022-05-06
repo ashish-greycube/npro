@@ -5,6 +5,16 @@ frappe.ui.form.on('Npro Monthly Status', {
 	month_start_date: function (frm) {
 		let end_date = moment(frm.doc.month_start_date).endOf('month').format();
 		frm.set_value('month_end_date', end_date)
-	}
+	},
+	setup: function (frm) {
+		frm.set_query('project', () => {
+			return {
+				filters: {
+					project_type: ['in', ["Internal"]]
+				}
+			}
+		})
+	},
+
 
 });

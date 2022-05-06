@@ -4,7 +4,12 @@
 
 frappe.query_reports["Project Tasks Report"] = {
   filters: [
-
+    {
+      fieldname: "project_type",
+      label: __("Project Type"),
+      fieldtype: "Link",
+      options: "Project Type",
+    },
   ],
 
   "formatter": function (value, row, column, data, default_formatter) {

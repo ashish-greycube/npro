@@ -3,6 +3,15 @@
 
 frappe.ui.form.on('NPro Timesheet', {
 
+	setup: function (frm) {
+		frm.set_query('project', () => {
+			return {
+				filters: {
+					project_type: ['in', ["Internal"]]
+				}
+			}
+		})
+	},
 
 	fetch_dates: function (frm) {
 		let existing_dates = (frm.doc.npro_timesheet_detail || []).map(d => d.timesheet_date)

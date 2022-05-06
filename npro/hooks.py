@@ -42,6 +42,7 @@ doctype_js = {
     "Job Applicant": "public/js/job_applicant.js",
     "Interview": "public/js/interview.js",
     "Employee": "public/js/employee.js",
+    "Project": "public/js/project.js",
 }
 doctype_list_js = {"Job Applicant": "public/js/job_applicant_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -111,6 +112,7 @@ doc_events = {
     "Interview": {"on_update": "npro.api.on_update_interview"},
     "Job Offer": {
         "on_submit": "npro.npro.doc_events.on_submit_job_offer",
+        "validate": "npro.npro.doc_events.on_validate_job_offer",
     },
     "Job Opening": {
         "autoname": "npro.api.autoname_job_opening",
