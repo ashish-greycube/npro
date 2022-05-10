@@ -1,0 +1,33 @@
+{
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "",
+ "creation": "2022-05-06 16:23:55.814036",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "NPro Timesheet",
+ "enabled": 0,
+ "event": "New",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Please approve the Timesheet for the {{doc.consultant}} <br>\n\nClick to go to the Timesheet\n{{ frappe.utils.get_url_to_form(doc.doctype,doc.name) }}\n\n",
+ "modified": "2022-05-06 16:23:55.814036",
+ "modified_by": "Administrator",
+ "module": "NPro",
+ "name": "NPro Timesheet Approval",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "npro_technical_manager"
+  },
+  {
+   "receiver_by_document_field": "owner"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "",
+ "sender_email": "",
+ "subject": "NPro Timesheet to Approve for {{doc.consultant}}"
+}

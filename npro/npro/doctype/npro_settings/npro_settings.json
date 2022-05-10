@@ -91,7 +91,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-04-22 07:11:57.524195",
+ "modified": "2022-05-06 16:19:24.169015",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
@@ -106,6 +106,27 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "HR Manager",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "HR User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Employee",
+   "share": 1
   }
  ],
  "quick_entry": 1,
