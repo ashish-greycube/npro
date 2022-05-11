@@ -15,9 +15,10 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tnt.consultant , tnt.project , tnt.role , tnt.from_date , tnt.to_date , tnt.npro_technical_manager , tnt.name ,
-            tntd.timesheet_date, DATE_FORMAT(tntd.timesheet_date,'%%a') day_name , tntd.hours, tntd.remark , tntd.status , 
-            te.job_applicant , te.employee_name , tja.customer_cf 
+            tnt.consultant , tnt.project , tnt.role , tnt.from_date , tnt.to_date , 
+            tnt.client_manager , tnt.name , tntd.hours, tntd.remark , tntd.status , 
+            tntd.timesheet_date, DATE_FORMAT(tntd.timesheet_date,'%%a') day_name , 
+            te.job_applicant , te.employee_name , tja.customer_cf , tnt.project_name
         from `tabNPro Timesheet` tnt 
         inner join `tabNPro Timesheet Detail` tntd  on tntd.parent = tnt.name
         inner join `tabEmployee` te on te.name = tnt.consultant 
@@ -52,10 +53,8 @@ def get_columns(filters):
         },
         {
             "label": _("Project"),
-            "fieldname": "project",
-            "fieldtype": "Link",
-            "options": "Project",
-            "width": 180,
+            "fieldname": "project_name",
+            "width": 240,
         },
         {
             "label": _("Role"),
@@ -64,7 +63,7 @@ def get_columns(filters):
         },
         {
             "label": _("Client Manager"),
-            "fieldname": "npro_technical_manager",
+            "fieldname": "client_manager",
             "width": 180,
         },
         {

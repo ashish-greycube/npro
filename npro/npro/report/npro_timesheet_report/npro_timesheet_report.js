@@ -42,8 +42,9 @@ frappe.query_reports["NPro Timesheet Report"] = {
 
     if (column.fieldname == "job_title") {
       value = `<a href="/app/job-opening/${data['job_name']}" data-doctype="Job Opening">${data['job_title']}</a>`;
+    } else if (column.fieldname == "project_name") {
+      value = `<a href="/app/project/${data['project']}" data-doctype="Project">${data['project_name']}</a>`;
     }
-
 
     return value;
   },

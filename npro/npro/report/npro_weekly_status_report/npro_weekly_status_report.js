@@ -49,7 +49,7 @@ frappe.query_reports["NPro Weekly Status Report"] = {
       value = `<a href="/app/project/${data['project']}" data-doctype="Project">${data['project_name']}</a>`;
     }
 
-    return value;
+    return value || '';
   },
 
 

@@ -15,8 +15,8 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tnws.customer , tp.customer_reporting_mgr_cf , tnws.project ,
-            tp.project_name , tpu.consultants , tnws.npro_technical_manager , 
+            tnws.customer , tnws.customer_reporting_manager , tnws.project ,
+            tnws.project_name , tpu.consultants , tnws.npro_technical_manager , 
             tnws.escalation_mgmt_count , tnws.issues_needs_attention , tnws.total_expected_hours , 
             tnws.total_hours_worked , tnws.status_rag , tnws.week_start_date , tnws.week_end_date 
         from `tabNPro Weekly Status` tnws 
@@ -46,7 +46,7 @@ def get_columns(filters):
         },
         {
             "label": _("Customer Reporting Manager"),
-            "fieldname": "customer_reporting_mgr_cf",
+            "fieldname": "customer_reporting_manager",
             "fieldtype": "Link",
             "options": "User",
             "width": 130,

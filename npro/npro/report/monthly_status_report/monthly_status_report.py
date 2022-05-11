@@ -15,9 +15,9 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tnms.customer ,
+            tnms.customer , tnms.project ,
             tnms.overall_delivery_status , schedule_adherence , sla_adherence , major_achievements_for_the_month ,
-            tp.project_name , tp.npro_technical_manager_cf , tpu.consultants , tp.customer_reporting_mgr_cf ,
+            tnms.project_name , tp.npro_technical_manager_cf , tpu.consultants , tnms.customer_reporting_manager ,
             tnms.month_start_date , tnms.month_end_date
         from `tabNpro Monthly Status` tnms 
         inner join tabProject tp on tp.name = tnms.project 
@@ -63,7 +63,7 @@ def get_columns(filters):
         },
         {
             "label": _("Customer Reporting Manager"),
-            "fieldname": "customer_reporting_mgr_cf",
+            "fieldname": "customer_reporting_manager",
             "fieldtype": "Link",
             "options": "User",
             "width": 130,
