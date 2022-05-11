@@ -9,12 +9,13 @@
  "field_order": [
   "consultant",
   "from_date",
-  "role",
+  "designation",
   "npro_technical_manager",
   "cb_1",
   "project",
   "to_date",
   "fetch_dates",
+  "project_name",
   "client_manager",
   "approved",
   "tsd_sb",
@@ -33,15 +34,9 @@
   {
    "fieldname": "from_date",
    "fieldtype": "Date",
-   "in_standard_filter": 1,
-   "label": "From Date"
-  },
-  {
-   "fieldname": "role",
-   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Role"
+   "label": "From Date"
   },
   {
    "fieldname": "approved",
@@ -71,9 +66,11 @@
    "label": "To Date"
   },
   {
+   "fetch_from": "project.customer_reporting_mgr_cf",
    "fieldname": "client_manager",
    "fieldtype": "Data",
-   "label": "Client Manager"
+   "label": "Client Manager",
+   "read_only": 1
   },
   {
    "fieldname": "tsd_sb",
@@ -89,19 +86,38 @@
    "fetch_from": "consultant.npro_technical_manager_cf",
    "fieldname": "npro_technical_manager",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "NPro Technical Manager",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "depends_on": "eval:((doc.from_date) && (doc.to_date))",
    "fieldname": "fetch_dates",
    "fieldtype": "Button",
    "label": "Fetch Dates"
+  },
+  {
+   "fetch_from": "consultant.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-06 16:21:50.440985",
+ "modified": "2022-05-11 08:03:04.507706",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Timesheet",

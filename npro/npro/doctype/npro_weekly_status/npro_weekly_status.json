@@ -9,11 +9,12 @@
  "field_order": [
   "week_start_date",
   "project",
+  "project_name",
   "npro_technical_manager",
   "cb_1",
   "week_end_date",
   "customer",
-  "client_manager_project_owner",
+  "customer_reporting_manager",
   "section_break_8",
   "schedule_adherence",
   "escalation_mgmt_count",
@@ -68,12 +69,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "client_manager_project_owner",
-   "fieldtype": "Data",
-   "label": "Client Manager Project Owner",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_8",
    "fieldtype": "Section Break"
   },
@@ -125,10 +120,27 @@
    "fieldname": "expected_growth",
    "fieldtype": "Data",
    "label": "Expected Growth"
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.customer_reporting_mgr_cf",
+   "fieldname": "customer_reporting_manager",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Customer Reporting Manager",
+   "read_only": 1
   }
  ],
  "links": [],
- "modified": "2022-05-06 09:43:20.806778",
+ "modified": "2022-05-11 08:10:52.949192",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Weekly Status",

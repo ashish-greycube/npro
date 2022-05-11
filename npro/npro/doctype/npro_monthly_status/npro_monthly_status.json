@@ -16,6 +16,8 @@
   "project_risk_and_mitigation_plan",
   "cb_1",
   "month_end_date",
+  "project_name",
+  "customer_reporting_manager",
   "schedule_adherence",
   "sla_adherence",
   "major_achievements_for_the_month",
@@ -92,10 +94,25 @@
    "fieldtype": "Link",
    "label": "Customer",
    "options": "Customer"
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Project Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.customer_reporting_mgr_cf",
+   "fieldname": "customer_reporting_manager",
+   "fieldtype": "Data",
+   "label": "Customer Reporting Manager",
+   "read_only": 1
   }
  ],
  "links": [],
- "modified": "2022-04-25 05:02:23.275065",
+ "modified": "2022-05-11 08:57:30.217816",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Npro Monthly Status",
