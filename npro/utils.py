@@ -48,3 +48,15 @@ def make_consultant_from_job_offer(source_name, target_doc=None):
     )
 
     return doc
+
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_customer_contacts(doctype, txt, searchfield, start, page_len, filters):
+    from frappe.contacts.doctype.contact.contact import get_contacts_linking_to
+
+    out = [
+        (d.name,) for d in get_contacts_linking_to("Customer", filters.get("customer"))
+    ]
+
+    return txt and [d for d in out if txt in d] or out
