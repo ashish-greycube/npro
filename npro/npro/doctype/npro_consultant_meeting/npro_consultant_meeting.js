@@ -10,7 +10,7 @@ frappe.ui.form.on('NPro Consultant Meeting', {
 		frm.set_query('project', () => {
 			return {
 				filters: {
-					project_type: ['in', ["Internal"]]
+					project_type: ['in', ["External"]]
 				}
 			}
 		})

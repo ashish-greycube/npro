@@ -15,13 +15,13 @@ def on_submit_job_offer(doc, method):
 
 def on_validate_job_offer(doc, method):
     if doc.status == "Rejected":
-        if not doc.db_get("status") == "Rejected":
-            frappe.db.set_value(
-                "Job Applicant",
-                doc.job_applicant,
-                "rejected_reason_cf",
-                doc.offer_rejection_reason_cf,
-            )
+        # if not doc.db_get("status") == "Rejected":
+        frappe.db.set_value(
+            "Job Applicant",
+            doc.job_applicant,
+            "rejected_reason_cf",
+            doc.offer_rejection_reason_cf,
+        )
 
 
 def on_validate_employee(doc, method):

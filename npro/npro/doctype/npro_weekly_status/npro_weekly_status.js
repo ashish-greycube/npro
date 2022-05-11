@@ -9,7 +9,7 @@ frappe.ui.form.on('NPro Weekly Status', {
 		frm.set_query('project', () => {
 			return {
 				filters: {
-					project_type: ['in', ["Internal"]]
+					project_type: ['in', ["External"]]
 				}
 			}
 		})
