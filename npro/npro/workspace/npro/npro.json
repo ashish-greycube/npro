@@ -61,6 +61,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Job Offer",
+   "link_to": "Job Offer",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Candidate On Boarding Setup",
    "link_type": "DocType",
    "onboard": 0,
@@ -612,7 +621,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-05-06 15:04:38.237102",
+ "modified": "2022-05-12 13:01:26.661287",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",

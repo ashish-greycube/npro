@@ -10,6 +10,31 @@ frappe.query_reports["Project Tasks Report"] = {
       fieldtype: "Link",
       options: "Project Type",
     },
+    {
+      fieldname: "project",
+      label: __("Project"),
+      fieldtype: "Link",
+      options: "Project",
+      "get_query": () => {
+        return {
+          filters: {
+            "project_type": frappe.query_report.get_filter_value('project_type')
+          }
+        }
+      }
+    },
+    {
+      "fieldname": "from_date",
+      "label": __("From Date (Task Created On)"),
+      "fieldtype": "Date",
+      "default": frappe.datetime.month_start(),
+    },
+    {
+      "fieldname": "to_date",
+      "label": __("To Date (Task Created On)"),
+      "fieldtype": "Date",
+      "default": frappe.datetime.get_today(),
+    },
   ],
 
   "formatter": function (value, row, column, data, default_formatter) {
@@ -24,7 +49,6 @@ frappe.query_reports["Project Tasks Report"] = {
     } else if (column.fieldname == "project_name") {
       value = `<a href="/app/project/${data['project']}" data-doctype="Project">${data['project_name']}</a>`;
     }
-
     return value;
   },
 

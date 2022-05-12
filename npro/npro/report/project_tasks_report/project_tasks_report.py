@@ -93,7 +93,7 @@ def get_columns(filters):
         },
         {
             "label": _("Task Start Date"),
-            "fieldname": "enp_start_date",
+            "fieldname": "exp_start_date",
             "fieldtype": "Date",
             "width": 120,
         },
@@ -120,7 +120,16 @@ def get_columns(filters):
 def get_conditions(filters):
     where_clause = []
 
+    if filters.get("project"):
+        where_clause.append("tp.name = %(project)s")
+
     if filters.get("project_type"):
         where_clause.append("tp.project_type = %(project_type)s")
+
+    if filters.get("from_date"):
+        where_clause.append("DATE(tt.creation) >= %(from_date)s")
+
+    if filters.get("to_date"):
+        where_clause.append("DATE(tt.creation) <= %(to_date)s")
 
     return " where " + " and ".join(where_clause) if where_clause else ""
