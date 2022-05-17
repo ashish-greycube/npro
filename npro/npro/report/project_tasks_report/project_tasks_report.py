@@ -40,12 +40,12 @@ order by tp.name, tt.name
 
 def get_columns(filters):
     return [
-        {
-            "label": _("Candidate Name"),
-            "fieldname": "candidate_name",
-            "fieldtype": "Data",
-            "width": 200,
-        },
+        # {
+        #     "label": _("Candidate Name"),
+        #     "fieldname": "candidate_name",
+        #     "fieldtype": "Data",
+        #     "width": 200,
+        # },
         {
             "label": _("Client"),
             "fieldname": "customer",
@@ -57,6 +57,13 @@ def get_columns(filters):
             "label": _("Reporting Manager"),
             "fieldname": "customer_reporting_mgr_cf",
             "width": 190,
+        },
+        {
+            "label": _("Project ID"),
+            "fieldtype": "Link",
+            "fieldname": "project",
+            "options": "Project",
+            "width": 125,
         },
         {
             "label": _("Project Name"),

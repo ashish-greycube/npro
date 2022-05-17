@@ -24,7 +24,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Job Applicant Status",
-   "options": "Open\nReplied\nPending for Internal Screening\nCV Shared with Client\nCV Selected for Interview\nCV Rejected\nInterview Scheduled\nRejected by Client\nRejected by Candidate\nHold\nAccepted",
+   "options": "Open\nReplied\nScreening Call\nScreening Call- Rejected\nTechnical interview\nTechnical interview- Rejected\nClient CV Screening\nClient CV Screening- Accepted\nClient CV Screening- Rejected\nClient Interview\nClient interview-Rejected\nClient Interview-rescheduled\nClient Interview-waiting for feedback\nRejected by Candidate\nHold\nAccepted\nRejected",
    "reqd": 1
   },
   {
@@ -39,7 +39,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-01-21 10:30:49.930287",
+ "modified": "2022-05-16 16:46:22.876684",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Job Applicant Status Priority Mapping",

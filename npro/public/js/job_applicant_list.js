@@ -1,4 +1,3 @@
-
 frappe.listview_settings['Job Applicant'] = {
-    hide_name_column: true
-}
+    hide_name_column: true,
+};

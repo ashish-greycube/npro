@@ -7,20 +7,6 @@ import frappe
 import frappe
 from frappe import _
 
-applicant_status = [
-    "Open",
-    "Replied",
-    "Pending for Internal Screening",
-    "CV Shared with Client",
-    "CV Selected for Interview",
-    "CV Rejected",
-    "Interview Scheduled",
-    "Rejected",
-    "Hold",
-    "Accepted",
-    "For Future Hire",
-]
-
 
 def execute(filters=None):
     columns, data = [], []
@@ -43,12 +29,12 @@ def get_data(filters):
         select tja.job_title ,
             count(distinct if(tnsl.old_value is NULL,tja.applicant_name,null)) no_applied ,
             count(distinct if(tnsl.new_value ='Accepted',tja.applicant_name,null)) no_selected ,
-            count(distinct if(tnsl.new_value ='CV Shared with Client',tja.applicant_name,null)) no_shared_with_client ,
-            count(distinct if(tnsl.new_value ='CV Selected for Interview',tja.applicant_name,null)) no_selected_by_client ,
-            count(distinct if(tnsl.new_value ='Rejected by Client',tja.applicant_name,null)) no_rejected_by_client ,
+            count(distinct if(tnsl.new_value ='Client CV Screening',tja.applicant_name,null)) no_shared_with_client ,
+            count(distinct if(tnsl.new_value ='Client CV Screening- Accepted',tja.applicant_name,null)) no_selected_by_client ,
+            count(distinct if(tnsl.new_value ='Client interview-Rejected',tja.applicant_name,null)) no_rejected_by_client ,
             count(distinct 
-                if(tnsl.new_value like 'CV%%' 
-                or tnsl.new_value in ('Rejected', 'Accepted', 'Hold', 'Interview Scheduled'),
+                if(tnsl.new_value like '%%CV%%' 
+                or tnsl.new_value in ('Rejected', 'Accepted', 'Hold', 'Client Interview'),
                 tja.job_title,null)) no_passed_screening 
         from `tabJob Applicant` tja 
         left outer join `tabNPro Status Log` tnsl on tnsl.doc_type = 'Job Applicant'
@@ -65,6 +51,13 @@ def get_data(filters):
         as_dict=True,
         # debug=True,
     )
+
+    for d in data:
+        d["no_passed_screening"] = (
+            d.get("no_selected_by_client", 0)
+            + d.get("no_rejected_by_client", 0)
+            + d.get("no_shared_with_client", 0)
+        )
     return data
 
 
@@ -131,7 +124,7 @@ def get_columns(filters):
             "width": 145,
         },
         {
-            "label": "CV Rejected by Client",
+            "label": "Client interview-Rejected",
             "fieldname": "no_rejected_by_client",
             "width": 145,
         },

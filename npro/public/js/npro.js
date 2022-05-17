@@ -103,3 +103,34 @@ Object.assign(npro.utils, {
   },
 });
 
+frappe.provide("frappe.utils");
+
+Object.assign(frappe.utils, {
+  guess_style: function (text, default_style, _colour) {
+    // Override frappe utils function
+    // to fix list indicator for Job Applicant
+    var style = default_style || "default";
+    var colour = "gray";
+    if (text) {
+      if (has_words(["Pending", "Review", "Medium", "Not Approved"], text)) {
+        style = "warning";
+        colour = "orange";
+      } else if (has_words(["Open", "Urgent", "High", "Failed", "Rejected", "Error"], text)) {
+        style = "danger";
+        colour = "red";
+      } else if (has_words(["Closed", "Finished", "Converted", "Completed", "Complete", "Confirmed",
+        "Approved", "Yes", "Active", "Available", "Paid", "Success"], text)) {
+        style = "success";
+        colour = "green";
+      } else if (has_words(["Submitted"], text)) {
+        style = "info";
+        colour = "blue";
+      } else if (text.match(/reject/ig)) {
+        style = "danger";
+        colour = "red";
+      }
+    }
+    return _colour ? colour : style;
+  }
+})
+

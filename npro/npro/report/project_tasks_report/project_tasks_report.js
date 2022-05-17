@@ -48,6 +48,8 @@ frappe.query_reports["Project Tasks Report"] = {
       }
     } else if (column.fieldname == "project_name") {
       value = `<a href="/app/project/${data['project']}" data-doctype="Project">${data['project_name']}</a>`;
+    } else if (column.fieldname == "project") {
+      value = `<a href="/app/project/${data['project']}" data-doctype="Project">${data['project']}</a>`;
     }
     return value;
   },
