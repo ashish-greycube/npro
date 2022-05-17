@@ -18,32 +18,84 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
-    select tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation, 
-    tjo.customer_cf, 
-    tjo.customer_contact_cf, tjo.npro_sourcing_owner_cf, tjo.sales_person_cf,
-    appl.no_applied, appl.no_passed_screening, appl.no_selected, 
-    appl.no_shared_with_client, appl.no_selected_by_client,
-    appl.no_rejected_by_client
-    from `tabJob Opening` tjo   
-    left outer join (
-        select tja.job_title ,
-            count(distinct if(tnsl.old_value is NULL,tja.applicant_name,null)) no_applied ,
-            count(distinct if(tnsl.new_value ='Accepted',tja.applicant_name,null)) no_selected ,
-            count(distinct if(tnsl.new_value ='Client CV Screening',tja.applicant_name,null)) no_shared_with_client ,
-            count(distinct if(tnsl.new_value ='Client CV Screening- Accepted',tja.applicant_name,null)) no_selected_by_client ,
-            count(distinct if(tnsl.new_value ='Client interview-Rejected',tja.applicant_name,null)) no_rejected_by_client ,
-            count(distinct 
-                if(tnsl.new_value like '%%CV%%' 
-                or tnsl.new_value in ('Rejected', 'Accepted', 'Hold', 'Client Interview'),
-                tja.job_title,null)) no_passed_screening 
+WITH t1 as
+(
+		select tja.job_title , tnsl.new_value status, count(tnsl.new_value) ct
         from `tabJob Applicant` tja 
-        left outer join `tabNPro Status Log` tnsl on tnsl.doc_type = 'Job Applicant'
+        inner join `tabNPro Status Log` tnsl on tnsl.doc_type = 'Job Applicant'
             and tnsl.docfield_name = 'status' and tnsl.doc_name = tja.name 
-        	and date(tnsl.creation) >= %(from_date)s and date(tnsl.creation) <= %(to_date)s
-        where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
-        group by tja.job_title 
-    ) appl on appl.job_title = tjo.name
-    {where_conditions}
+            and date(tnsl.creation) >= %(from_date)s and date(tnsl.creation) <= %(to_date)s
+        where
+            date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
+		group by tja.job_title , tnsl.new_value
+		order by tja.job_title , tnsl.new_value
+) 
+select 
+	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation ,
+	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
+	sum(
+        case when t1.status in (
+        'Screening Call',
+        'Screening Call- Rejected',
+        'Technical interview',
+        'Technical interview- Rejected',
+        'Client CV Screening',
+        'Client CV Screening- Accepted',
+        'Client CV Screening- Rejected',
+        'Client Interview',
+        'Client interview-Rejected',
+        'Client Interview-rescheduled',
+        'Client Interview-waiting for feedback',
+        'Rejected by candidate',
+        'Hold',
+        'Accepted'
+    ) then 1 else 0 end) cand_applied ,
+	sum(case when t1.status in (
+        'Technical interview',
+        'Technical interview- Rejected',
+        'Client CV Screening',
+        'Client CV Screening- Accepted',
+        'Client CV Screening- Rejected',
+        'Client Interview',
+        'Client interview-Rejected',
+        'Client Interview-rescheduled',
+        'Client Interview-waiting for feedback',
+        'Rejected by candidate',
+        'Hold',
+        'Accepted'
+    ) then 1 else 0 end) cand_passed_npro_screening ,
+	sum(case when t1.status in (
+        'Client CV Screening',
+        'Client CV Screening- Accepted',
+        'Client CV Screening- Rejected',
+        'Client Interview',
+        'Client interview-Rejected',
+        'Client Interview-rescheduled',
+        'Client Interview-waiting for feedback',
+        'Rejected by candidate',
+        'Hold',
+        'Accepted'
+    ) then 1 else 0 end) no_cv_shared ,
+	sum(case when t1.status in (
+        'Client CV Screening- Accepted', 
+        'Accepted'
+    ) then 1 else 0 end) cv_accepted_by_client ,
+	sum(case when t1.status in ('CV rejected by client') then 1 else 0 end) cv_rejected_by_client ,
+    sum(case when t1.status in (
+        'Client interview-Rejected', 
+        'Client Interview-waiting for feedback' , 
+        'Accepted' , 
+        'Hold'
+    ) then 1 else 0 end) client_interview_held ,
+	sum(case when t1.status in ('Client interview-Rejected') then 1 else 0 end) client_interview_rejected ,
+	sum(case when t1.status in ('Accepted') then 1 else 0 end) selected 
+from `tabJob Opening` tjo 
+left outer join t1 on t1.job_title = tjo.name
+{where_conditions}
+group by 
+	job_opening, tjo.job_title, tjo.company, tjo.designation ,
+	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf 
+order by tjo.creation 
 """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -52,12 +104,6 @@ def get_data(filters):
         # debug=True,
     )
 
-    for d in data:
-        d["no_passed_screening"] = (
-            d.get("no_selected_by_client", 0)
-            + d.get("no_rejected_by_client", 0)
-            + d.get("no_shared_with_client", 0)
-        )
     return data
 
 
@@ -68,69 +114,79 @@ def get_columns(filters):
             "fieldname": "customer_cf",
             "fieldtype": "Link",
             "options": "Customer",
-            "width": 145,
+            "width": 190,
         },
         {
             "label": "Customer Contact",
             "fieldname": "customer_contact_cf",
             "fieldtype": "Link",
             "options": "Contact",
-            "width": 145,
+            "width": 190,
         },
         {
             "label": "Job Opening",
             "fieldname": "job_opening",
             "fieldtype": "Link",
             "options": "Job Opening",
-            "width": 145,
+            "width": 190,
         },
         {
             "label": "NPro Sourcing Owner",
             "fieldname": "npro_sourcing_owner_cf",
             "fieldtype": "Link",
             "options": "User",
-            "width": 145,
+            "width": 190,
         },
         {
             "label": "Npro Sales Person",
             "fieldname": "sales_person_cf",
             "fieldtype": "Link",
             "options": "User",
-            "width": 145,
+            "width": 190,
         },
-        # {
-        #     "label": "No Of Vacancies",
-        #     "fieldname": "no_of_vacancies_cf",
-        #     "width": 145,
-        # },
         {
             "label": "Candidates Applied",
-            "fieldname": "no_applied",
-            "width": 145,
+            "fieldname": "cand_applied",
+            "width": 190,
         },
         {
             "label": "Candidates Passed NPro Screening",
-            "fieldname": "no_passed_screening",
-            "width": 145,
+            "fieldname": "cand_passed_npro_screening",
+            "width": 275,
+        },
+        {
+            "label": "Candidate passed Npro technical interview",
+            "fieldname": "no_cv_shared",
+            "width": 290,
         },
         {
             "label": "No Of CV Shared",
-            "fieldname": "no_shared_with_client",
-            "width": 145,
+            "fieldname": "no_cv_shared",
+            "width": 190,
         },
         {
-            "label": "CV Selected by Client",
-            "fieldname": "no_selected_by_client",
-            "width": 145,
+            "label": "CV accepted by Client",
+            "fieldname": "cv_accepted_by_client",
+            "width": 190,
+        },
+        {
+            "label": "CV rejected by Client",
+            "fieldname": "cv_rejected_by_client",
+            "width": 190,
+        },
+        {
+            "label": "Client Interview held",
+            "fieldname": "client_interview_held",
+            "width": 190,
         },
         {
             "label": "Client interview-Rejected",
-            "fieldname": "no_rejected_by_client",
-            "width": 145,
+            "fieldname": "client_interview_rejected",
+            "width": 190,
         },
         {
-            "label": "Candidates Selected",
-            "fieldname": "no_selected",
+            "label": "Selected",
+            "fieldname": "selected",
             "width": 145,
         },
     ]

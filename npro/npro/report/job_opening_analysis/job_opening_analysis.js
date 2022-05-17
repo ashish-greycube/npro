@@ -73,7 +73,27 @@ const legend = [
 	{ stage: "Selected By client", description: "Client CV Screening- Accepted" },
 	{ stage: "Client interview-Rejected", description: "Client interview-Rejected" },
 	{ stage: "CV Shared", description: "CV Shared with Client" },
-	{ stage: "Selected", description: "Accepted" }
+	{
+		stage: "Candidates Applied",
+		description: "Screening Call,Screening Call- Rejected,Technical interview,Technical interview- Rejected,Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
+	},
+	{
+		stage: "Candidates Passed NPro Screening",
+		description: "Technical interview,Technical interview- Rejected,Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
+	},
+	{
+		stage: "Candidate passed Npro technical interview",
+		description: "Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
+	},
+	{
+		stage: "No Of CV Shared",
+		description: "Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
+	},
+	{ stage: "CV accepted by Client", description: "Client CV Screening- Accepted,Accepted" },
+	{ stage: "CV rejected by Client", description: "CV rejected by client" },
+	{ stage: "Client Interview held", description: "Client interview-Rejected,Client Interview-waiting for feedback,Accepted,Hold" },
+	{ stage: "Client interview-Rejected", description: "Client interview-Rejected" },
+	{ stage: "Selected", description: "Accepted" },
 ]
 
 function show_legend() {
