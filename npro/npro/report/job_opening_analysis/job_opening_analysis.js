@@ -68,11 +68,6 @@ frappe.query_reports["Job Opening Analysis"] = {
 };
 
 const legend = [
-	{ stage: "Applied", description: "Applied within selected dates." },
-	{ stage: "Passed NPro Screening", description: "'Rejected', 'Accepted', 'Hold', 'Client Interview' <br> or status like 'CV*'," },
-	{ stage: "Selected By client", description: "Client CV Screening- Accepted" },
-	{ stage: "Client interview-Rejected", description: "Client interview-Rejected" },
-	{ stage: "CV Shared", description: "CV Shared with Client" },
 	{
 		stage: "Candidates Applied",
 		description: "Screening Call,Screening Call- Rejected,Technical interview,Technical interview- Rejected,Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
