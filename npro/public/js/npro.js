@@ -119,7 +119,7 @@ Object.assign(frappe.utils, {
         style = "danger";
         colour = "red";
       } else if (has_words(["Closed", "Finished", "Converted", "Completed", "Complete", "Confirmed",
-        "Approved", "Yes", "Active", "Available", "Paid", "Success"], text)) {
+        "Approved", "Yes", "Active", "Available", "Paid", "Success", "Accepted"], text)) {
         style = "success";
         colour = "green";
       } else if (has_words(["Submitted"], text)) {

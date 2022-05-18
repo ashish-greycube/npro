@@ -165,12 +165,12 @@ def get_columns(filters):
             "width": 190,
         },
         {
-            "label": "CV accepted by Client",
+            "label": "CV Accepted by Client",
             "fieldname": "cv_accepted_by_client",
             "width": 190,
         },
         {
-            "label": "CV rejected by Client",
+            "label": "CV Rejected by Client",
             "fieldname": "cv_rejected_by_client",
             "width": 190,
         },
