@@ -25,7 +25,7 @@
  "fields": [
   {
    "fieldname": "project",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Project",
    "options": "Npro Projects",
    "reqd": 1
@@ -95,7 +95,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-19 09:08:56.311265",
+ "modified": "2022-05-19 09:58:46.787241",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Consultant Meeting",

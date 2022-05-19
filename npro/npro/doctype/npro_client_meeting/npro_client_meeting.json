@@ -29,7 +29,7 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Project",
    "options": "Npro Projects"
   },
@@ -71,7 +71,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-19 09:06:14.597285",
+ "modified": "2022-05-19 09:58:32.042073",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Client Meeting",
