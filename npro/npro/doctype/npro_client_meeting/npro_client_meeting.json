@@ -29,9 +29,9 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Link",
+   "fieldtype": "Table MultiSelect",
    "label": "Project",
-   "options": "Project"
+   "options": "Npro Projects"
   },
   {
    "fieldname": "cb_1",
@@ -51,7 +51,7 @@
    "fieldname": "attendees",
    "fieldtype": "Table",
    "label": "Attendees",
-   "options": "NPro Meeting Attendees"
+   "options": "Npro Client Attendee"
   },
   {
    "fieldname": "points_discussed",
@@ -71,7 +71,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-06 09:43:57.666630",
+ "modified": "2022-05-19 09:06:14.597285",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Client Meeting",

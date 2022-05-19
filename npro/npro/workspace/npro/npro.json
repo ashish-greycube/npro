@@ -299,6 +299,16 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Consultant",
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Project",
    "link_to": "Project",
    "link_type": "DocType",
@@ -311,6 +321,16 @@
    "is_query_report": 0,
    "label": "Task",
    "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Timesheet",
+   "link_to": "Timesheet",
    "link_type": "DocType",
    "onboard": 0,
    "only_for": "",
@@ -621,7 +641,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-05-12 13:01:26.661287",
+ "modified": "2022-05-19 09:25:01.760254",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
