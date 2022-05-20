@@ -1,1 +1,2 @@
 npro.patches.update_job_applicant_status
+npro.patches.update_npro_status_log
