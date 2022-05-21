@@ -22,14 +22,14 @@ def on_validate_job_offer(doc, method):
             "rejected_reason_cf",
             doc.offer_rejection_reason_cf,
         )
-    if doc.get("consultancy_fees_offered_usd_cf", 0):
+    if doc.get("billing_per_month_cf", 0):
         doc.margin_cf = (
             100
             * (
                 doc.get("billing_per_month_cf", 0)
                 - doc.get("consultancy_fees_offered_usd_cf")
             )
-            / doc.get("consultancy_fees_offered_usd_cf", 0)
+            / doc.get("billing_per_month_cf", 0)
         )
 
 
