@@ -78,6 +78,12 @@ select
     ) then 1 else 0 end) no_cv_shared ,
 	sum(case when t1.status in (
         'Client CV Screening- Accepted', 
+        'Client Interview',
+        'Client interview-Rejected', 
+        'Client Interview-rescheduled',
+        'Client Interview-waiting for feedback',
+        'Rejected by candidate',
+        'Hold',
         'Accepted'
     ) then 1 else 0 end) cv_accepted_by_client ,
 	sum(case when t1.status in ('CV rejected by client') then 1 else 0 end) cv_rejected_by_client ,
