@@ -85,7 +85,7 @@ const legend = [
 		description: "Client CV Screening,Client CV Screening- Accepted,Client CV Screening- Rejected,Client Interview,Client interview-Rejected,Client Interview-rescheduled,Client Interview-waiting for feedback,Rejected by candidate,Hold,Accepted"
 	},
 	{ stage: "CV accepted by Client", description: "Client CV Screening- Accepted, Client Interview, Client interview-Rejected, Client Interview-rescheduled, Client Interview-waiting for feedback, Rejected by candidate, Hold, Accepted" },
-	{ stage: "CV rejected by Client", description: "CV rejected by client" },
+	{ stage: "CV rejected by Client", description: "Client CV Screening- Rejected" },
 	{ stage: "Client Interview held", description: "Client interview-Rejected,Client Interview-waiting for feedback,Accepted,Hold" },
 	{ stage: "Client interview-Rejected", description: "Client interview-Rejected" },
 	{ stage: "Selected", description: "Accepted" },

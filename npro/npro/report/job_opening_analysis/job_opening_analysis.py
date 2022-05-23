@@ -52,7 +52,7 @@ def get_data(filters):
         (
             select distinct doc_name
             from `tabNPro Status Log` tnsl 
-            where new_value in ('CV rejected by client')
+            where new_value in ('Client CV Screening- Rejected')
         ),
         client_interview_held as
         (
