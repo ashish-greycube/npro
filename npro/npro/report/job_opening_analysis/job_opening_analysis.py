@@ -16,6 +16,10 @@ def execute(filters=None):
 
 
 def get_data(filters):
+    if filters.get("ignore_duration"):
+        filters["from_date"] = "1900-01-01"
+        filters["to_date"] = "2500-01-01"
+
     data = frappe.db.sql(
         """
         with npro_screening_passed as
@@ -100,8 +104,9 @@ def get_data(filters):
             group by tja.job_title 
         ) t1 on t1.job_title = tjo.name
         left outer join (
-            select job_title , count(name) applied
-            from `tabJob Applicant`
+            select tja.job_title , count(tja.name) applied
+            from `tabJob Applicant` tja
+            where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
             group by job_title
         ) appl on appl.job_title = tjo.name
         {where_conditions}

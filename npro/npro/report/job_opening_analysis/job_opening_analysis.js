@@ -52,6 +52,12 @@ frappe.query_reports["Job Opening Analysis"] = {
 			reqd: 1,
 		},
 		{
+			fieldname: "ignore_duration",
+			label: __("Ignore Duration"),
+			fieldtype: "Check",
+			default: 1
+		},
+		{
 			fieldname: "legend",
 			fieldtype: "Button",
 			label: "Show Stage Status Mapping",
