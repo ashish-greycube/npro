@@ -2,7 +2,7 @@
  "actions": [],
  "allow_events_in_timeline": 1,
  "allow_rename": 1,
- "autoname": "NPRO-CSM-.YY.MM.DD.-#",
+ "autoname": "NPRO-CSM-.YY.MM.DD.-.#",
  "creation": "2022-03-30 14:02:30.856991",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -95,7 +95,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-19 09:58:46.787241",
+ "modified": "2022-05-24 10:53:02.439244",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Consultant Meeting",
@@ -139,6 +139,5 @@
   }
  ],
  "sort_field": "modified",
- "sort_order": "DESC",
- "title_field": "project"
+ "sort_order": "DESC"
 }
