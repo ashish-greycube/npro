@@ -100,6 +100,17 @@
    "link_to": "Interview Round",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Npro Rejected Reason",
+   "link_to": "Npro Rejected Reason",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -117,6 +128,7 @@
    "label": "Candidate Reports - Job Opening",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -179,6 +191,7 @@
    "label": "Candidate Reports - Job Applicant",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -223,6 +236,7 @@
    "label": "Candidate Reports - Interview",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -641,7 +655,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-05-19 09:25:01.760254",
+ "modified": "2022-05-25 16:11:27.746784",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
