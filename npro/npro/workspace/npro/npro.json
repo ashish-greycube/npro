@@ -152,6 +152,16 @@
   {
    "hidden": 0,
    "is_query_report": 1,
+   "label": "Job Applicant Status",
+   "link_to": "Job Applicant Status",
+   "link_type": "Report",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
    "label": "Closed Candidate Sourcing",
    "link_to": "Closed Candidate Sourcing",
    "link_type": "Report",
@@ -308,6 +318,7 @@
    "label": "Consultant Transaction",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -447,6 +458,7 @@
    "label": "Consultant On Boarding Setup",
    "link_type": "DocType",
    "onboard": 0,
+   "only_for": "",
    "type": "Card Break"
   },
   {
@@ -655,7 +667,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-05-25 16:11:27.746784",
+ "modified": "2022-06-02 09:09:34.451142",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
