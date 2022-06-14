@@ -20,6 +20,8 @@ def get_data(filters):
         filters["from_date"] = "1900-01-01"
         filters["to_date"] = "2500-01-01"
 
+    filters["ignore_duration"] = filters.get("ignore_duration") or 0
+
     data = frappe.db.sql(
         """
         with npro_screening_passed as
@@ -81,7 +83,7 @@ def get_data(filters):
         	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation ,
         	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
             appl.applied , t1.passed_npro_screening , t1.no_cv_shared ,t1.cv_accepted_by_client ,
-            t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected
+            t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected , t1.selected
         from `tabJob Opening` tjo 
         left outer join 
         (
@@ -92,6 +94,7 @@ def get_data(filters):
             , count(distinct cv_rejected_by_client.doc_name) cv_rejected_by_client
             , count(distinct client_interview_held.doc_name) client_interview_held
             , count(distinct client_interview_rejected.doc_name) client_interview_rejected
+            , count(distinct cand_selected.doc_name) selected
             from `tabJob Applicant` tja 
             left outer join npro_screening_passed on tja.name = npro_screening_passed.doc_name
             left outer join cv_shared on tja.name = cv_shared.doc_name
@@ -109,6 +112,13 @@ def get_data(filters):
             where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
             group by job_title
         ) appl on appl.job_title = tjo.name
+        where 
+        (
+            %(ignore_duration)s = 0 
+            or exists (
+                select tja.job_title  from `tabNPro Status Log` tnsl
+                inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name and tja.job_title = tjo.name)
+        )
         {where_conditions}
 order by tjo.creation 
 """.format(
@@ -116,7 +126,7 @@ order by tjo.creation
         ),
         filters,
         as_dict=True,
-        debug=True,
+        # debug=True,
     )
 
     return data
@@ -303,7 +313,7 @@ def get_conditions(filters):
     if filters.get("customer"):
         where_clause.append("tjo.customer_cf = %(customer)s")
 
-    return " where " + " and ".join(where_clause) if where_clause else ""
+    return " and " + " and ".join(where_clause) if where_clause else ""
 
 
 @frappe.whitelist()
