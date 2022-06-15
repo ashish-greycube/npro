@@ -114,10 +114,11 @@ def get_data(filters):
         ) appl on appl.job_title = tjo.name
         where 
         (
-            %(ignore_duration)s = 0 
+            %(ignore_duration)s = 1 
             or exists (
                 select tja.job_title  from `tabNPro Status Log` tnsl
-                inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name and tja.job_title = tjo.name)
+                inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name 
+                    and tja.job_title = tjo.name limit 1)
         )
         {where_conditions}
 order by tjo.creation 
