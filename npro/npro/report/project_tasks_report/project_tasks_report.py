@@ -19,7 +19,7 @@ select
 	tp.project_name , tp.status project_status , tp.expected_start_date , tp.percent_complete , 
 	tt.name task_name, tt.subject , coalesce(tt.parent_task,'') parent_task , ptt.subject parent_subject , 
     tp.npro_technical_manager_cf , tt.status task_status , tt.task_owner_cf ,
-	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf
+	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf , tt.progress
 from tabProject tp 
 left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) candidate_name from `tabProject User` tpu 
 group by tpu.parent ) tpu on tpu.parent = tp.name 
@@ -112,6 +112,12 @@ def get_columns(filters):
         },
         {
             "label": _("% Progress"),
+            "fieldname": "progress",
+            "fieldtype": "Percent",
+            "width": 110,
+        },
+        {
+            "label": _("Project %"),
             "fieldname": "percent_progress",
             "fieldtype": "Percent",
             "width": 110,

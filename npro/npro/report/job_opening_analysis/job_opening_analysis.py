@@ -316,11 +316,11 @@ def get_columns(filters):
             "fieldname": "selected",
             "width": 145,
         },
-        {
-            "label": "Total",
-            "fieldname": "total_count",
-            "width": 145,
-        },
+        # {
+        #     "label": "Total",
+        #     "fieldname": "total_count",
+        #     "width": 145,
+        # },
     ]
 
 
