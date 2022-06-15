@@ -83,7 +83,10 @@ def get_data(filters):
         	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation ,
         	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
             appl.applied , t1.passed_npro_screening , t1.no_cv_shared ,t1.cv_accepted_by_client ,
-            t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected , t1.selected
+            t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected , t1.selected ,
+        t1.passed_npro_screening + t1.no_cv_shared + t1.cv_accepted_by_client + 
+        t1.cv_rejected_by_client +  t1.client_interview_held +  
+        t1.client_interview_rejected +  t1.selected total_count
         from `tabJob Opening` tjo 
         left outer join 
         (
@@ -112,14 +115,11 @@ def get_data(filters):
             where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
             group by job_title
         ) appl on appl.job_title = tjo.name
-        where 
-        (
-            %(ignore_duration)s = 1 
-            or exists (
-                select tja.job_title  from `tabNPro Status Log` tnsl
-                inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name 
-                    and tja.job_title = tjo.name limit 1)
-        )
+        left outer join(
+    	    select job_title, count(*) ct from `tabNPro Status Log` tnsl
+            inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name 
+            group by tja.job_title
+        ) t3 on t3.job_title = tjo.name
         {where_conditions}
 order by tjo.creation 
 """.format(
@@ -127,10 +127,22 @@ order by tjo.creation
         ),
         filters,
         as_dict=True,
-        # debug=True,
+        debug=True,
     )
+    if not filters.get("ignore_duration"):
+        data = [d for d in data if d.get("total_count")]
 
     return data
+
+
+def get_conditions(filters):
+    where_clause = []
+    if filters.get("job_opening"):
+        where_clause.append("tjo.name = %(job_opening)s")
+    if filters.get("customer"):
+        where_clause.append("tjo.customer_cf = %(customer)s")
+
+    return " and " + " and ".join(where_clause) if where_clause else ""
 
 
 # def get_data(filters):
@@ -304,17 +316,12 @@ def get_columns(filters):
             "fieldname": "selected",
             "width": 145,
         },
+        {
+            "label": "Total",
+            "fieldname": "total_count",
+            "width": 145,
+        },
     ]
-
-
-def get_conditions(filters):
-    where_clause = []
-    if filters.get("job_opening"):
-        where_clause.append("tjo.name = %(job_opening)s")
-    if filters.get("customer"):
-        where_clause.append("tjo.customer_cf = %(customer)s")
-
-    return " and " + " and ".join(where_clause) if where_clause else ""
 
 
 @frappe.whitelist()
