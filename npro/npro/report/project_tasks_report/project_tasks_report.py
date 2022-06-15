@@ -118,7 +118,7 @@ def get_columns(filters):
         },
         {
             "label": _("Project %"),
-            "fieldname": "percent_progress",
+            "fieldname": "percent_complete",
             "fieldtype": "Percent",
             "width": 110,
         },
