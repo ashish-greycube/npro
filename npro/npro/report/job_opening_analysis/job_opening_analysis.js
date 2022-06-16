@@ -70,6 +70,13 @@ frappe.query_reports["Job Opening Analysis"] = {
 		report.get_filter('timespan').onchange();
 	}
 
+	// , "formatter": function (value, row, column, data, default_formatter) {
+	// 	value = default_formatter(value, row, column, data);
+	// 	if (column.fieldname == "job_opening") {
+	// 		value = `<a href="/app/job-opening/${data['job_opening']}" data-doctype="Job Opening">${data['job_opening']}:${data['job_title']}</a>`;
+	// 	}
+	// 	return value
+	// }
 
 };
 

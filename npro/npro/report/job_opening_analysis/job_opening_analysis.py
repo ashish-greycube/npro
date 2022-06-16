@@ -255,7 +255,13 @@ def get_columns(filters):
             "fieldname": "job_opening",
             "fieldtype": "Link",
             "options": "Job Opening",
-            "width": 190,
+            "width": 120,
+        },
+        {
+            "label": "Job Title",
+            "fieldname": "job_title",
+            "fieldtype": "Data",
+            "width": 230,
         },
         {
             "label": "NPro Sourcing Owner",
