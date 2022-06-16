@@ -16,7 +16,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """ 
         select 
-            name, opportunity_cf, npro_sourcing_owner_cf, customer_cf, 
+            name, job_title, opportunity_cf, npro_sourcing_owner_cf, customer_cf, 
             datediff(%(today)s,modified) days_since
         from 
             `tabJob Opening` tjo 
@@ -41,25 +41,30 @@ def get_columns(filters):
             "width": 145,
         },
         {
+            "label": "Job Title",
+            "fieldname": "job_title",
+            "width": 245,
+        },
+        {
             "label": "Opportunity",
             "fieldname": "opportunity_cf",
             "fieldtype": "Link",
             "options": "Opportunity",
-            "width": 145,
+            "width": 195,
         },
         {
             "label": "Customer",
             "fieldname": "customer_cf",
             "fieldtype": "Link",
             "options": "Customer",
-            "width": 145,
+            "width": 235,
         },
         {
             "label": "NPro Sourcing Owner",
             "fieldname": "npro_sourcing_owner_cf",
             "fieldtype": "Link",
             "options": "User",
-            "width": 175,
+            "width": 225,
         },
         {
             "label": "Days since Last Activity",
