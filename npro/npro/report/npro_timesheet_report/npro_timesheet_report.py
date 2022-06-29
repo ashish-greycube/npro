@@ -15,7 +15,7 @@ def get_data(filters):
     data = frappe.db.sql(
         """
         select 
-            tnt.consultant , tnt.project , tnt.role , tnt.from_date , tnt.to_date , 
+            tnt.consultant , tnt.project , tnt.from_date , tnt.to_date , 
             tnt.client_manager , tnt.name , tntd.hours, tntd.remark , tntd.status , 
             tntd.timesheet_date, DATE_FORMAT(tntd.timesheet_date,'%%a') day_name , 
             te.job_applicant , te.employee_name , tja.customer_cf , tnt.project_name
@@ -55,11 +55,6 @@ def get_columns(filters):
             "label": _("Project"),
             "fieldname": "project_name",
             "width": 240,
-        },
-        {
-            "label": _("Role"),
-            "fieldname": "role",
-            "width": 120,
         },
         {
             "label": _("Client Manager"),
