@@ -12,12 +12,11 @@
   "designation",
   "npro_technical_manager",
   "cb_1",
-  "project",
   "to_date",
   "fetch_dates",
-  "project_name",
-  "client_manager",
   "approved",
+  "section_break_9",
+  "npro_project_for_timesheet",
   "tsd_sb",
   "npro_timesheet_detail"
  ],
@@ -52,34 +51,18 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "project",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Project",
-   "options": "Project",
-   "reqd": 1
-  },
-  {
    "fieldname": "to_date",
    "fieldtype": "Date",
    "label": "To Date"
   },
   {
-   "fetch_from": "project.customer_reporting_mgr_cf",
-   "fieldname": "client_manager",
-   "fieldtype": "Data",
-   "label": "Client Manager",
-   "read_only": 1
-  },
-  {
    "fieldname": "tsd_sb",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "NPro Timesheet Detail"
   },
   {
    "fieldname": "npro_timesheet_detail",
    "fieldtype": "Table",
-   "label": "NPro Timesheet Detail",
    "options": "NPro Timesheet Detail"
   },
   {
@@ -106,18 +89,19 @@
    "read_only": 1
   },
   {
-   "fetch_from": "project.project_name",
-   "fieldname": "project_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Project Name",
-   "read_only": 1
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break",
+   "label": "Npro Project for Timesheet"
+  },
+  {
+   "fieldname": "npro_project_for_timesheet",
+   "fieldtype": "Table",
+   "options": "Npro Project for Timesheet"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-05-11 08:03:04.507706",
+ "modified": "2022-07-04 13:45:08.163685",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Timesheet",
