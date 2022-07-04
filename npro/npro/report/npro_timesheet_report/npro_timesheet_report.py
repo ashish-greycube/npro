@@ -51,11 +51,11 @@ def get_columns(filters):
             "options": "Customer",
             "width": 180,
         },
-        {
-            "label": _("Project"),
-            "fieldname": "project_name",
-            "width": 240,
-        },
+        # {
+        #     "label": _("Project"),
+        #     "fieldname": "project_name",
+        #     "width": 240,
+        # },
         {
             "label": _("Client Manager"),
             "fieldname": "client_manager",
