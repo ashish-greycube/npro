@@ -15,14 +15,12 @@ def get_data(filters):
     data = frappe.db.sql(
         """
 select 
-	tpu.candidate_name , tp.name project, tp.customer , tp.customer_reporting_mgr_cf ,
+	tp.name project, tp.customer , tp.customer_reporting_mgr_cf ,
 	tp.project_name , tp.status project_status , tp.expected_start_date , tp.percent_complete , 
 	tt.name task_name, tt.subject , coalesce(tt.parent_task,'') parent_task , ptt.subject parent_subject , 
     tp.npro_technical_manager_cf , tt.status task_status , tt.task_owner_cf ,
-	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf , tt.progress
+	tt.exp_start_date , tt.exp_end_date , tt.task_issue_cf , tt.progress , tt.completed_on
 from tabProject tp 
-left outer join (select tpu.parent , GROUP_CONCAT(tpu.`user`) candidate_name from `tabProject User` tpu 
-group by tpu.parent ) tpu on tpu.parent = tp.name 
 inner join tabTask tt on tt.project = tp.name 
 left outer join tabTask ptt on ptt.name = tt.parent_task
 {where_conditions}
@@ -99,16 +97,22 @@ def get_columns(filters):
             "width": 100,
         },
         {
-            "label": _("Task Start Date"),
+            "label": _("Task Expected Start Date"),
             "fieldname": "exp_start_date",
             "fieldtype": "Date",
-            "width": 120,
+            "width": 145,
         },
         {
-            "label": _("Task End Date"),
+            "label": _("Task Expected End Date"),
             "fieldname": "exp_end_date",
             "fieldtype": "Date",
-            "width": 120,
+            "width": 145,
+        },
+        {
+            "label": _("Task Completed On"),
+            "fieldname": "completed_on",
+            "fieldtype": "Date",
+            "width": 145,
         },
         {
             "label": _("% Progress"),
