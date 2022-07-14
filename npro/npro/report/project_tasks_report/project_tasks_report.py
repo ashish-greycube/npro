@@ -87,8 +87,6 @@ def get_columns(filters):
         {
             "label": _("Task Owner"),
             "fieldname": "task_owner_cf",
-            "fieldtype": "Link",
-            "options": "User",
             "width": 100,
         },
         {
@@ -130,6 +128,13 @@ def get_columns(filters):
             "label": _("Issues"),
             "fieldname": "task_issue_cf",
             "width": 200,
+        },
+        {
+            "label": _("Technical Manager"),
+            "fieldname": "npro_technical_manager_cf",
+            "fieldtype": "Link",
+            "options": "User",
+            "width": 100,
         },
     ]
 
