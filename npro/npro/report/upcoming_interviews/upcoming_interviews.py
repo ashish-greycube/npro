@@ -20,7 +20,7 @@ def get_data(filters):
                 tja.name applicant, tja.applicant_name, ti.designation, ti.scheduled_on, 
                 TIME_FORMAT(ti.from_time,'%%h:%%i %%p') from_time, 
                 TIME_FORMAT(ti.to_time,'%%h:%%i %%p') to_time,
-                tu.full_name, ti.interview_round 
+                tu.full_name, ti.interview_round , ti.job_opening
             from 
                 tabInterview ti 
                 inner join `tabJob Applicant` tja on tja.name = ti.job_applicant 
@@ -39,6 +39,13 @@ def get_data(filters):
 
 def get_columns(filters):
     return [
+        {
+            "label": _("Job Opening"),
+            "fieldname": "job_opening",
+            "fieldtype": "Link",
+            "options": "Job Opening",
+            "width": 150,
+        },
         {
             "label": _("Applicant Name"),
             "fieldname": "applicant_name",
@@ -84,7 +91,7 @@ def get_columns(filters):
 
 def get_conditions(filters):
     where_clause = []
-    where_clause.append("ti.scheduled_on >= %(today)s")
+    # where_clause.append("ti.scheduled_on >= %(today)s")
 
     # if filters.get("from_date"):
     #     where_clause.append("op.transaction_date >= %(from_date)s")

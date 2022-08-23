@@ -80,7 +80,7 @@ def get_data(filters):
             where new_value in ('Accepted')
         )
 		select 
-        	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation ,
+        	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation , tjo.location_cf ,
         	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
             appl.applied , t1.passed_npro_screening , t1.no_cv_shared ,t1.cv_accepted_by_client ,
             t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected , t1.selected ,
@@ -106,13 +106,13 @@ def get_data(filters):
             left outer join client_interview_held on tja.name = client_interview_held.doc_name
             left outer join client_interview_rejected on tja.name = client_interview_rejected.doc_name
             left outer join cand_selected on tja.name = cand_selected.doc_name
-            where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
+            where date(tja.modified) >= %(from_date)s and date(tja.modified) <= %(to_date)s
             group by tja.job_title 
         ) t1 on t1.job_title = tjo.name
         left outer join (
             select tja.job_title , count(tja.name) applied
             from `tabJob Applicant` tja
-            where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
+            where date(tja.modified) >= %(from_date)s and date(tja.modified) <= %(to_date)s
             group by job_title
         ) appl on appl.job_title = tjo.name
         left outer join(
@@ -262,6 +262,12 @@ def get_columns(filters):
             "fieldname": "job_title",
             "fieldtype": "Data",
             "width": 230,
+        },
+        {
+            "label": "Location",
+            "fieldname": "location_cf",
+            "fieldtype": "Data",
+            "width": 150,
         },
         {
             "label": "NPro Sourcing Owner",
