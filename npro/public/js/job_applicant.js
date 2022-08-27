@@ -6,13 +6,12 @@ frappe.ui.form.on('Job Applicant', {
                 frm.add_custom_button(__("Job Offer"), function () {
                     frappe.db.get_value("Job Opening", frm.doc.job_title, "billing_per_month_cf").then((r) => {
                         let billing = r.message && r.message.billing_per_month_cf || 0;
-                        let job_offer = frappe.model.make_new_doc_and_get_name('Job Offer');
-                        job_offer = locals['Job Offer'][job_offer];
-                        job_offer.job_applicant = frm.doc.name;
-                        job_offer.applicant_name = frm.doc.applicant_name;
-                        job_offer.designation = frm.doc.job_opening;
-                        job_offer.billing_per_month_cf = billing;
-                        frappe.set_route('Form', 'Job Offer', job_offer.name);
+                        frappe.new_doc("Job Offer", {
+                            job_applicant: frm.doc.name,
+                            applicant_name: frm.doc.applicant_name,
+                            designation: frm.doc.job_opening,
+                            billing_per_month_cf: billing,
+                        });
                     })
                 });
             }, 500);
