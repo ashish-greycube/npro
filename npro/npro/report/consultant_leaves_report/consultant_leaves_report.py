@@ -24,9 +24,6 @@ def get_data(filters):
             {where_conditions}
             group by te.name , te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
             tp.customer
-
-
-
         """.format(
             where_conditions=get_conditions(filters),
         ),
@@ -87,11 +84,11 @@ def get_conditions(filters):
 
     if filters.get("from_date"):
         where_clause.append(
-            "(te.date_of_joining is null or te.date_of_joining >= %(from_date)s)"
+            "(tntd.timesheet_date is null or tntd.timesheet_date >= %(from_date)s)"
         )
     if filters.get("till_date"):
         where_clause.append(
-            "(te.date_of_joining is null or te.date_of_joining <= %(till_date)s)"
+            "(tntd.timesheet_date is null or tntd.timesheet_date <= %(till_date)s)"
         )
 
     return " where " + " and ".join(where_clause) if where_clause else ""
