@@ -6,11 +6,14 @@ frappe.ui.form.on('Job Applicant', {
                 frm.add_custom_button(__("Job Offer"), function () {
                     frappe.db.get_value("Job Opening", frm.doc.job_title, "billing_per_month_cf").then((r) => {
                         let billing = r.message && r.message.billing_per_month_cf || 0;
+                        console.log(billing);
                         frappe.new_doc("Job Offer", {
                             job_applicant: frm.doc.name,
                             applicant_name: frm.doc.applicant_name,
                             designation: frm.doc.job_opening,
-                            billing_per_month_cf: billing,
+                        }, function (doc) {
+                            // non link values are not set in above, so set in callback
+                            frappe.model.set_value(doc.doctype, doc.name, 'billing_per_month_cf', billing)
                         });
                     })
                 });
