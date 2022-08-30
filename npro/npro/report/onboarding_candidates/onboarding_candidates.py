@@ -18,7 +18,8 @@ def get_data(filters):
 select 
     teo.job_applicant , teo.employee_name , teo.date_of_joining , tja.customer_cf , 
     tjo.opportunity_technology_cf , tjo.customer_contact_cf , tjo.location_cf , tjo.npro_sourcing_owner_cf , 
-    tjo2.offer_released_date_cf , tjo2.previous_salary_cf , tjo2.consultancy_fees_offered_usd_cf , tjo.billing_per_month_cf 
+    tjo2.offer_released_date_cf , tjo2.previous_salary_usd_cf , 
+    tjo2.consultancy_fees_offered_usd_cf , tjo.billing_per_month_cf 
 from `tabEmployee Onboarding` teo 
 inner join `tabJob Applicant` tja on tja.name = teo.job_applicant 
 inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
@@ -88,7 +89,7 @@ def get_columns(filters):
         },
         {
             "label": _("Previous Salary"),
-            "fieldname": "previous_salary_cf",
+            "fieldname": "previous_salary_usd_cf",
             "fieldtype": "Currency",
             "width": 110,
         },

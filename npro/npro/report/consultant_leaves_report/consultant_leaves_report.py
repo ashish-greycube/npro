@@ -14,26 +14,24 @@ def execute(filters=None):
 def get_data(filters):
     data = frappe.db.sql(
         """
+            with fn as ( 
+	            select tnt.consultant , count(tntd.name) ct
+	            from `tabNPro Timesheet` tnt
+	            inner join `tabNPro Timesheet Detail` tntd on tntd.parent = tnt.name and tntd.status like '%%leave%%'
+                {where_conditions}
+	            group by tnt.consultant
+            )
             select 
-                te.name employee, te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
-                tp.customer , count(tntd.name) leaves_utilised
-            from tabEmployee te 
-            inner join `tabNPro Timesheet` tnt on tnt.consultant = te.name
-            inner join tabProject tp on tp.name = tnt.project
-            left outer join `tabNPro Timesheet Detail` tntd  on tntd.parent = tnt.name and tntd.status like '%%leave%%'
-            {where_conditions}
-            group by te.name , te.employee_name , te.annual_leaves_allocated_cf , te.npro_technical_manager_cf ,
-            tp.customer
+            	te.name employee, te.employee_name , te.annual_leaves_allocated_cf , te.customer_cf ,
+            	fn.ct leaves_utilised , te.annual_leaves_allocated_cf - fn.ct  balance_leaves
+            from tabEmployee te
+            left outer join fn on fn.consultant = te.name
         """.format(
             where_conditions=get_conditions(filters),
         ),
         filters,
         as_dict=True,
-        # debug=True,
     )
-
-    for d in data:
-        d["balance_leaves"] = d.annual_leaves_allocated_cf - (d.leaves_utilised or 0)
 
     return data
 
@@ -48,15 +46,10 @@ def get_columns(filters):
         },
         {
             "label": _("Client"),
-            "fieldname": "customer",
+            "fieldname": "customer_cf",
             "fieldtype": "Link",
             "options": "Customer",
             "width": 200,
-        },
-        {
-            "label": _("NPro Technical Manager"),
-            "fieldname": "npro_technical_manager_cf",
-            "width": 120,
         },
         {
             "label": _("Total Leaves"),
