@@ -73,6 +73,12 @@ def get_data(filters):
             from `tabNPro Status Log` tnsl 
             where new_value in ('Client interview-Rejected')
         ),
+        rejected_by_candidate as
+        (
+            select distinct doc_name
+            from `tabNPro Status Log` tnsl 
+            where new_value in ('Rejected by Candidate')
+        ),        
         cand_selected as
         (
             select distinct doc_name
@@ -84,9 +90,10 @@ def get_data(filters):
         	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
             appl.applied , t1.passed_npro_screening , t1.no_cv_shared ,t1.cv_accepted_by_client ,
             t1.cv_rejected_by_client , t1.client_interview_held , t1.client_interview_rejected , t1.selected ,
+            t1.rejected_by_candidate ,
         t1.passed_npro_screening + t1.no_cv_shared + t1.cv_accepted_by_client + 
         t1.cv_rejected_by_client +  t1.client_interview_held +  
-        t1.client_interview_rejected +  t1.selected total_count
+        t1.client_interview_rejected +  t1.selected + t1.rejected_by_candidate total_count
         from `tabJob Opening` tjo 
         left outer join 
         (
@@ -97,6 +104,7 @@ def get_data(filters):
             , count(distinct cv_rejected_by_client.doc_name) cv_rejected_by_client
             , count(distinct client_interview_held.doc_name) client_interview_held
             , count(distinct client_interview_rejected.doc_name) client_interview_rejected
+            , count(distinct rejected_by_candidate.doc_name) rejected_by_candidate
             , count(distinct cand_selected.doc_name) selected
             from `tabJob Applicant` tja 
             left outer join npro_screening_passed on tja.name = npro_screening_passed.doc_name
@@ -105,6 +113,7 @@ def get_data(filters):
             left outer join cv_rejected_by_client on tja.name = cv_rejected_by_client.doc_name
             left outer join client_interview_held on tja.name = client_interview_held.doc_name
             left outer join client_interview_rejected on tja.name = client_interview_rejected.doc_name
+            left outer join rejected_by_candidate on tja.name = rejected_by_candidate.doc_name
             left outer join cand_selected on tja.name = cand_selected.doc_name
             where date(tja.modified) >= %(from_date)s and date(tja.modified) <= %(to_date)s
             group by tja.job_title 
@@ -143,95 +152,6 @@ def get_conditions(filters):
         where_clause.append("tjo.customer_cf = %(customer)s")
 
     return " and " + " and ".join(where_clause) if where_clause else ""
-
-
-# def get_data(filters):
-#     data = frappe.db.sql(
-#         """
-# WITH t1 as
-# (
-# 		select tja.job_title , tnsl.new_value status, count(tnsl.new_value) ct
-#         from `tabJob Applicant` tja
-#         inner join `tabNPro Status Log` tnsl on tnsl.doc_type = 'Job Applicant'
-#             and tnsl.docfield_name = 'status' and tnsl.doc_name = tja.name
-#             and date(tnsl.creation) >= %(from_date)s and date(tnsl.creation) <= %(to_date)s
-#         where
-#             date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
-# 		group by tja.job_title , tnsl.new_value
-# 		order by tja.job_title , tnsl.new_value
-# )
-# select
-# 	tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation ,
-# 	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
-# 	max(appl.applied) cand_applied ,
-# 	sum(case when t1.status in (
-#         'Technical interview',
-#         'Technical interview- Rejected',
-#         'Client CV Screening',
-#         'Client CV Screening- Accepted',
-#         'Client CV Screening- Rejected',
-#         'Client Interview',
-#         'Client interview-Rejected',
-#         'Client Interview-rescheduled',
-#         'Client Interview-waiting for feedback',
-#         'Rejected by candidate',
-#         'Hold',
-#         'Accepted'
-#     ) then 1 else 0 end) cand_passed_npro_screening ,
-# 	sum(case when t1.status in (
-#         'Client CV Screening',
-#         'Client CV Screening- Accepted',
-#         'Client CV Screening- Rejected',
-#         'Client Interview',
-#         'Client interview-Rejected',
-#         'Client Interview-rescheduled',
-#         'Client Interview-waiting for feedback',
-#         'Rejected by candidate',
-#         'Hold',
-#         'Accepted'
-#     ) then 1 else 0 end) no_cv_shared ,
-# 	sum(case when t1.status in (
-#         'Client CV Screening- Accepted',
-#         'Client Interview',
-#         'Client interview-Rejected',
-#         'Client Interview-rescheduled',
-#         'Client Interview-waiting for feedback',
-#         'Rejected by candidate',
-#         'Hold',
-#         'Accepted'
-#     ) then 1 else 0 end) cv_accepted_by_client ,
-# 	sum(case when t1.status in ('CV rejected by client') then 1 else 0 end) cv_rejected_by_client ,
-#     sum(case when t1.status in (
-#         'Client interview-Rejected',
-#         'Client Interview-waiting for feedback' ,
-#         'Accepted' ,
-#         'Hold'
-#     ) then 1 else 0 end) client_interview_held ,
-# 	sum(case when t1.status in ('Client interview-Rejected') then 1 else 0 end) client_interview_rejected ,
-# 	sum(case when t1.status in ('Accepted') then 1 else 0 end) selected
-# from `tabJob Opening` tjo
-# left outer join t1 on t1.job_title = tjo.name
-# left outer join
-# (
-#     select count(tja.name) applied, tjo.name
-#     from `tabJob Applicant` tja
-#     inner join `tabJob Opening` tjo on tjo.name = tja.job_title
-#     group by tjo.name
-# ) appl on appl.name = tjo.name
-# {where_conditions}
-# group by
-# 	job_opening, tjo.job_title, tjo.company, tjo.designation ,
-# 	tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf
-# order by tjo.creation
-# """.format(
-#             where_conditions=get_conditions(filters),
-#         ),
-#         filters,
-#         as_dict=True,
-#         debug=True,
-#     )
-
-# return data
 
 
 def get_columns(filters):
@@ -321,6 +241,11 @@ def get_columns(filters):
         {
             "label": "Client interview-Rejected",
             "fieldname": "client_interview_rejected",
+            "width": 190,
+        },
+        {
+            "label": "Rejected by Candidate",
+            "fieldname": "rejected_by_candidate",
             "width": 190,
         },
         {

@@ -138,6 +138,17 @@
    "link_to": "Job Opening Analysis",
    "link_type": "Report",
    "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Job Opening Analysis Updates",
+   "link_to": "Job Opening Analysis Updates",
+   "link_type": "Report",
+   "onboard": 0,
+   "only_for": "",
    "type": "Link"
   },
   {
@@ -667,7 +678,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-06-02 09:09:34.451142",
+ "modified": "2022-08-31 00:38:25.417775",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",

@@ -68,12 +68,18 @@ def get_data(filters):
     for d in df2.to_dict("r"):
         status_wise_counts[d["job_title"]] = d
     for d in data:
+        d["total"] = d.get("applied", 0) or 0
         for col, statuses in STATUS_MAP.items():
             for status in statuses:
                 d[col] = d.get(col, 0) + status_wise_counts.get(d.job_opening, {}).get(
                     status, 0
                 )
             d[col] = d.get(col) or None
+            d["total"] = d["total"] + cint(d[col])
+
+    if not cint(filters.get("ignore_duration")):
+        data = [d for d in data if d.get("total")]
+
     return data
 
 
