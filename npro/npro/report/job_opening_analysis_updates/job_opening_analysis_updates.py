@@ -46,27 +46,29 @@ def get_data(filters):
 		tja.job_title , new_value , count(new_value) ct 
 		from `tabNPro Status Log` tnsl 
 		inner join `tabJob Applicant` tja on tja.name = tnsl.doc_name and tnsl.doc_type = 'Job Applicant'
-		where date(tnsl.modified) >= %(from_date)s and date(tnsl.modified) <= %(to_date)s
+		where date(tnsl.modified) >= %(from_date)s and date(tnsl.modified) <= %(to_date)s 
 		group by tja.job_title , new_value 
 	""",
         filters,
         as_dict=True,
     )
-
-    df = pandas.DataFrame.from_records(status_data)
-    df1 = pandas.pivot_table(
-        df,
-        index=["job_title"],
-        columns=["new_value"],
-        aggfunc=sum,
-        fill_value=0,
-        dropna=True,
-    )
-    df1.columns = df1.columns.to_series().str[1]
-    df2 = df1.reset_index()
     status_wise_counts = {}
-    for d in df2.to_dict("r"):
-        status_wise_counts[d["job_title"]] = d
+
+    if status_data:
+        df = pandas.DataFrame.from_records(status_data)
+        df1 = pandas.pivot_table(
+            df,
+            index=["job_title"],
+            columns=["new_value"],
+            aggfunc=sum,
+            fill_value=0,
+            dropna=True,
+        )
+        df1.columns = df1.columns.to_series().str[1]
+        df2 = df1.reset_index()
+        for d in df2.to_dict("r"):
+            status_wise_counts[d["job_title"]] = d
+
     for d in data:
         d["total"] = d.get("applied", 0) or 0
         for col, statuses in STATUS_MAP.items():
