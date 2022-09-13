@@ -15,6 +15,9 @@ def execute(filters=None):
 
 
 def get_data(filters):
+    filters["from_date"] = filters.get("from_date") or "1900-01-01"
+    filters["to_date"] = filters.get("to_date") or "2900-01-01"
+
     if cint(filters.get("ignore_duration")):
         filters["from_date"] = "1900-01-01"
         filters["to_date"] = "2500-01-01"
@@ -24,14 +27,8 @@ def get_data(filters):
 		select 
 			tjo.name job_opening, tjo.job_title, tjo.company, tjo.designation , tjo.location_cf ,
 			tjo.customer_cf , tjo.customer_contact_cf , tjo.npro_sourcing_owner_cf , tjo.sales_person_cf ,
-			ta.applied 
+			tjo.status
 		from `tabJob Opening` tjo 
-		left outer join (
-			select tja.job_title , count(tja.name) applied
-			from `tabJob Applicant` tja
-			where date(tja.creation) >= %(from_date)s and date(tja.creation) <= %(to_date)s
-			group by job_title
-		) ta on ta.job_title = tjo.name
 		{where_conditions}
 		order by tjo.creation """.format(
             where_conditions=get_conditions(filters),
@@ -39,6 +36,25 @@ def get_data(filters):
         filters,
         as_dict=True,
     )
+
+    npro_technical_interview_passed = {}
+    for d in frappe.db.sql(
+        """
+    select 
+        job_opening , count(job_applicant) ct  
+        from tabInterview ti 
+        where ti.status = 'Cleared'
+        and ti.scheduled_on between %(from_date)s and %(to_date)s
+        and ti.modified between %(from_date)s and %(to_date)s
+        and exists (select 1 from `tabInterview Round` x 
+        where x.name = ti.interview_round 
+        and x.interview_type in ('Internal technical interview','Technical interview'))
+        group by job_opening 
+    """,
+        filters,
+        as_dict=True,
+    ):
+        npro_technical_interview_passed[d.job_opening] = d.ct
 
     status_data = frappe.db.sql(
         """
@@ -70,7 +86,10 @@ def get_data(filters):
             status_wise_counts[d["job_title"]] = d
 
     for d in data:
-        d["total"] = d.get("applied", 0) or 0
+        d["total"] = 0
+        d["npro_technical_interview_passed"] = npro_technical_interview_passed.get(
+            d.job_opening, 0
+        )
         for col, statuses in STATUS_MAP.items():
             for status in statuses:
                 d[col] = d.get(col, 0) + status_wise_counts.get(d.job_opening, {}).get(
@@ -107,7 +126,7 @@ def get_columns(filters):
 		Npro Sales Person,sales_person_cf,Link,User,190
 		Candidates Applied,applied,Int,190
 		Candidates Passed NPro Screening,npro_screening_passed,Int,275
-		Candidate passed Npro technical interview,cv_shared,Int,290
+		Candidate passed Npro technical interview,npro_technical_interview_passed,Int,290
 		No Of CV Shared,cv_shared,Int,190
 		CV Accepted by Client,cv_accepted_by_client,Int,190
 		CV Rejected by Client,cv_rejected_by_client,Int,190
@@ -145,41 +164,21 @@ def csv_to_columns(csv_str):
 
 
 STATUS_MAP = {
+    "applied": ["Screening Call", "Screening Call - Rejected"],
     "npro_screening_passed": [
         "Technical interview",
         "Technical interview- Rejected",
-        "Client CV Screening",
-        "Client CV Screening- Accepted",
-        "Client CV Screening- Rejected",
-        "Client Interview",
-        "Client interview-Rejected",
-        "Client Interview-rescheduled",
-        "Client Interview-waiting for feedback",
-        "Rejected by candidate",
-        "Hold",
-        "Accepted",
+    ],
+    "npro_technical_interview_passed": [
+        "Technical interview",
+        "Technical interview- Rejected",
     ],
     "cv_shared": [
         "Client CV Screening",
-        "Client CV Screening- Accepted",
-        "Client CV Screening- Rejected",
-        "Client Interview",
-        "Client interview-Rejected",
-        "Client Interview-rescheduled",
-        "Client Interview-waiting for feedback",
-        "Rejected by candidate",
-        "Hold",
-        "Accepted",
     ],
     "cv_accepted_by_client": [
         "Client CV Screening- Accepted",
         "Client Interview",
-        "Client interview-Rejected",
-        "Client Interview-rescheduled",
-        "Client Interview-waiting for feedback",
-        "Rejected by candidate",
-        "Hold",
-        "Accepted",
     ],
     "cv_rejected_by_client": ["Client CV Screening- Rejected"],
     "client_interview_held": [
