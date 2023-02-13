@@ -16,6 +16,7 @@
   "create_job_opening",
   "job_opening",
   "email_sent_for_job_opening_creation",
+  "employee_name",
   "opportunity_close_date",
   "billing_start_date",
   "exception",
@@ -40,7 +41,7 @@
    "columns": 1,
    "fieldname": "billing_per_month",
    "fieldtype": "Currency",
-   "label": "Billing Per Month"
+   "label": "Billing Per Month (in USD)"
   },
   {
    "columns": 2,
@@ -121,12 +122,18 @@
    "fieldtype": "Link",
    "label": "Job Opening",
    "options": "Job Opening"
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-02-03 07:21:35.974693",
+ "modified": "2023-02-13 12:15:27.906817",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Consulting Detail CT",
