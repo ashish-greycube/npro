@@ -15,7 +15,9 @@
   "teramind_instance",
   "teramind_access_token",
   "consultant_on_boarding_section",
-  "default_timesheet_status"
+  "default_timesheet_status",
+  "consultant_attachments_sb_section",
+  "default_consultant_attachment"
  ],
  "fields": [
   {
@@ -86,12 +88,23 @@
    "label": "Default Timesheet Status",
    "options": "Npro Timesheet Status",
    "reqd": 1
+  },
+  {
+   "fieldname": "consultant_attachments_sb_section",
+   "fieldtype": "Section Break",
+   "label": "Default Consultant Attachment"
+  },
+  {
+   "fieldname": "default_consultant_attachment",
+   "fieldtype": "Table",
+   "options": "NPro Attachment",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-05-06 16:19:24.169015",
+ "modified": "2023-02-14 13:09:21.390884",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
@@ -125,7 +138,7 @@
    "email": 1,
    "print": 1,
    "read": 1,
-   "role": "Employee",
+   "role": "Consultant",
    "share": 1
   }
  ],
