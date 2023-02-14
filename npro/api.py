@@ -171,15 +171,19 @@ def remove_standard_crm_values():
 def on_update_contact(doc, method=None):
     for d in doc.links:
         if d.link_doctype == "Lead":
+            lead = frappe.db.get_value(
+                "Lead",
+                {
+                    "name": d.link_name,
+                },
+                ["company_name", "organization_lead", "linkedin_profile_cf"],
+                as_dict=True,
+            )
             if not doc.department_cf:
-                doc.department_cf = frappe.db.get_value(
-                    "Lead", d.link_name, "department_cf"
-                )
+                doc.department_cf = lead.department_cf
             if not doc.linkedin_profile_cf:
-                doc.linkedin_profile_cf = frappe.db.get_value(
-                    "Lead", d.link_name, "linkedin_profile_cf"
-                )
-            break
+                doc.linkedin_profile_cf = lead.linkedin_profile_cf
+            d.link_title = lead.company_name
 
 
 @frappe.whitelist()

@@ -119,6 +119,9 @@ doc_events = {
         "on_update": "npro.api.on_update_job_opening",
         "validate": "npro.api.validate_job_opening",
     },
+    "Lead": {
+        "validate": "npro.npro.doc_events.on_validate_lead",
+    },
     "Job Applicant": {
         "on_update": "npro.api.on_update_job_applicant",
         "validate": "npro.npro.doc_events.on_validate_job_applicant",
