@@ -73,3 +73,22 @@ def on_update_task(doc, method):
                         onboarding.post_boarding_status = "Completed"
                         onboarding.save()
         frappe.db.commit()
+
+
+def on_update_consultant_onboarding(doc, method):
+    if doc.date_of_joining:
+        frappe.db.sql(
+            """
+            update `tabJob Applicant` tja 
+            inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
+            inner join `tabOpportunity` topp on topp.name = tjo.opportunity_cf 
+            inner join `tabOpportunity Consulting Detail CT` tocdc on tocdc.parent = topp.name
+                and tocdc.job_opening = tjo.name 
+            set tocdc.stage = 'Candidate On-Boarded',
+                tocdc.employee_name = tja.applicant_name
+            where tja.name = %s
+        """,
+            (doc.job_applicant),
+        )
+
+        frappe.db.commit()

@@ -132,6 +132,10 @@ doc_events = {
     "Task": {
         "on_update": "npro.npro.doc_events.on_update_task",
     },
+    "Employee Onboarding": {
+        "on_update_after_submit": "npro.npro.doc_events.on_update_consultant_onboarding",
+        "on_update": "npro.npro.doc_events.on_update_consultant_onboarding",
+    },
 }
 
 # Scheduled Tasks

@@ -54,6 +54,42 @@ def on_update_opportunity(doc, method):
 def on_validate_opportunity(doc, method):
     opportunity_cost_calculation(doc, method)
     notify_sales_stage_update(doc, method)
+    validate_requirement_stage(doc, method)
+    validate_requirement_unique_job_opening(doc, method)
+
+
+def validate_requirement_unique_job_opening(doc, method):
+    job_openings = [
+        d.job_opening for d in doc.opportunity_consulting_detail_ct_cf if d.job_opening
+    ]
+
+    from itertools import groupby
+
+    for key, group in groupby(sorted(job_openings)):
+        if len(list(group)) > 1:
+            frappe.throw(
+                "Job Opening '%s' must be unique in requirements." % (frappe.bold(key))
+            )
+
+
+def validate_requirement_stage(doc, method):
+    invalid_stage = [
+        "Row #%s: Stage cannot be '%s' for '%s'"
+        % (d.idx, frappe.bold(d.stage), frappe.bold(d.project_name))
+        for d in doc.opportunity_consulting_detail_ct_cf
+        if not d.job_opening
+        and d.stage
+        in [
+            "Client CV Screening",
+            "Client Interview",
+            "Candidate Selected",
+            "Candidate On-boarded",
+            "PO pending",
+            "Won",
+        ]
+    ]
+    if invalid_stage:
+        frappe.throw(",".join(invalid_stage))
 
 
 @frappe.whitelist()
