@@ -15,18 +15,15 @@ frappe.ui.form.on("Lead", {
   },
 
   years_of_experience_in_the_org_cf: function (frm) {
-    frappe.utils.check_numeric("years_of_experience_in_the_org_cf", frm);
+    frappe.utils.check_numeric("years_of_experience_in_the_org_cf", frm, true);
   },
 
-  email_id: function (frm) {
-    let email_id = frm.doc.email_id;
-    if (
-      email_id &&
-      (!email_id.endsWith(".com") || email_id.indexOf("@") == -1)
-    ) {
-      frappe.throw(
-        "Invalid Email ID. Valid Email Id should have '@' and end in '.com' "
-      );
-    }
+  validate: function (frm) {
+    frappe.utils.check_validate([
+      [frappe.utils.check_numeric, "phone", frm],
+      [frappe.utils.check_numeric, "mobile_no", frm],
+      [frappe.utils.check_numeric, "years_of_experience_in_the_org_cf", frm],
+      [frappe.utils.validate_email, "email_id", frm],
+    ]);
   },
 });

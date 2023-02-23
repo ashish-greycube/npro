@@ -101,12 +101,47 @@ Object.assign(npro.utils, {
 frappe.provide("frappe.utils");
 
 Object.assign(frappe.utils, {
-  check_numeric: function (fieldname, frm) {
+  check_numeric: function (fieldname, frm, raise) {
     if (isNaN(frm.doc[fieldname])) {
-      let message = `Invalid ${frm.fields_dict[
-        fieldname
-      ].df.label.bold()}. Please enter a numeric value.`;
-      frappe.throw(message);
+      let args = {
+        title: __("Invalid {0}.", [frm.fields_dict[fieldname].df.label.bold()]),
+        message: __("Please enter a numeric value.."),
+      };
+      if (raise) {
+        frappe.throw(args);
+      } else return args;
+    }
+  },
+
+  validate_email: function (fieldname, frm, raise) {
+    let email = frm.doc[fieldname];
+    if (email && (!email.includes(".com") || !email.includes("@"))) {
+      let args = {
+        title: __("Invalid {0}.", [frm.fields_dict[fieldname].df.label.bold()]),
+        message: __("Please include @ and .com in email."),
+      };
+      if (raise) {
+        frappe.throw(args);
+      } else return args;
+    }
+  },
+
+  check_validate: function (arr) {
+    let messages = [];
+    for (const fn of arr) {
+      messages.push(fn[0](fn[1], fn[2]));
+    }
+    messages = messages
+      .filter((t) => t)
+      .map((t) => {
+        return `${t.title} ${t.message}`;
+      });
+
+    if (messages.length) {
+      frappe.throw({
+        title: __("Validation error."),
+        message: messages.join("<br>"),
+      });
     }
   },
 

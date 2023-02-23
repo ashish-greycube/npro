@@ -11,7 +11,7 @@ class NProStatusLog(Document):
 
 def make_child_status_log(doc, docfield_name, child_docfield_name):
     children = doc.get(docfield_name)
-    from_db = doc._doc_before_save.get(docfield_name)
+    from_db = doc.get_doc_before_save().get(docfield_name)
 
     for d in children:
         old_value = None

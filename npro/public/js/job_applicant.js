@@ -58,18 +58,11 @@ frappe.ui.form.on("Job Applicant", {
     });
   },
 
-  email_id: function (frm) {
-    let email = frm.doc.email_id;
-    if (email && (!email.includes(".com") || !email.includes("@"))) {
-      frappe.throw({
-        title: __("Invalid email."),
-        message: __("Please include @ and .com in email."),
-      });
-    }
-  },
-
-  phone_number: function (frm) {
-    frappe.utils.check_numeric("phone_number", frm);
+  validate: function (frm) {
+    frappe.utils.check_validate([
+      [frappe.utils.check_numeric, "phone_number", frm],
+      [frappe.utils.validate_email, "email_id", frm],
+    ]);
   },
 
   toggle_create_interview: function (frm) {

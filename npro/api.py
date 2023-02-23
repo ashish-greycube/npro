@@ -58,7 +58,6 @@ def on_update_opportunity(doc, method):
 
 
 def on_validate_opportunity(doc, method):
-    return
     opportunity_cost_calculation(doc, method)
     notify_sales_stage_update(doc, method)
     validate_requirement_stage(doc, method)
@@ -209,24 +208,6 @@ def remove_standard_crm_values():
         },
     )
     frappe.db.commit()
-
-
-def on_update_contact(doc, method=None):
-    for d in doc.links:
-        if d.link_doctype == "Lead":
-            lead = frappe.db.get_value(
-                "Lead",
-                {
-                    "name": d.link_name,
-                },
-                ["company_name", "organization_lead", "linkedin_profile_cf"],
-                as_dict=True,
-            )
-            if not doc.department_cf:
-                doc.department_cf = lead.department_cf
-            if not doc.linkedin_profile_cf:
-                doc.linkedin_profile_cf = lead.linkedin_profile_cf
-            d.link_title = lead.company_name
 
 
 @frappe.whitelist()

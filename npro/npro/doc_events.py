@@ -23,8 +23,33 @@ def on_update_interview(doc, method):
         notify_update("Job Applicant", doc.job_applicant)
 
 
-def on_validate_lead(doc, method):
+def on_update_lead(doc, method):
     make_status_log(doc, "status")
+    # Set Contact details in Lead update as Contact is created by ErpNext before_insert
+    set_contact_details(doc)
+
+
+def set_contact_details(doc):
+    contact = frappe.db.get_value(
+        "Dynamic Link",
+        {"link_doctype": "Lead", "link_name": doc.name},
+        ["parent", "name"],
+        as_dict=True,
+    )
+
+    if contact:
+        frappe.db.set_value(
+            "Dynamic Link", contact.name, "link_title", doc.company_name
+        )
+        frappe.db.set_value(
+            "Contact",
+            contact.parent,
+            {
+                "department_cf": doc.department_cf,
+                "linkedin_profile_cf": doc.linkedin_profile_cf,
+            },
+        )
+    frappe.db.commit()
 
 
 def on_submit_job_offer(doc, method):

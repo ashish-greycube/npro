@@ -114,7 +114,6 @@ doc_events = {
             "npro.npro.controllers.opportunity.on_validate_opportunity",
         ],
     },
-    "Contact": {"on_update": "npro.api.on_update_contact"},
     "Interview": {
         "on_update": [
             "npro.api.on_update_interview",
@@ -133,7 +132,7 @@ doc_events = {
         ],
     },
     "Lead": {
-        "validate": "npro.npro.doc_events.on_validate_lead",
+        "on_update": "npro.npro.doc_events.on_update_lead",
     },
     "Job Applicant": {
         "on_update": "npro.api.on_update_job_applicant",
