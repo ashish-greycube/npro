@@ -4,15 +4,23 @@ from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
     make_child_status_log,
 )
+from npro.api import notify_update
 
 
 def on_validate_job_applicant(doc, method):
-    validate_technical_interview(doc)
     make_status_log(doc, "status")
 
 
-def validate_technical_interview(doc):
-    pass
+def on_update_interview(doc, method):
+    if doc.interview_type_cf == "Technical Interview":
+        status = (
+            "Technical interview-Rejected"
+            if doc.status == "Rejected"
+            else "Technical interview"
+        )
+        frappe.db.set_value("Job Applicant", doc.job_applicant, "status", status)
+        frappe.db.commit()
+        notify_update("Job Applicant", doc.job_applicant)
 
 
 def on_validate_lead(doc, method):

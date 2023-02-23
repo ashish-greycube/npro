@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import frappe, json
+from frappe import _
 from frappe.utils import (
     getdate,
     add_days,
@@ -11,6 +12,7 @@ from frappe.utils import (
     get_time_zone,
     format_datetime,
     nowdate,
+    now_datetime,
 )
 import pytz
 from frappe.model.naming import make_autoname
@@ -385,10 +387,11 @@ def on_update_job_opening(doc, method):
         """,
             (doc.name, doc.opportunity_cf),
         )
-        frappe.get_doc("Opportunity", doc.opportunity_cf).notify_update()
+        notify_update("Opportunity", doc.opportunity_cf)
 
 
 def on_update_job_applicant(doc, method):
+    validate_technical_interview(doc, method)
     results = frappe.db.sql(
         """
         update `tabOpportunity Consulting Detail CT` ocd 
@@ -412,7 +415,20 @@ def on_update_job_applicant(doc, method):
     ):
         if d.opportunity_cf:
             # notify so doc is reloaded in client
-            frappe.get_doc("Opportunity", d.opportunity_cf).notify_update()
+            notify_update("Opportunity", d.opportunity_cf)
+
+
+def validate_technical_interview(doc, method):
+    if doc.status == "Technical interview":
+        if not frappe.db.exists(
+            "Interview",
+            {"interview_type_cf": "Technical Interview", "job_applicant": doc.name},
+        ):
+            frappe.throw(
+                _("No Interview of type 'Technical Interview' found for {0}").format(
+                    frappe.bold(doc.name)
+                )
+            )
 
 
 def notify_sales_stage_update(doc, method):
@@ -434,40 +450,16 @@ def notify_sales_stage_update(doc, method):
                 evaluate_alert(doc, notification, "Custom")
 
 
-# def __on_update_job_applicant(doc, method):
-#     new_stage = None
-#     if doc.job_title:
-#         for d in frappe.db.sql(
-#             """
-#             select name, stage
-#             from `tabOpportunity Consulting Detail CT`
-#             where job_opening = %s
-#                 """,
-#             (doc.job_title),
-#             as_dict=True,
-#         ):
-#             stage = get_consulting_stage_for_applicant_status(doc.status, d.stage)
-#             print(stage)
+def notify_update(doctype, name):
+    """Publish realtime that the current document is modified.
+    No need to load full document just to publish realtime"""
+    if frappe.flags.in_patch:
+        return
 
-#             if stage:
-#                 frappe.db.sql(
-#                     """update `tabOpportunity Consulting Detail CT`
-#                     set stage = %s where name = %s""",
-#                     (stage, d.name),
-#                 )
-
-
-# def __get_consulting_stage_for_applicant_status(job_applicant_status, stage):
-#     settings = frappe.get_single("NPro Settings")
-#     priority_mapping = settings.opportunity_job_applicant_status_priority_mapping
-
-#     _map = {x.opportunity_consulting_stage: x.priority for x in priority_mapping}
-#     _temp = [
-#         x for x in priority_mapping if x.job_applicant_status == job_applicant_status
-#     ]
-
-#     for t in _temp:
-#         if not _map.get(stage) or t.priority < _map.get(stage):
-#             return t.opportunity_consulting_stage
-
-#     return stage
+    frappe.publish_realtime(
+        "doc_update",
+        {"modified": now_datetime(), "doctype": doctype, "name": name},
+        doctype=doctype,
+        docname=name,
+        after_commit=True,
+    )

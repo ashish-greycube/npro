@@ -115,7 +115,12 @@ doc_events = {
         ],
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
-    "Interview": {"on_update": "npro.api.on_update_interview"},
+    "Interview": {
+        "on_update": [
+            "npro.api.on_update_interview",
+            "npro.npro.doc_events.on_update_interview",
+        ]
+    },
     "Job Offer": {
         "on_submit": "npro.npro.doc_events.on_submit_job_offer",
         "validate": "npro.npro.doc_events.on_validate_job_offer",
