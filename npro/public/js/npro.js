@@ -15,30 +15,25 @@ Object.assign(npro.utils, {
   get_date_range: function (timespan = "This Month") {
     timespan = timespan.toLowerCase();
     let current_date = frappe.datetime.now_date();
-    if (timespan == 'today') {
-      return [current_date, current_date]
-    } else if (timespan.startsWith('this ')) {
-      timespan = timespan.replace('this ', '')
+    if (timespan == "today") {
+      return [current_date, current_date];
+    } else if (timespan.startsWith("this ")) {
+      timespan = timespan.replace("this ", "");
       return [
-        moment().startOf(timespan).format(), moment().endOf(timespan).format(),
-      ]
-    } else if (timespan.startsWith('last ')) {
-      timespan = timespan.replace('last ', '')
+        moment().startOf(timespan).format(),
+        moment().endOf(timespan).format(),
+      ];
+    } else if (timespan.startsWith("last ")) {
+      timespan = timespan.replace("last ", "");
       return [
         moment().subtract(1, timespan).startOf(timespan).format(),
         moment().subtract(1, timespan).endOf(timespan).format(),
-      ]
-    } else if (timespan == 'all time') {
-      return [
-        '2000-01-01',
-        current_date
-      ]
+      ];
+    } else if (timespan == "all time") {
+      return ["2000-01-01", current_date];
     } else {
-      return [
-        moment().startOf('month').format(), current_date
-      ]
+      return [moment().startOf("month").format(), current_date];
     }
-
   },
 
   set_chart_values: function (values) {
@@ -106,6 +101,15 @@ Object.assign(npro.utils, {
 frappe.provide("frappe.utils");
 
 Object.assign(frappe.utils, {
+  check_numeric: function (fieldname, frm) {
+    if (isNaN(frm.doc[fieldname])) {
+      let message = `Invalid ${frm.fields_dict[
+        fieldname
+      ].df.label.bold()}. Please enter a numeric value.`;
+      frappe.throw(message);
+    }
+  },
+
   guess_style: function (text, default_style, _colour) {
     // Override frappe utils function
     // to fix list indicator for Job Applicant
@@ -115,22 +119,44 @@ Object.assign(frappe.utils, {
       if (has_words(["Pending", "Review", "Medium", "Not Approved"], text)) {
         style = "warning";
         colour = "orange";
-      } else if (has_words(["Open", "Urgent", "High", "Failed", "Rejected", "Error"], text)) {
+      } else if (
+        has_words(
+          ["Open", "Urgent", "High", "Failed", "Rejected", "Error"],
+          text
+        )
+      ) {
         style = "danger";
         colour = "red";
-      } else if (has_words(["Closed", "Finished", "Converted", "Completed", "Complete", "Confirmed",
-        "Approved", "Yes", "Active", "Available", "Paid", "Success", "Accepted"], text)) {
+      } else if (
+        has_words(
+          [
+            "Closed",
+            "Finished",
+            "Converted",
+            "Completed",
+            "Complete",
+            "Confirmed",
+            "Approved",
+            "Yes",
+            "Active",
+            "Available",
+            "Paid",
+            "Success",
+            "Accepted",
+          ],
+          text
+        )
+      ) {
         style = "success";
         colour = "green";
       } else if (has_words(["Submitted"], text)) {
         style = "info";
         colour = "blue";
-      } else if (text.match(/reject/ig)) {
+      } else if (text.match(/reject/gi)) {
         style = "danger";
         colour = "red";
       }
     }
     return _colour ? colour : style;
-  }
-})
-
+  },
+});

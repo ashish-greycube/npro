@@ -10,6 +10,10 @@
   "doc_type",
   "doc_name",
   "docfield_name",
+  "child_doc_type",
+  "child_doc_name",
+  "child_docfield_name",
+  "column_break_7",
   "old_value",
   "new_value"
  ],
@@ -39,11 +43,31 @@
    "fieldname": "new_value",
    "fieldtype": "Data",
    "label": "New Value"
+  },
+  {
+   "fieldname": "child_doc_type",
+   "fieldtype": "Link",
+   "label": "Child Doc Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "child_doc_name",
+   "fieldtype": "Data",
+   "label": "Child Doc Name"
+  },
+  {
+   "fieldname": "child_docfield_name",
+   "fieldtype": "Data",
+   "label": "Child DocField Name"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-04-11 14:38:25.746296",
+ "modified": "2023-02-21 08:26:00.353239",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Status Log",

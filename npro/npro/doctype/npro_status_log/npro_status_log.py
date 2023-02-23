@@ -9,6 +9,33 @@ class NProStatusLog(Document):
     pass
 
 
+def make_child_status_log(doc, docfield_name, child_docfield_name):
+    children = doc.get(docfield_name)
+    from_db = doc._doc_before_save.get(docfield_name)
+
+    for d in children:
+        old_value = None
+        original = [i for i in from_db if i.name == d.name]
+        if original:
+            old_value = original[0].get(child_docfield_name)
+            if old_value == d.get(child_docfield_name):
+                continue
+
+        frappe.get_doc(
+            {
+                "doctype": "NPro Status Log",
+                "doc_type": doc.doctype,
+                "doc_name": doc.name,
+                "docfield_name": docfield_name,
+                "child_doc_type": d.doctype,
+                "child_doc_name": d.name,
+                "child_docfield_name": child_docfield_name,
+                "old_value": old_value,
+                "new_value": d.get(child_docfield_name),
+            }
+        ).save(ignore_permissions=True)
+
+
 def make_status_log(doc, docfield_name):
     old_value = (
         None
@@ -27,3 +54,4 @@ def make_status_log(doc, docfield_name):
             }
         )
         status_doc.save(ignore_permissions=True)
+    frappe.db.commit()

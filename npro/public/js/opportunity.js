@@ -27,9 +27,12 @@ frappe.ui.form.on("Opportunity", {
       "create_job_opening",
       stage === "NPro Candidate Sourcing"
     );
-    grid_row.grid_form.fields_dict.create_job_opening.$input.addClass(
-      "btn-primary"
-    );
+    if (stage === "NPro Candidate Sourcing") {
+      let btn = grid_row.grid_form.fields_dict.create_job_opening;
+      if (btn && btn.$input) {
+        btn.$input.addClass("btn-primary");
+      }
+    }
   },
 
   previous_jo_cf: function (frm) {

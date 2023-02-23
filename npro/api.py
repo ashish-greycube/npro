@@ -17,6 +17,10 @@ from frappe.model.naming import make_autoname
 
 from frappe.desk.form.load import get_attachments
 from frappe.email.doctype.notification.notification import evaluate_alert
+from npro.npro.doctype.npro_status_log.npro_status_log import (
+    make_status_log,
+    make_child_status_log,
+)
 
 
 def on_update_opportunity(doc, method):
@@ -52,6 +56,7 @@ def on_update_opportunity(doc, method):
 
 
 def on_validate_opportunity(doc, method):
+    return
     opportunity_cost_calculation(doc, method)
     notify_sales_stage_update(doc, method)
     validate_requirement_stage(doc, method)
@@ -366,21 +371,21 @@ def autoname_job_opening(doc, method):
 def validate_job_opening(doc, method):
     if doc.status == "Closed" and not doc.closed_date_cf:
         doc.closed_date_cf = nowdate()
+    make_status_log(doc, "status")
 
 
 def on_update_job_opening(doc, method):
     if doc.opportunity_cf and doc.opportunity_consulting_detail_ct_cf:
         # notify update to reload Opportunity in client
-        opportunity = frappe.get_doc("Opportunity", doc.opportunity_cf)
-        update = 0
-        detail = [
-            d
-            for d in opportunity.opportunity_consulting_detail_ct_cf
-            if d.name == doc.opportunity_consulting_detail_ct_cf
-        ]
-        for d in detail:
-            d.job_opening = doc.name
-            opportunity.save()
+        frappe.db.sql(
+            """
+        update `tabOpportunity Consulting Detail CT`
+        set job_opening = %s
+        where parent = %s and job_opening is null
+        """,
+            (doc.name, doc.opportunity_cf),
+        )
+        frappe.get_doc("Opportunity", doc.opportunity_cf).notify_update()
 
 
 def on_update_job_applicant(doc, method):

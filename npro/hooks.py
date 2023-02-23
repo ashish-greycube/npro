@@ -105,8 +105,14 @@ override_doctype_class = {
 
 doc_events = {
     "Opportunity": {
-        "on_update": "npro.api.on_update_opportunity",
-        "validate": "npro.api.on_validate_opportunity",
+        "on_update": [
+            "npro.api.on_update_opportunity",
+            "npro.npro.controllers.opportunity.on_update_opportunity",
+        ],
+        "validate": [
+            "npro.api.on_validate_opportunity",
+            "npro.npro.controllers.opportunity.on_validate_opportunity",
+        ],
     },
     "Contact": {"on_update": "npro.api.on_update_contact"},
     "Interview": {"on_update": "npro.api.on_update_interview"},
@@ -117,7 +123,9 @@ doc_events = {
     "Job Opening": {
         "autoname": "npro.api.autoname_job_opening",
         "on_update": "npro.api.on_update_job_opening",
-        "validate": "npro.api.validate_job_opening",
+        "validate": [
+            "npro.api.validate_job_opening",
+        ],
     },
     "Lead": {
         "validate": "npro.npro.doc_events.on_validate_lead",

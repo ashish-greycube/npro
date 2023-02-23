@@ -15,7 +15,7 @@ frappe.ui.form.on("Lead", {
   },
 
   years_of_experience_in_the_org_cf: function (frm) {
-    check_numeric("years_of_experience_in_the_org_cf", frm);
+    frappe.utils.check_numeric("years_of_experience_in_the_org_cf", frm);
   },
 
   email_id: function (frm) {
@@ -30,12 +30,3 @@ frappe.ui.form.on("Lead", {
     }
   },
 });
-
-function check_numeric(fieldname, frm) {
-  if (isNaN(frm.doc[fieldname])) {
-    let message = `Invalid ${frm.fields_dict[
-      fieldname
-    ].df.label.bold()}. Please enter a numeric value.`;
-    frappe.throw(message);
-  }
-}

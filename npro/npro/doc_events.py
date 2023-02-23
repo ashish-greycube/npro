@@ -1,10 +1,18 @@
 from __future__ import unicode_literals
 import frappe, json
-from npro.npro.doctype.npro_status_log.npro_status_log import make_status_log
+from npro.npro.doctype.npro_status_log.npro_status_log import (
+    make_status_log,
+    make_child_status_log,
+)
 
 
 def on_validate_job_applicant(doc, method):
+    validate_technical_interview(doc)
     make_status_log(doc, "status")
+
+
+def validate_technical_interview(doc):
+    pass
 
 
 def on_validate_lead(doc, method):
