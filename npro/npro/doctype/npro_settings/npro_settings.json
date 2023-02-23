@@ -9,6 +9,8 @@
   "lead_active_status",
   "candidate_sourcing_notification",
   "opportunity_consulting_detail_stage_update_notification",
+  "screening_call_type",
+  "client_cv_screening_email_template",
   "opportunity_job_applicant_status_priority_mapping",
   "business_module_website_service_mapping",
   "tm_sb",
@@ -99,12 +101,26 @@
    "fieldtype": "Table",
    "options": "NPro Attachment",
    "reqd": 1
+  },
+  {
+   "fieldname": "screening_call_type",
+   "fieldtype": "Link",
+   "label": "Screening Call Type",
+   "options": "NPro Call Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_cv_screening_email_template",
+   "fieldtype": "Link",
+   "label": "Client CV Screening Email Template",
+   "options": "Email Template",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-02-14 13:09:21.390884",
+ "modified": "2023-02-20 07:32:12.614310",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
