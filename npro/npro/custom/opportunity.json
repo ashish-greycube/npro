@@ -913,7 +913,7 @@
    "columns": 0,
    "creation": "2023-02-13 11:59:44.912058",
    "default": null,
-   "depends_on": "eval:doc.requirement_type_cf == 'Replacement'",
+   "depends_on": "eval:doc.requirement_type_cf == 'Replacement' && doc.previous_opportunity_cf",
    "description": null,
    "docstatus": 0,
    "dt": "Opportunity",
