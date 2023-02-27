@@ -11,11 +11,13 @@ class NProStatusLog(Document):
 
 def make_child_status_log(doc, docfield_name, child_docfield_name):
     children = doc.get(docfield_name)
-    from_db = doc.get_doc_before_save().get(docfield_name)
+    children_before_save = []
+    if doc.get_doc_before_save():
+        children_before_save = doc.get_doc_before_save().get(docfield_name)
 
     for d in children:
         old_value = None
-        original = [i for i in from_db if i.name == d.name]
+        original = [i for i in children_before_save if i.name == d.name]
         if original:
             old_value = original[0].get(child_docfield_name)
             if old_value == d.get(child_docfield_name):
