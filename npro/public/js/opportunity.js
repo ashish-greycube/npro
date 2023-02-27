@@ -12,6 +12,14 @@ frappe.ui.form.on("Opportunity", {
         },
       };
     });
+
+    frm.set_query("previous_jo_cf", () => {
+      return {
+        filters: {
+          opportunity_cf: frm.doc.previous_opportunity_cf || "?",
+        },
+      };
+    });
   },
   refresh: function (frm) {
     frm.set_value("opportunity_from", "Customer", true);
@@ -44,18 +52,30 @@ frappe.ui.form.on("Opportunity", {
         previous_job_opening_fetch_fields
       )
       .then((r) => {
-        let args = {
-          project_name: r.message.opportunity_technology_cf,
-          duration_in_months: r.message.contract_duration_cf,
-          billing_per_month: r.message.billing_per_month_cf,
-          location: r.message.location_cf,
-          amount:
-            flt(r.message.contract_duration_cf) *
-            flt(r.message.billing_per_month_cf),
-        };
-        console.log(args);
-        frm.add_child("opportunity_consulting_detail_ct_cf", args);
-        frm.refresh_field("opportunity_consulting_detail_ct_cf");
+        let details = frm.doc.opportunity_consulting_detail_ct_cf,
+          is_added = false;
+        if (details.length) {
+          for (const d of details) {
+            if (r.message.opportunity_technology_cf == d.project_name) {
+              is_added = true;
+              break;
+            }
+          }
+        }
+
+        if (!is_added) {
+          let args = {
+            project_name: r.message.opportunity_technology_cf,
+            duration_in_months: r.message.contract_duration_cf,
+            billing_per_month: r.message.billing_per_month_cf,
+            location: r.message.location_cf,
+            amount:
+              flt(r.message.contract_duration_cf) *
+              flt(r.message.billing_per_month_cf),
+          };
+          frm.add_child("opportunity_consulting_detail_ct_cf", args);
+          frm.refresh_field("opportunity_consulting_detail_ct_cf");
+        }
       });
   },
 
