@@ -23,8 +23,11 @@ def on_update_interview(doc, method):
         notify_update("Job Applicant", doc.job_applicant)
 
 
-def on_update_lead(doc, method):
+def on_validate_lead(doc, method):
     make_status_log(doc, "status")
+
+
+def on_update_lead(doc, method):
     # Set Contact details in Lead update as Contact is created by ErpNext before_insert
     set_contact_details(doc)
 

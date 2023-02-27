@@ -132,6 +132,7 @@ doc_events = {
         ],
     },
     "Lead": {
+        "validate": "npro.npro.doc_events.on_validate_lead",
         "on_update": "npro.npro.doc_events.on_update_lead",
     },
     "Job Applicant": {
