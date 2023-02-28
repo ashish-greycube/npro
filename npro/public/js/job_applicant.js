@@ -66,9 +66,14 @@ frappe.ui.form.on("Job Applicant", {
   },
 
   toggle_create_interview: function (frm) {
-    cur_frm.custom_buttons["Create Interview"].prop(
-      "disabled",
-      !(frm.doc.resume_attachment && frm.doc.candidate_call_detail_cf.length)
+    let recording = (frm.doc.candidate_call_detail_cf || []).filter(
+      (d) => d.call_type === "Screening Call"
     );
+
+    if (!recording.length || !frm.doc.resume_attachment) {
+      frm.custom_buttons["Create Interview"].prop("disabled", true);
+    } else {
+      frm.custom_buttons["Create Interview"].prop("disabled", false);
+    }
   },
 });

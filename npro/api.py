@@ -79,21 +79,22 @@ def validate_requirement_unique_job_opening(doc, method):
 
 
 def validate_requirement_stage(doc, method):
-    invalid_stage = [
-        "Row #%s: Stage cannot be '%s' for '%s'"
-        % (d.idx, frappe.bold(d.stage), frappe.bold(d.project_name))
-        for d in doc.opportunity_consulting_detail_ct_cf
-        if not d.job_opening
-        and d.stage
-        in [
+    invalid_stage = []
+    for d in doc.opportunity_consulting_detail_ct_cf:
+        if d.stage in [
             "Client CV Screening",
             "Client Interview",
             "Candidate Selected",
-            "Candidate On-boarded",
-            "PO pending",
+            "Candidate On-Boarded",
+            "PO Pending",
             "Won",
-        ]
-    ]
+        ]:
+            if not d.job_opening:
+                invalid_stage.append(
+                    "Row #%s: Stage for '%s' cannot be set to '%s' without a Job Opening."
+                    % (d.idx, frappe.bold(d.project_name), frappe.bold(d.stage))
+                )
+
     if invalid_stage:
         frappe.throw(",".join(invalid_stage))
 
@@ -354,6 +355,7 @@ def autoname_job_opening(doc, method):
 def validate_job_opening(doc, method):
     if doc.status == "Closed" and not doc.closed_date_cf:
         doc.closed_date_cf = nowdate()
+
     make_status_log(doc, "status")
 
 
