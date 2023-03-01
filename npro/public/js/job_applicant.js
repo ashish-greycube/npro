@@ -66,14 +66,18 @@ frappe.ui.form.on("Job Applicant", {
   },
 
   toggle_create_interview: function (frm) {
-    let recording = (frm.doc.candidate_call_detail_cf || []).filter(
-      (d) => d.call_type === "Screening Call"
-    );
+    frappe.db
+      .get_single_value("NPro Settings", "screening_call_type")
+      .then((screening_call_type) => {
+        let recording = (frm.doc.candidate_call_detail_cf || []).filter(
+          (d) => d.call_type === screening_call_type
+        );
 
-    if (!recording.length || !frm.doc.resume_attachment) {
-      frm.custom_buttons["Create Interview"].prop("disabled", true);
-    } else {
-      frm.custom_buttons["Create Interview"].prop("disabled", false);
-    }
+        if (!recording.length || !frm.doc.resume_attachment) {
+          frm.custom_buttons["Create Interview"].prop("disabled", true);
+        } else {
+          frm.custom_buttons["Create Interview"].prop("disabled", false);
+        }
+      });
   },
 });

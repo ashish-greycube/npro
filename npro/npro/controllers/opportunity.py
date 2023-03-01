@@ -18,8 +18,8 @@ def on_update_opportunity(doc, method):
             jo.billing_per_month_cf = d.billing_per_month
 
             # set JO status to Closed if Opp requirement is Lost
-            if d.stage == "Lost" and not jo.status == "Closed":
-                jo.status = "Closed"
+            if d.stage == "Lost" and not jo.status == "Lost":
+                jo.status = "Lost"
                 jo.lost_reason_cf = (
                     "The opportunity was lost hence the Job Opening is set to lost."
                 )
