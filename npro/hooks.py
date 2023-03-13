@@ -154,6 +154,9 @@ doc_events = {
     "Employee Onboarding": {
         "on_cancel": "npro.npro.doc_events.on_cancel_consultant_onboarding",
     },
+    "Communication": {
+        "after_insert": "npro.npro.doc_events.after_insert_communication"
+    },
 }
 
 # Scheduled Tasks

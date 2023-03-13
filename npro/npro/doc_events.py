@@ -169,3 +169,22 @@ def on_cancel_consultant_onboarding(doc, method):
 
 def on_validate_interview(doc, method):
     make_status_log(doc, "status")
+
+
+def after_insert_communication(doc, method):
+    try:
+        if (
+            doc.communication_type == "Communication"
+            and doc.get("reference_doctype") == "Interview"
+            and doc.sent_or_received == "Sent"
+        ):
+            job_applicant, interview_type_cf = frappe.db.get_value(
+                "Interview", doc.reference_name, ["job_applicant", "interview_type_cf"]
+            )
+            if interview_type_cf == "Client Interview":
+                frappe.db.set_value(
+                    "Job Applicant", job_applicant, "status", "Client Interview"
+                )
+                notify_update("Job Applicant", job_applicant)
+    except Exception:
+        frappe.log_error(frappe.get_traceback())
