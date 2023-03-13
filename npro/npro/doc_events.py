@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import frappe, json
+from frappe.utils import cint
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
     make_child_status_log,
@@ -12,12 +13,29 @@ def on_validate_job_applicant(doc, method):
 
 
 def on_update_interview(doc, method):
-    if doc.interview_type_cf == "Technical Interview":
-        status = (
-            "Technical interview-Rejected"
-            if doc.status == "Rejected"
-            else "Technical interview"
-        )
+    status = ""
+    if doc.interview_type_cf == "Client Interview":
+        status_map = {
+            "Under Review": "Hold",
+            "Cleared": "Accepted",
+            "Rejected": "Rejected",
+        }
+        if cint(
+            frappe.db.get_value(
+                "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
+            )
+        ):
+            status_map["Rejected"] = "Client interview-Rejected"
+        status = status_map[doc.status]
+    elif doc.interview_type_cf == "Technical Interview":
+        if doc.status == "Cleared":
+            status = "Client CV Screening"
+        elif doc.status == "Rejected":
+            status = "Technical interview-Rejected"
+        else:
+            status = "Technical interview"
+
+    if status:
         frappe.db.set_value("Job Applicant", doc.job_applicant, "status", status)
         frappe.db.commit()
         notify_update("Job Applicant", doc.job_applicant)
@@ -136,3 +154,18 @@ def on_update_consultant_onboarding(doc, method):
         )
 
         frappe.db.commit()
+
+
+def on_cancel_consultant_onboarding(doc, method):
+    if doc.job_applicant:
+        frappe.db.set_value(
+            "Job Applicant",
+            doc.job_applicant,
+            "status",
+            "Rejected by Candidate",
+        )
+        notify_update("Job Applicant", doc.job_applicant)
+
+
+def on_validate_interview(doc, method):
+    make_status_log(doc, "status")

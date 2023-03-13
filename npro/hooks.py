@@ -41,6 +41,7 @@ doctype_js = {
     "Job Offer": "public/js/job_offer.js",
     "Job Applicant": "public/js/job_applicant.js",
     "Interview": "public/js/interview.js",
+    "Interview Round": "public/js/interview_round.js",
     "Employee": "public/js/employee.js",
     "Project": "public/js/project.js",
 }
@@ -118,7 +119,8 @@ doc_events = {
         "on_update": [
             "npro.api.on_update_interview",
             "npro.npro.doc_events.on_update_interview",
-        ]
+        ],
+        "validate": "npro.npro.doc_events.on_validate_interview",
     },
     "Job Offer": {
         "on_submit": "npro.npro.doc_events.on_submit_job_offer",
@@ -149,6 +151,9 @@ doc_events = {
         "on_update_after_submit": "npro.npro.doc_events.on_update_consultant_onboarding",
         "on_update": "npro.npro.doc_events.on_update_consultant_onboarding",
     },
+    "Employee Onboarding": {
+        "on_cancel": "npro.npro.doc_events.on_cancel_consultant_onboarding",
+    },
 }
 
 # Scheduled Tasks
@@ -159,6 +164,7 @@ scheduler_events = {
         "npro.npro.report.lead_status_reminder.lead_status_reminder.send_reminder",
         "npro.npro.report.opportunity_sales_stage_reminder.opportunity_sales_stage_reminder.send_reminder",
         "npro.npro.report.customer_contactwise_communication_frequency_alert.customer_contactwise_communication_frequency_alert.send_reminder",
+        "npro.utils.set_client_interview_waiting_for_feedback",
     ]
     # 	"all": [
     # 		"npro.tasks.all"

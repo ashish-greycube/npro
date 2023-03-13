@@ -8,6 +8,7 @@ class CustomInterview(Interview):
     """
     Custom class to override erpnext.
     Fixes bug in reschedule_interview, where both old and new scheduled dates are same.
+    Updates Job Applicant status to
     """
 
     @frappe.whitelist()
@@ -20,6 +21,12 @@ class CustomInterview(Interview):
             {"scheduled_on": scheduled_on, "from_time": from_time, "to_time": to_time}
         )
         self.notify_update()
+        frappe.db.set_value(
+            "Job Applicant",
+            self.job_applicant,
+            "status",
+            "Client Interview-rescheduled",
+        )
 
         recipients = get_recipients(self.name)
 
