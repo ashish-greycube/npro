@@ -26,7 +26,7 @@ def on_update_interview(doc, method):
             )
         ):
             status_map["Rejected"] = "Client interview-Rejected"
-        status = status_map[doc.status]
+        status = status_map.get(doc.status)
     elif doc.interview_type_cf == "Technical Interview":
         if doc.status == "Cleared":
             status = "Client CV Screening"
