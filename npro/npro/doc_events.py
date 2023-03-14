@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 import frappe, json
-from frappe.utils import cint
+from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
     make_child_status_log,
@@ -91,8 +91,8 @@ def on_validate_job_offer(doc, method):
         doc.margin_cf = (
             100
             * (
-                doc.get("billing_per_month_cf", 0)
-                - doc.get("consultancy_fees_offered_usd_cf", 0)
+                flt(doc.get("billing_per_month_cf", 0))
+                - flt(doc.get("consultancy_fees_offered_usd_cf", 0))
             )
             / doc.get("billing_per_month_cf", 0)
         )
