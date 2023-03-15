@@ -12,7 +12,7 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2021-12-27 09:50:34.433528",
-   "default": null,
+   "default": "",
    "depends_on": null,
    "description": null,
    "docstatus": 0,
@@ -543,6 +543,31 @@
  ],
  "custom_perms": [],
  "doctype": "Interview Feedback",
- "property_setters": [],
+ "property_setters": [
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "creation": "2023-03-15 07:08:32.425538",
+   "default_value": null,
+   "doc_type": "Interview Feedback",
+   "docstatus": 0,
+   "doctype_or_field": "DocField",
+   "field_name": "interviewer",
+   "idx": 0,
+   "modified": "2023-03-15 07:08:32.425538",
+   "modified_by": "Administrator",
+   "name": "Interview Feedback-interviewer-default",
+   "owner": "Administrator",
+   "parent": null,
+   "parentfield": null,
+   "parenttype": null,
+   "property": "default",
+   "property_type": "Text",
+   "row_name": null,
+   "value": "__user"
+  }
+ ],
  "sync_on_migrate": 1
 }

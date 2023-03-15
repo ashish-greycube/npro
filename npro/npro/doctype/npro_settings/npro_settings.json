@@ -19,7 +19,9 @@
   "consultant_on_boarding_section",
   "default_timesheet_status",
   "consultant_attachments_sb_section",
-  "default_consultant_attachment"
+  "default_consultant_attachment",
+  "user_consent_section",
+  "npro_user_consent"
  ],
  "fields": [
   {
@@ -115,12 +117,23 @@
    "label": "Client CV Screening Email Template",
    "options": "Email Template",
    "reqd": 1
+  },
+  {
+   "fieldname": "user_consent_section",
+   "fieldtype": "Section Break",
+   "label": "User Consent "
+  },
+  {
+   "fieldname": "npro_user_consent",
+   "fieldtype": "Text Editor",
+   "label": "NPro User Consent",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-02-20 07:32:12.614310",
+ "modified": "2023-03-15 08:09:31.439188",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Settings",
