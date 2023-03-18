@@ -1,6 +1,23 @@
 frappe.ui.form.on("Job Offer", {
   refresh: function (frm) {
     frm.events.add_custom_buttons(frm);
+    frm.trigger("toggle_offer_approver");
+  },
+
+  status(frm) {
+    if (!frm.doc.offer_approver_cf) {
+      frm.set_value("offer_approver_cf", frappe.user.name);
+    }
+    frm.trigger("toggle_offer_approver");
+  },
+
+  toggle_offer_approver(frm) {
+    if (
+      !frm.doc.offer_approver_cf ||
+      frm.doc.offer_approver_cf == frappe.user.name
+    ) {
+      frm.set_df_property("offer_approver_cf", "disabled", 1);
+    }
   },
 
   add_custom_buttons(frm) {
@@ -58,5 +75,15 @@ frappe.ui.form.on("Job Offer", {
       method: "npro.utils.make_consultant_from_job_offer",
       frm: frm,
     });
+  },
+
+  validate: function (frm) {
+    if (frm.doc.status == "Sent for Approval") {
+      if (frm.doc.offer_approver_cf !== frm.doc.offer_approved_by_cf) {
+        frappe.throw(
+          __("Offer in status 'Sent For Approval' cannot be changed ")
+        );
+      }
+    }
   },
 });

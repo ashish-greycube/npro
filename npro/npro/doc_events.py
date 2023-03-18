@@ -90,8 +90,10 @@ def set_contact_details(doc):
 
 
 def on_submit_job_offer(doc, method):
-    if not doc.status == "Offer Released & Awaiting Response":
-        frappe.throw("Job Offer status must be Offer Released & Awaiting Response")
+    if not doc.status in ("Accepted", "Rejected"):
+        frappe.throw(
+            _("Job Offer cannot be submitted in status {0}").format(doc.status)
+        )
 
         # validate attachments
         missing = []
@@ -127,7 +129,11 @@ def on_update_job_offer(doc, method):
 
 
 def on_validate_job_offer(doc, method):
-    if doc.status == "Rejected":
+    if doc.status == "Offer Approved":
+        if not doc.offer_approver_cf:
+            doc.offer_approver_cf = frappe.session.user
+
+    elif doc.status == "Rejected":
         # if not doc.db_get("status") == "Rejected":
         frappe.db.set_value(
             "Job Applicant",
