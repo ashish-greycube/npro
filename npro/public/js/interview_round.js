@@ -2,6 +2,7 @@ frappe.ui.form.on("Interview Round", {
   setup: function (frm) {
     frm.trigger("hide_grid_add_row");
   },
+
   hide_grid_add_row: function (frm) {
     setTimeout(() => {
       frm.fields_dict.expected_skill_set.grid.wrapper
@@ -9,6 +10,20 @@ frappe.ui.form.on("Interview Round", {
         .remove();
     }, 100);
   },
+
+  interview_type: function (frm) {
+    if (frm.is_new()) {
+      frappe.db
+        .get_value("Job Opening", frm.doc.job_opening_cf, "job_title")
+        .then((r) => {
+          frm.set_value(
+            "round_name",
+            `${r.message.job_title}-${frm.doc.interview_type}`
+          );
+        });
+    }
+  },
+
   //   job_opening_cf: function (frm) {
   //     frappe.model.with_doc("Job Opening", frm.doc.job_opening_cf).then(() => {
   //       let jo = frappe.get_doc("Job Opening", frm.doc.job_opening_cf);

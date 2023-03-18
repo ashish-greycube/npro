@@ -7,6 +7,43 @@ import json
 
 
 @frappe.whitelist()
+def open_mapped_doc_job_offer(source_name, target_doc=None):
+    def set_missing_values(source, target):
+        billing_per_month_cf = frappe.db.get_value(
+            "Job Opening", source.job_title, "billing_per_month_cf"
+        )
+        target.billing_per_month_cf = billing_per_month_cf
+        for att in frappe.get_doc("NPro Settings").get(
+            "default_consultant_attachment", []
+        ):
+            target.append(
+                "npro_attachment_cf",
+                {
+                    "attachment_type": att.attachment_type,
+                    "is_attachment_mandatory": att.is_attachment_mandatory,
+                },
+            )
+
+    doc = get_mapped_doc(
+        "Job Applicant",
+        source_name,
+        {
+            "Job Applicant": {
+                "doctype": "Job Offer",
+                "field_map": {
+                    "job_applicant": "job_applicant",
+                    "applicant_name": "applicant_name",
+                    "designation": "designation",
+                },
+            }
+        },
+        target_doc,
+        set_missing_values,
+    )
+    return doc
+
+
+@frappe.whitelist()
 def make_consultant_from_job_offer(source_name, target_doc=None):
     def set_missing_values(source, target):
         target.customer_cf = source.customer_cf
@@ -38,6 +75,7 @@ def make_consultant_from_job_offer(source_name, target_doc=None):
             "Job Offer": {
                 "doctype": "Employee",
                 "field_map": {
+                    "job_applicant": "job_applicant",
                     "applicant_name": "employee_name",
                     "designation": "designation",
                     "company": "company",

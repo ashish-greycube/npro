@@ -42,7 +42,7 @@ function make_interview_round(frm) {
   let doc_name = frappe.model.make_new_doc_and_get_name("Interview Round"),
     doc = locals["Interview Round"][doc_name];
   doc.job_opening_cf = frm.doc.name;
-  doc.round_name = `${frm.doc.job_title}-${frm.doc.customer_cf}`;
+  doc.round_name = `${frm.doc.job_title}`;
   doc.designation = frm.doc.designation;
   let avg_proficiency = 0;
   (frm.doc.jrss_ct_cf || []).forEach((t) => {

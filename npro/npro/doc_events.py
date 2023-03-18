@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import frappe, json
+from frappe import _
 from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
@@ -12,28 +13,43 @@ def on_validate_job_applicant(doc, method):
     make_status_log(doc, "status")
 
 
+def on_validate_interview_feedback(doc, method):
+    make_status_log(doc, "result")
+
+
+def on_validate_consultant_onboarding(doc, method):
+    make_status_log(doc, "status")
+
+
+def on_submit_interview_feedback(doc, method):
+    if not doc.status:
+        frappe.throw(_("Interview Feedback status has to be Cleared or Rejected"))
+    interview = frappe.get_doc("Interview", doc.interview)
+    interview.status = doc.status
+    interview.save()
+
+
 def on_update_interview(doc, method):
     status = ""
     if doc.interview_type_cf == "Client Interview":
-        status_map = {
-            "Under Review": "Hold",
-            "Cleared": "Accepted",
-            "Rejected": "Rejected",
-        }
-        if cint(
+        is_internal_hiring = cint(
             frappe.db.get_value(
                 "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
             )
-        ):
-            status_map["Rejected"] = "Client interview-Rejected"
-        status = status_map.get(doc.status)
+        )
+        status = {
+            "Under Review": "Hold",
+            "Cleared": "Accepted",
+            "Rejected": "Rejected"
+            if is_internal_hiring
+            else "Client interview-Rejected",
+        }.get(doc.status)
+
     elif doc.interview_type_cf == "Technical Interview":
-        if doc.status == "Cleared":
-            status = "Client CV Screening"
-        elif doc.status == "Rejected":
-            status = "Technical interview-Rejected"
-        else:
-            status = "Technical interview"
+        status = {
+            "Cleared": "Client CV Screening",
+            "Rejected": "Technical interview-Rejected",
+        }.get(doc.status) or "Technical interview"
 
     if status:
         frappe.db.set_value("Job Applicant", doc.job_applicant, "status", status)
@@ -77,6 +93,38 @@ def on_submit_job_offer(doc, method):
     if not doc.status == "Offer Released & Awaiting Response":
         frappe.throw("Job Offer status must be Offer Released & Awaiting Response")
 
+        # validate attachments
+        missing = []
+        for att in frappe.get_doc("NPro Settings").get(
+            "default_consultant_attachment", []
+        ):
+            if cint(att.is_attachment_mandatory):
+                if not len(
+                    [
+                        d
+                        for d in doc.npro_attachment_cf
+                        if d.attachment_type == att.attachment_type
+                    ]
+                ):
+                    missing.append(att.attachment_type)
+        if missing:
+            frappe.throw(_("Attachments missing: {0}").format(",".join(missing)))
+
+
+def on_update_job_offer(doc, method):
+    if doc.status == "Rejected":
+        # Cancel Consultant Onboarding, by setting status = Cancelled
+        onboarding = frappe.db.get_value(
+            "Employee Onboarding", {"job_offer": doc.name, "docstatus": 1}
+        )
+        if onboarding:
+            frappe.get_doc("Employee Onboarding", onboarding).db_set(
+                "status",
+                "Cancelled",
+                update_modified=True,
+                notify=True,
+            )
+
 
 def on_validate_job_offer(doc, method):
     if doc.status == "Rejected":
@@ -87,15 +135,7 @@ def on_validate_job_offer(doc, method):
             "rejected_reason_cf",
             doc.offer_rejection_reason_cf,
         )
-    if doc.get("billing_per_month_cf", 0):
-        doc.margin_cf = (
-            100
-            * (
-                flt(doc.get("billing_per_month_cf", 0))
-                - flt(doc.get("consultancy_fees_offered_usd_cf", 0))
-            )
-            / doc.get("billing_per_month_cf", 0)
-        )
+    make_status_log(doc, "status")
 
 
 def on_validate_employee(doc, method):
@@ -152,6 +192,55 @@ def on_update_consultant_onboarding(doc, method):
         """,
             (doc.job_applicant),
         )
+
+    if doc.status in ("Cancelled",):
+        # Job Offer Cancelled
+        jo = frappe.db.get_value(
+            "Job Offer", {"name": doc.job_offer, "status": ("!=", "Cancelled")}
+        )
+        if jo:
+            frappe.get_doc("Job Offer", jo).cancel()
+
+        # Job Applicant status = Rejected By Candidate
+        applicant = frappe.db.get_value(
+            "Job Applicant", {"name": doc.job_applicant, "status": ("!=", "Cancelled")}
+        )
+        if applicant:
+            frappe.get_doc("Job Applicant", applicant).db_set(
+                "status",
+                "Rejected By Candidate",
+                update_modified=True,
+                notify=True,
+            )
+        # Open Tasks and Internal Project: status Cancelled
+        if doc.project:
+            if frappe.db.exists(
+                "Project",
+                {
+                    "name": doc.project,
+                    "project_type": "Internal",
+                    "status": ("!=", "Cancelled"),
+                },
+            ):
+                frappe.get_doc("Project", doc.project).db._set(
+                    "status",
+                    "Cancelled",
+                    update_modified=True,
+                    notify=True,
+                )
+            for task in frappe.db.get_list(
+                "Task",
+                {
+                    "project": doc.project,
+                    "status": ("not in", ["Cancelled", "Completed"]),
+                },
+            ):
+                frappe.get_doc("Task", task).db_set(
+                    "status",
+                    "Cancelled",
+                    update_modified=True,
+                    notify=True,
+                )
 
         frappe.db.commit()
 

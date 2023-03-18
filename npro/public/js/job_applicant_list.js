@@ -59,7 +59,7 @@ function set_status_client_cv_screening(applicants) {
   frappe.call({
     method: "npro.utils.update_job_applicant_status_client_cv_screening",
     args: {
-      applicants: selected_applicants,
+      applicants: applicants,
     },
   });
 }

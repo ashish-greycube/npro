@@ -26,6 +26,7 @@ def get_data(filters):
             	fn.ct leaves_utilised , te.annual_leaves_allocated_cf - fn.ct  balance_leaves
             from tabEmployee te
             left outer join fn on fn.consultant = te.name
+            where te.status = 'Active'
         """.format(
             where_conditions=get_conditions(filters),
         ),
