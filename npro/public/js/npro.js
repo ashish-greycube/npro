@@ -195,3 +195,47 @@ Object.assign(frappe.utils, {
     return _colour ? colour : style;
   },
 });
+
+$(document).ready(function () {
+  if (frappe.boot.is_user_consent !== 1) {
+    setInterval(() => {
+      get_user_consent();
+    }, 5000);
+  }
+});
+
+const get_user_consent = function () {
+  let doctype = "NPro User Consent";
+
+  if (cur_dialog && cur_dialog.doc.doctype === doctype) {
+    return;
+  }
+
+  function _after_insert() {
+    let dlg = frappe.msgprint({
+      message: __("Thank you for your consent. You will need to login again."),
+      title: __("Thank you for your consent."),
+    });
+    dlg.keep_open = true;
+    dlg.custom_onhide = function () {
+      frappe.app.logout();
+    };
+  }
+
+  frappe.model.with_doctype(doctype, () => {
+    frappe.db
+      .get_single_value("NPro Settings", "npro_user_consent")
+      .then((consent) => {
+        let new_doc = frappe.model.get_new_doc(doctype);
+        new_doc.user = frappe.session.user;
+        new_doc.consent = consent;
+        frappe.ui.form.make_quick_entry(
+          doctype,
+          _after_insert,
+          null,
+          new_doc,
+          true
+        );
+      });
+  });
+};

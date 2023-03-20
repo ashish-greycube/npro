@@ -66,6 +66,8 @@ doctype_list_js = {"Job Applicant": "public/js/job_applicant_list.js"}
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
 
+extend_bootinfo = "npro.overrides.set_user_consent"
+
 # Installation
 # ------------
 

@@ -134,13 +134,14 @@ def on_validate_job_offer(doc, method):
             doc.offer_approver_cf = frappe.session.user
 
     elif doc.status == "Rejected":
-        # if not doc.db_get("status") == "Rejected":
-        frappe.db.set_value(
-            "Job Applicant",
-            doc.job_applicant,
-            "rejected_reason_cf",
-            doc.offer_rejection_reason_cf,
-        )
+        if not doc.db_get("status") == "Rejected" and doc.offer_rejection_reason_cf:
+            job_applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
+            for item in doc.offer_rejection_reason_cf:
+                job_applicant.append(
+                    "rejected_reason_cf",
+                    {"rejected_reason": item.get("rejected_reason")},
+                )
+            job_applicant.save()
     make_status_log(doc, "status")
 
 
