@@ -22,11 +22,14 @@ def on_validate_consultant_onboarding(doc, method):
 
 
 def on_submit_interview_feedback(doc, method):
-    if not doc.status:
+    if not doc.result:
         frappe.throw(_("Interview Feedback status has to be Cleared or Rejected"))
     interview = frappe.get_doc("Interview", doc.interview)
-    interview.status = doc.status
+    interview.status = doc.result
     interview.save()
+    frappe.set_value(
+        "Job Opening", interview.job_opening, "inform_all_stakeholder_cf", 1
+    )
 
 
 def on_update_interview(doc, method):
