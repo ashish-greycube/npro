@@ -27,9 +27,11 @@ def on_submit_interview_feedback(doc, method):
     interview = frappe.get_doc("Interview", doc.interview)
     interview.status = doc.result
     interview.save()
-    frappe.set_value(
-        "Job Opening", interview.job_opening, "inform_all_stakeholder_cf", 1
-    )
+    # update Job Opening
+    if doc.result == "Cleared" and interview.interview_type_cf == "Technical Interview":
+        frappe.set_value(
+            "Job Opening", interview.job_opening, "inform_all_stakeholder_cf", 1
+        )
 
 
 def on_update_interview(doc, method):
