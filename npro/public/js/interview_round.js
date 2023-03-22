@@ -13,14 +13,10 @@ frappe.ui.form.on("Interview Round", {
 
   interview_type: function (frm) {
     if (frm.is_new()) {
-      frappe.db
-        .get_value("Job Opening", frm.doc.job_opening_cf, "job_title")
-        .then((r) => {
-          frm.set_value(
-            "round_name",
-            `${r.message.job_title}-${frm.doc.interview_type}`
-          );
-        });
+      frm.set_value(
+        "round_name",
+        `${frm.doc.interview_type}-${frm.doc.job_opening_cf}`
+      );
     }
   },
 

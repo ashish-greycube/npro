@@ -115,6 +115,10 @@ def on_submit_job_offer(doc, method):
 
 def on_update_job_offer(doc, method):
     if doc.status == "Rejected":
+        # frappe.flags.rejected_reasons = [
+        #     d.rejected_reason for d in doc.offer_rejection_reason_cf
+        # ]
+
         # Cancel Consultant Onboarding, by setting status = Cancelled
         onboarding = frappe.db.get_value(
             "Employee Onboarding", {"job_offer": doc.name, "docstatus": 1}
@@ -132,16 +136,6 @@ def on_validate_job_offer(doc, method):
     if doc.status == "Offer Approved":
         if not doc.offer_approver_cf:
             doc.offer_approver_cf = frappe.session.user
-
-    elif doc.status == "Rejected":
-        if not doc.db_get("status") == "Rejected" and doc.offer_rejection_reason_cf:
-            job_applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
-            for item in doc.offer_rejection_reason_cf:
-                job_applicant.append(
-                    "rejected_reason_cf",
-                    {"rejected_reason": item.get("rejected_reason")},
-                )
-            job_applicant.save()
     make_status_log(doc, "status")
 
 
@@ -208,17 +202,11 @@ def on_update_consultant_onboarding(doc, method):
         if jo:
             frappe.get_doc("Job Offer", jo).cancel()
 
-        # Job Applicant status = Rejected By Candidate
-        applicant = frappe.db.get_value(
-            "Job Applicant", {"name": doc.job_applicant, "status": ("!=", "Cancelled")}
-        )
-        if applicant:
-            frappe.get_doc("Job Applicant", applicant).db_set(
-                "status",
-                "Rejected By Candidate",
-                update_modified=True,
-                notify=True,
-            )
+        # set applicant Rejected by Candidate
+        # frappe.flags.rejected_reasons = [
+        #     d.rejected_reason for d in doc.offer_rejection_reason_cf
+        # ]
+
         # Open Tasks and Internal Project: status Cancelled
         if doc.project:
             if frappe.db.exists(

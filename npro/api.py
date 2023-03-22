@@ -374,6 +374,26 @@ def on_update_job_opening(doc, method):
 
 
 def on_update_job_applicant(doc, method):
+    def _update_job_applicant_status():
+        if doc.status == "Rejected by Candidate":
+            if doc.flags.rejected_reasons:
+                for d in doc.flags.rejected_reasons:
+                    doc.append("rejected_reason_cf", {"rejected_reason": d})
+
+        if frappe.db.exists(
+            "Job Offer",
+            {"job_applicant": doc.name, "status": "Rejected", "docstatus": ("!=", 2)},
+        ):
+            doc.db_set("status", "Rejected by Candidate")
+
+        if frappe.db.exists(
+            "Employee Onboarding",
+            {"job_applicant": doc.name, "status": "Cancelled", "docstatus": ("!=", 2)},
+        ):
+            doc.db_set("status", "Rejected by Candidate")
+
+        frappe.db.commit()
+
     validate_technical_interview(doc, method)
     results = frappe.db.sql(
         """

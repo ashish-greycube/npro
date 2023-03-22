@@ -32,7 +32,7 @@ def get_data(filters):
                 'Technical interview', 'Technical interview- Rejected', 'Client CV Screening', 
                 'Client CV Screening- Accepted', 'Client CV Screening- Rejected', 'Client Interview', 
                 'Client interview-Rejected', 'Client Interview-rescheduled', 
-                'Client Interview-waiting for feedback', 'Rejected by candidate', 'Hold', 'Accepted'
+                'Client Interview-waiting for feedback', 'Rejected by Candidate', 'Hold', 'Accepted'
             )
         ),
         cv_shared as
@@ -42,7 +42,7 @@ def get_data(filters):
             where new_value in (
                 'Client CV Screening', 'Client CV Screening- Accepted', 'Client CV Screening- Rejected', 
                 'Client Interview', 'Client interview-Rejected', 'Client Interview-rescheduled', 
-                'Client Interview-waiting for feedback', 'Rejected by candidate', 'Hold', 'Accepted'
+                'Client Interview-waiting for feedback', 'Rejected by Candidate', 'Hold', 'Accepted'
             )
         ),
         cv_accepted_by_client as
