@@ -199,7 +199,20 @@ def on_update_consultant_onboarding(doc, method):
             (doc.job_applicant),
         )
 
-    if doc.status in ("Cancelled",):
+    if doc.boarding_status in ("Cancelled",):
+        if doc.job_applicant:
+            if frappe.db.exists(
+                "Job Applicant",
+                {"name": doc.job_applicant, "status": "Rejected by Candidate"},
+            ):
+                frappe.db.set_value(
+                    "Job Applicant",
+                    doc.job_applicant,
+                    "status",
+                    "Rejected by Candidate",
+                )
+                notify_update("Job Applicant", doc.job_applicant)
+
         # Job Offer Cancelled
         jo = frappe.db.get_value(
             "Job Offer", {"name": doc.job_offer, "status": ("!=", "Cancelled")}
@@ -243,17 +256,6 @@ def on_update_consultant_onboarding(doc, method):
                 )
 
         frappe.db.commit()
-
-
-def on_cancel_consultant_onboarding(doc, method):
-    if doc.job_applicant:
-        frappe.db.set_value(
-            "Job Applicant",
-            doc.job_applicant,
-            "status",
-            "Rejected by Candidate",
-        )
-        notify_update("Job Applicant", doc.job_applicant)
 
 
 def on_validate_interview(doc, method):

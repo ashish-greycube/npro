@@ -158,9 +158,7 @@ doc_events = {
         "on_update_after_submit": "npro.npro.doc_events.on_update_consultant_onboarding",
         "on_update": "npro.npro.doc_events.on_update_consultant_onboarding",
         "validate": "npro.npro.doc_events.on_validate_consultant_onboarding",
-    },
-    "Employee Onboarding": {
-        "on_cancel": "npro.npro.doc_events.on_cancel_consultant_onboarding",
+        # "on_cancel": "npro.npro.doc_events.on_cancel_consultant_onboarding",
     },
     "Communication": {
         "after_insert": "npro.npro.doc_events.after_insert_communication"
