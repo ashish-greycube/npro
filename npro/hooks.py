@@ -197,9 +197,9 @@ scheduler_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "npro.event.get_events"
-# }
+override_whitelisted_methods = {
+    "erpnext.hr.utils.get_boarding_status": "npro.npro.doc_events.get_boarding_status"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

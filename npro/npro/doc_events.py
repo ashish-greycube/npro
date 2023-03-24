@@ -279,3 +279,17 @@ def after_insert_communication(doc, method):
                 notify_update("Job Applicant", job_applicant)
     except Exception:
         frappe.log_error(frappe.get_traceback())
+
+
+@frappe.whitelist()
+def get_boarding_status(project):
+    status = "Pending"
+    if project:
+        doc = frappe.get_doc("Project", project)
+        if doc.status == "Cancelled":
+            return "Cancelled"
+        if flt(doc.percent_complete) > 0.0 and flt(doc.percent_complete) < 100.0:
+            status = "In Process"
+        elif flt(doc.percent_complete) == 100.0:
+            status = "Completed"
+        return status
