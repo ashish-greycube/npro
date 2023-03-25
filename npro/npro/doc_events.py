@@ -200,6 +200,7 @@ def on_update_consultant_onboarding(doc, method):
         )
 
     if doc.boarding_status in ("Cancelled",):
+        doc.db_set("docstatus", 2)
         if doc.job_applicant:
             if frappe.db.exists(
                 "Job Applicant",
@@ -235,7 +236,7 @@ def on_update_consultant_onboarding(doc, method):
                     "status": ("!=", "Cancelled"),
                 },
             ):
-                frappe.get_doc("Project", doc.project).db._set(
+                frappe.get_doc("Project", doc.project).db_set(
                     "status",
                     "Cancelled",
                     update_modified=True,
