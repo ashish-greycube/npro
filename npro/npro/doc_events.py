@@ -199,64 +199,69 @@ def on_update_consultant_onboarding(doc, method):
             (doc.job_applicant),
         )
 
-    if doc.boarding_status in ("Cancelled",):
-        doc.db_set("docstatus", 2)
-        if doc.job_applicant:
-            if frappe.db.exists(
+
+@frappe.whitelist()
+def cancel_consultant_onboarding(name):
+    # frappe.throw("ee")
+    doc = frappe.get_doc("Employee Onboarding", name)
+    frappe.set_value("Employee Onboarding", name, "boarding_status", "Cancelled")
+    frappe.db.set_value("Employee Onboarding", name, "docstatus", 2)
+    if doc.job_applicant:
+        if frappe.db.exists(
+            "Job Applicant",
+            {"name": doc.job_applicant, "status": "Rejected by Candidate"},
+        ):
+            frappe.db.set_value(
                 "Job Applicant",
-                {"name": doc.job_applicant, "status": "Rejected by Candidate"},
-            ):
-                frappe.db.set_value(
-                    "Job Applicant",
-                    doc.job_applicant,
-                    "status",
-                    "Rejected by Candidate",
-                )
-                notify_update("Job Applicant", doc.job_applicant)
+                doc.job_applicant,
+                "status",
+                "Rejected by Candidate",
+            )
+            notify_update("Job Applicant", doc.job_applicant)
 
-        # Job Offer Cancelled
-        jo = frappe.db.get_value(
-            "Job Offer", {"name": doc.job_offer, "status": ("!=", "Cancelled")}
-        )
-        if jo:
-            frappe.get_doc("Job Offer", jo).cancel()
+    # Job Offer Cancelled
+    jo = frappe.db.get_value(
+        "Job Offer", {"name": doc.job_offer, "status": ("!=", "Cancelled")}
+    )
+    if jo:
+        frappe.get_doc("Job Offer", jo).cancel()
 
-        # set applicant Rejected by Candidate
-        # frappe.flags.rejected_reasons = [
-        #     d.rejected_reason for d in doc.offer_rejection_reason_cf
-        # ]
+    # set applicant Rejected by Candidate
+    # frappe.flags.rejected_reasons = [
+    #     d.rejected_reason for d in doc.offer_rejection_reason_cf
+    # ]
 
-        # Open Tasks and Internal Project: status Cancelled
-        if doc.project:
-            if frappe.db.exists(
-                "Project",
-                {
-                    "name": doc.project,
-                    "project_type": "Internal",
-                    "status": ("!=", "Cancelled"),
-                },
-            ):
-                frappe.get_doc("Project", doc.project).db_set(
-                    "status",
-                    "Cancelled",
-                    update_modified=True,
-                    notify=True,
-                )
-            for task in frappe.db.get_list(
-                "Task",
-                {
-                    "project": doc.project,
-                    "status": ("not in", ["Cancelled", "Completed"]),
-                },
-            ):
-                frappe.get_doc("Task", task).db_set(
-                    "status",
-                    "Cancelled",
-                    update_modified=True,
-                    notify=True,
-                )
+    # Open Tasks and Internal Project: status Cancelled
+    if doc.project:
+        if frappe.db.exists(
+            "Project",
+            {
+                "name": doc.project,
+                "project_type": "Internal",
+                "status": ("!=", "Cancelled"),
+            },
+        ):
+            frappe.get_doc("Project", doc.project).db_set(
+                "status",
+                "Cancelled",
+                update_modified=True,
+                notify=True,
+            )
+        for task in frappe.db.get_list(
+            "Task",
+            {
+                "project": doc.project,
+                "status": ("not in", ["Cancelled", "Completed"]),
+            },
+        ):
+            frappe.get_doc("Task", task).db_set(
+                "status",
+                "Cancelled",
+                update_modified=True,
+                notify=True,
+            )
 
-        frappe.db.commit()
+    frappe.db.commit()
 
 
 def on_validate_interview(doc, method):
