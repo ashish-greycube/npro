@@ -224,23 +224,15 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
         reason.save()
 
     # Job Applicant
-    if not frappe.db.exists(
-        "Job Applicant",
-        {"name": doc.job_applicant, "status": "Rejected by Candidate"},
-    ):
-        frappe.db.set_value(
-            "Job Applicant",
-            doc.job_applicant,
-            "status",
-            "Rejected by Candidate",
+    applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
+    applicant.status = "Rejected by Candidate"
+    applicant.save()
+    for d in rejection_reasons:
+        reason = applicant.append(
+            "rejected_reason_cf", {"rejected_reason": d["rejected_reason"]}
         )
-        applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
-        for d in rejection_reasons:
-            reason = applicant.append(
-                "rejected_reason_cf", {"rejected_reason": d["rejected_reason"]}
-            )
-            reason.save()
-        notify_update("Job Applicant", doc.job_applicant)
+        reason.save()
+    notify_update("Job Applicant", doc.job_applicant)
 
     # Job Offer Cancelled
     if frappe.db.get_value(
