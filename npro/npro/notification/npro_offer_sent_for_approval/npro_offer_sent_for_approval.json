@@ -1,7 +1,7 @@
 {
  "attach_print": 0,
  "channel": "Email",
- "condition": "doc.status == \"Pending for Approval\"",
+ "condition": "doc.status == \"Sent for Approval\"",
  "creation": "2022-04-06 07:25:05.403831",
  "days_in_advance": 0,
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "idx": 0,
  "is_standard": 1,
  "message": "Hello,\n<br>\n<br>\nYou have received the below job offer for approval\n<br>\n<ul>\n<li> Job Offer : {{doc.name}} </li>\n<li> Applicant : {{doc.applicant_name}} </li\n<li> Job Title : {{doc.job_title_cf}} </li>\n<li> Customer  : {{doc.customer_cf}} </li>\n<li> Expected DOJ : {{doc.expected_doj_cf}} </li>\n<li> Offer Received for Approval On : {{doc.offer_sent_for_approval_date_cf}} </li>\n\n</ul>",
- "modified": "2022-05-02 14:54:45.423349",
+ "modified": "2023-03-27 10:39:41.013799",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Offer Sent for Approval",
