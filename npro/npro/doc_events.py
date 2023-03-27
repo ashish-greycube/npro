@@ -217,7 +217,16 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
     rejection_reasons = json.loads(rejection_reasons or "[]")
 
     doc = frappe.get_doc("Employee Onboarding", name)
+    existing_reasons = frappe.get_all(
+        "Npro Rejected Reason Detail",
+        filters={"parent": name},
+        fields=["rejected_reason"],
+        pluck="rejected_reason",
+    )
+
     for d in rejection_reasons:
+        if d["rejected_reason"] in existing_reasons:
+            continue
         reason = doc.append(
             "rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
         )
@@ -225,11 +234,21 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
 
     # Job Applicant
     applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
+    existing_reasons = frappe.get_all(
+        "Npro Rejected Reason Detail",
+        filters={"parent": doc.job_applicant},
+        fields=["rejected_reason"],
+        pluck="rejected_reason",
+    )
+
     for d in rejection_reasons:
+        if d["rejected_reason"] in existing_reasons:
+            continue
         reason = applicant.append(
             "rejected_reason_cf", {"rejected_reason": d["rejected_reason"]}
         )
         reason.save()
+
     applicant.status = "Rejected by Candidate"
     applicant.save()
     notify_update("Job Applicant", doc.job_applicant)
@@ -240,7 +259,16 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
     ):
         frappe.db.set_value("Job Offer", doc.job_offer, "status", "Rejected")
         offer = frappe.get_doc("Job Offer", doc.job_offer)
+        existing_reasons = frappe.get_all(
+            "Npro Rejected Reason Detail",
+            filters={"parent": doc.job_offer},
+            fields=["rejected_reason"],
+            pluck="rejected_reason",
+        )
+
         for d in rejection_reasons:
+            if d["rejected_reason"] in existing_reasons:
+                continue
             reason = offer.append(
                 "offer_rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
             )
