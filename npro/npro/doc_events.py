@@ -18,7 +18,7 @@ def on_validate_interview_feedback(doc, method):
 
 
 def on_validate_consultant_onboarding(doc, method):
-    make_status_log(doc, "status")
+    make_status_log(doc, "boarding_status")
 
 
 def on_submit_interview_feedback(doc, method):
