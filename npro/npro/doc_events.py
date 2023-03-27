@@ -120,24 +120,32 @@ def on_submit_job_offer(doc, method):
 
 def on_update_job_offer(doc, method):
     if doc.status == "Rejected":
-        # frappe.flags.rejected_reasons = [
-        #     d.rejected_reason for d in doc.offer_rejection_reason_cf
-        # ]
-
-        # Cancel Consultant Onboarding, by setting status = Cancelled
-        onboarding = frappe.db.get_value(
-            "Employee Onboarding", {"job_offer": doc.name, "docstatus": 1}
-        )
-        if onboarding:
-            frappe.get_doc("Employee Onboarding", onboarding).db_set(
-                "status",
-                "Cancelled",
-                update_modified=True,
-                notify=True,
+        # change Job Applicant status to 'Rejected by Candidate' and set rejection reason
+        if frappe.db.get_value(
+            "Job Applicant",
+            {"name": doc.job_applicant, "status": ("!=", "Rejected by Candidate")},
+        ):
+            frappe.set_value(
+                "Job Applicant", doc.job_applicant, "status", "Rejected by Candidate"
             )
+
+            for r in frappe.get_all(
+                "Npro Rejected Reason Detail",
+                filters={"parent": doc.name},
+                fields=["name", "rejected_reason"],
+            ):
+                reason = doc.append(
+                    "rejected_reason_cf", {"rejected_reason": r.rejected_reason}
+                )
+                reason.save()
 
 
 def on_validate_job_offer(doc, method):
+    if doc.db_get("status") == "Sent for Approval":
+        if doc.offer_approver_cf == frappe.session.user:
+            doc.offer_approved_by_cf = frappe.session.user
+        else:
+            frappe.throw(_("Not allowed to change Job Offer"))
     if doc.status == "Offer Approved":
         if not doc.offer_approver_cf:
             doc.offer_approver_cf = frappe.session.user
@@ -201,35 +209,51 @@ def on_update_consultant_onboarding(doc, method):
 
 
 @frappe.whitelist()
-def cancel_consultant_onboarding(name):
+def cancel_consultant_onboarding(name, rejection_reasons=""):
     # frappe.throw("ee")
-    doc = frappe.get_doc("Employee Onboarding", name)
     frappe.set_value("Employee Onboarding", name, "boarding_status", "Cancelled")
     frappe.db.set_value("Employee Onboarding", name, "docstatus", 2)
-    if doc.job_applicant:
-        if frappe.db.exists(
+
+    rejection_reasons = json.loads(rejection_reasons or "[]")
+
+    doc = frappe.get_doc("Employee Onboarding", name)
+    for d in rejection_reasons:
+        reason = doc.append(
+            "rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
+        )
+        reason.save()
+
+    # Job Applicant
+    if not frappe.db.exists(
+        "Job Applicant",
+        {"name": doc.job_applicant, "status": "Rejected by Candidate"},
+    ):
+        frappe.db.set_value(
             "Job Applicant",
-            {"name": doc.job_applicant, "status": "Rejected by Candidate"},
-        ):
-            frappe.db.set_value(
-                "Job Applicant",
-                doc.job_applicant,
-                "status",
-                "Rejected by Candidate",
+            doc.job_applicant,
+            "status",
+            "Rejected by Candidate",
+        )
+        applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
+        for d in rejection_reasons:
+            reason = applicant.append(
+                "rejected_reason_cf", {"rejected_reason": d["rejected_reason"]}
             )
-            notify_update("Job Applicant", doc.job_applicant)
+            reason.save()
+        notify_update("Job Applicant", doc.job_applicant)
 
     # Job Offer Cancelled
-    jo = frappe.db.get_value(
-        "Job Offer", {"name": doc.job_offer, "status": ("!=", "Cancelled")}
-    )
-    if jo:
-        frappe.get_doc("Job Offer", jo).cancel()
-
-    # set applicant Rejected by Candidate
-    # frappe.flags.rejected_reasons = [
-    #     d.rejected_reason for d in doc.offer_rejection_reason_cf
-    # ]
+    if frappe.db.get_value(
+        "Job Offer", {"name": doc.job_offer, "status": ("!=", "Rejected")}
+    ):
+        frappe.db.set_value("Job Offer", doc.job_offer, "status", "Rejected")
+        offer = frappe.get_doc("Job Offer", doc.job_offer)
+        for d in rejection_reasons:
+            reason = offer.append(
+                "offer_rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
+            )
+            reason.save()
+        frappe.get_doc("Job Offer", doc.job_offer).cancel()
 
     # Open Tasks and Internal Project: status Cancelled
     if doc.project:
