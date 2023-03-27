@@ -374,31 +374,6 @@ def on_update_job_opening(doc, method):
 
 
 def on_update_job_applicant(doc, method):
-    def _update_job_applicant_status():
-        offer = frappe.db.exists(
-            "Job Offer",
-            {"job_applicant": doc.name, "status": "Rejected", "docstatus": ("!=", 2)},
-        )
-        onboarding = frappe.db.exists(
-            "Employee Onboarding",
-            {"job_applicant": doc.name, "status": "Cancelled", "docstatus": ("!=", 2)},
-        )
-
-        if onboarding or offer:
-            doc.db_set("status", "Rejected by Candidate")
-            for r in frappe.get_all(
-                "Npro Rejected Reason Detail",
-                filters={"parent": ("in", [onboarding, offer])},
-                fields=["name", "rejected_reason"],
-            ):
-                reason = doc.append(
-                    "rejected_reason_cf", {"rejected_reason": r.rejected_reason}
-                )
-                reason.save()
-
-        frappe.db.commit()
-
-    _update_job_applicant_status()
 
     validate_technical_interview(doc, method)
     results = frappe.db.sql(

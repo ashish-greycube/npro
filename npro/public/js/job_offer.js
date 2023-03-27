@@ -8,7 +8,7 @@ frappe.ui.form.on("Job Offer", {
     if (!frm.doc.offer_approver_cf) {
       frm.set_value("offer_approver_cf", frappe.user.name);
     }
-    frm.trigger("toggle_offer_approver");
+    // frm.trigger("toggle_offer_approver");
   },
 
   toggle_offer_approver(frm) {
