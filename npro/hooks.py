@@ -98,8 +98,8 @@ after_migrate = "npro.install.after_migrate"
 # Override standard doctype classes
 
 override_doctype_class = {
-    # 	"ToDo": "custom_app.overrides.CustomToDo"
-    "Interview": "npro.overrides.custom_interview.CustomInterview"
+    "Interview": "npro.overrides.custom_interview.CustomInterview",
+    "Job Offer": "npro.overrides.custom_job_offer.CustomJobOffer",
 }
 
 # Document Events
