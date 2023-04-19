@@ -54,7 +54,7 @@ frappe.ui.form.on("Opportunity", {
       .then((r) => {
         let details = frm.doc.opportunity_consulting_detail_ct_cf,
           is_added = false;
-        if (details.length) {
+        if (details && details.length) {
           for (const d of details) {
             if (r.message.opportunity_technology_cf == d.project_name) {
               is_added = true;

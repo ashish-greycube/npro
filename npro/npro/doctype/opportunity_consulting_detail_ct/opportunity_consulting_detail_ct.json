@@ -121,7 +121,8 @@
    "fieldname": "job_opening",
    "fieldtype": "Link",
    "label": "Job Opening",
-   "options": "Job Opening"
+   "options": "Job Opening",
+   "unique": 1
   },
   {
    "fieldname": "employee_name",
@@ -133,7 +134,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-02-13 12:15:27.906817",
+ "modified": "2023-04-19 06:40:00.233627",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Opportunity Consulting Detail CT",

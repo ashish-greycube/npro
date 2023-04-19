@@ -28,6 +28,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "consultant.npro_technical_manager_cf",
    "fieldname": "npro_technical_manager",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -36,6 +37,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "consultant.customer_cf",
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
@@ -63,6 +65,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "consultant.client_reporting_manager_cf",
    "fieldname": "client_reporting_manager",
    "fieldtype": "Link",
    "label": "Client Reporting Manager",
@@ -91,7 +94,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-02-15 06:47:56.425334",
+ "modified": "2023-04-17 13:15:14.792304",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "Upcoming Planned Leaves",

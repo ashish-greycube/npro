@@ -1053,7 +1053,7 @@
    "in_preview": 0,
    "in_standard_filter": 0,
    "insert_after": "offer_released_date_cf",
-   "label": "Consultancy Fees Offered (INR)",
+   "label": "Monthly Consultancy Fees Offered (INR)",
    "length": 0,
    "mandatory_depends_on": "",
    "modified": "2022-04-08 16:37:25.473992",

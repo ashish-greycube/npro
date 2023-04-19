@@ -466,6 +466,15 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Upcoming Planned Leaves",
+   "link_to": "Upcoming Planned Leaves",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Consultant On Boarding Setup",
    "link_type": "DocType",
    "onboard": 0,
@@ -678,7 +687,7 @@
    "type": "Link"
   }
  ],
- "modified": "2022-08-31 00:38:25.417775",
+ "modified": "2023-04-18 09:25:13.192241",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro",
