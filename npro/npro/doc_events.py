@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
-import frappe, json
+import frappe
+import json
 from frappe import _
 from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
@@ -23,7 +24,8 @@ def on_validate_consultant_onboarding(doc, method):
 
 def on_submit_interview_feedback(doc, method):
     if not doc.result:
-        frappe.throw(_("Interview Feedback status has to be Cleared or Rejected"))
+        frappe.throw(
+            _("Interview Feedback status has to be Cleared or Rejected"))
     interview = frappe.get_doc("Interview", doc.interview)
     interview.status = doc.result
     interview.save()
@@ -57,7 +59,11 @@ def on_update_interview(doc, method):
         }.get(doc.status) or "Technical interview"
 
     if status:
-        frappe.db.set_value("Job Applicant", doc.job_applicant, "status", status)
+        frappe.db.set_value(
+            "Job Applicant",
+            doc.job_applicant,
+            "status",
+            status)
         frappe.db.commit()
         notify_update("Job Applicant", doc.job_applicant)
 
@@ -67,7 +73,8 @@ def on_validate_lead(doc, method):
 
 
 def on_update_lead(doc, method):
-    # Set Contact details in Lead update as Contact is created by ErpNext before_insert
+    # Set Contact details in Lead update as Contact is created by ErpNext
+    # before_insert
     set_contact_details(doc)
 
 
@@ -95,7 +102,7 @@ def set_contact_details(doc):
 
 
 def on_submit_job_offer(doc, method):
-    if not doc.status in ("Accepted", "Rejected"):
+    if doc.status not in ("Accepted", "Rejected"):
         frappe.throw(
             _("Job Offer cannot be submitted in status {0}").format(doc.status)
         )
@@ -115,19 +122,24 @@ def on_submit_job_offer(doc, method):
                 ):
                     missing.append(att.attachment_type)
         if missing:
-            frappe.throw(_("Attachments missing: {0}").format(",".join(missing)))
+            frappe.throw(
+                _("Attachments missing: {0}").format(
+                    ",".join(missing)))
 
 
 def on_update_job_offer(doc, method):
     if doc.status == "Rejected":
-        # change Job Applicant status to 'Rejected by Candidate' and set rejection reason
+        # change Job Applicant status to 'Rejected by Candidate' and set
+        # rejection reason
         if frappe.db.get_value(
-            "Job Applicant",
-            {"name": doc.job_applicant, "status": ("!=", "Rejected by Candidate")},
-        ):
+            "Job Applicant", {
+                "name": doc.job_applicant, "status": (
+                "!=", "Rejected by Candidate")}, ):
             frappe.set_value(
-                "Job Applicant", doc.job_applicant, "status", "Rejected by Candidate"
-            )
+                "Job Applicant",
+                doc.job_applicant,
+                "status",
+                "Rejected by Candidate")
 
             for r in frappe.get_all(
                 "Npro Rejected Reason Detail",
@@ -138,6 +150,7 @@ def on_update_job_offer(doc, method):
                     "rejected_reason_cf", {"rejected_reason": r.rejected_reason}
                 )
                 reason.save()
+            frappe.db.commit()
 
 
 def on_validate_job_offer(doc, method):
@@ -157,10 +170,12 @@ def on_validate_employee(doc, method):
 
     # copy attachments from job offer to employee
     attachments = [d.file_name for d in get_attachments(doc.doctype, doc.name)]
-    for d in frappe.get_all("Job Offer", {"job_applicant": doc.job_applicant}, limit=1):
+    for d in frappe.get_all(
+            "Job Offer", {
+            "job_applicant": doc.job_applicant}, limit=1):
         for att in get_attachments("Job Offer", d.name):
             print(att)
-            if not att.file_name in attachments:
+            if att.file_name not in attachments:
                 _file = frappe.copy_doc(frappe.get_doc("File", att.name))
                 _file.attached_to_doctype = "Employee"
                 _file.attached_to_name = doc.name
@@ -195,11 +210,11 @@ def on_update_consultant_onboarding(doc, method):
     if doc.date_of_joining:
         frappe.db.sql(
             """
-            update `tabJob Applicant` tja 
-            inner join `tabJob Opening` tjo on tjo.name = tja.job_title 
-            inner join `tabOpportunity` topp on topp.name = tjo.opportunity_cf 
+            update `tabJob Applicant` tja
+            inner join `tabJob Opening` tjo on tjo.name = tja.job_title
+            inner join `tabOpportunity` topp on topp.name = tjo.opportunity_cf
             inner join `tabOpportunity Consulting Detail CT` tocdc on tocdc.parent = topp.name
-                and tocdc.job_opening = tjo.name 
+                and tocdc.job_opening = tjo.name
             set tocdc.stage = 'Candidate On-Boarded',
                 tocdc.employee_name = tja.applicant_name
             where tja.name = %s
@@ -211,7 +226,11 @@ def on_update_consultant_onboarding(doc, method):
 @frappe.whitelist()
 def cancel_consultant_onboarding(name, rejection_reasons=""):
     # frappe.throw("ee")
-    frappe.set_value("Employee Onboarding", name, "boarding_status", "Cancelled")
+    frappe.set_value(
+        "Employee Onboarding",
+        name,
+        "boarding_status",
+        "Cancelled")
     frappe.db.set_value("Employee Onboarding", name, "docstatus", 2)
 
     rejection_reasons = json.loads(rejection_reasons or "[]")
@@ -270,8 +289,8 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
             if d["rejected_reason"] in existing_reasons:
                 continue
             reason = offer.append(
-                "offer_rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
-            )
+                "offer_rejection_reason_cf", {
+                    "rejected_reason": d["rejected_reason"]})
             reason.save()
         frappe.get_doc("Job Offer", doc.job_offer).cancel()
 
@@ -338,7 +357,9 @@ def get_boarding_status(project):
         doc = frappe.get_doc("Project", project)
         if doc.status == "Cancelled":
             return "Cancelled"
-        if flt(doc.percent_complete) > 0.0 and flt(doc.percent_complete) < 100.0:
+        if flt(
+                doc.percent_complete) > 0.0 and flt(
+                doc.percent_complete) < 100.0:
             status = "In Process"
         elif flt(doc.percent_complete) == 100.0:
             status = "Completed"

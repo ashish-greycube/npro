@@ -1,5 +1,11 @@
 frappe.provide("npro.utils");
 
+$(document).on("form-refresh", function (e, frm) {
+  console.log(frm);
+  window.frm = frm;
+  window.doc = frm.doc;
+});
+
 Object.assign(npro.utils, {
   TIMESPAN_OPTIONS: [
     "Last Week",
@@ -102,7 +108,7 @@ frappe.provide("frappe.utils");
 
 Object.assign(frappe.utils, {
   check_numeric: function (fieldname, frm, raise) {
-    if (isNaN(frm.doc[fieldname])) {
+    if (frm.doc[fieldname] && isNaN(frm.doc[fieldname])) {
       let args = {
         title: __("Invalid {0}.", [frm.fields_dict[fieldname].df.label.bold()]),
         message: __("Please enter a numeric value.."),
