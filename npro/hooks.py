@@ -155,10 +155,8 @@ doc_events = {
         "on_update": "npro.npro.doc_events.on_update_task",
     },
     "Employee Onboarding": {
-        "on_update_after_submit": "npro.npro.doc_events.on_update_consultant_onboarding",
-        "on_update": "npro.npro.doc_events.on_update_consultant_onboarding",
+        "after_insert": "npro.npro.doc_events.after_insert_consultant_onboarding",
         "validate": "npro.npro.doc_events.on_validate_consultant_onboarding",
-        # "on_cancel": "npro.npro.doc_events.on_cancel_consultant_onboarding",
     },
     "Communication": {
         "after_insert": "npro.npro.doc_events.after_insert_communication"
@@ -207,54 +205,48 @@ override_whitelisted_methods = {
 # override_doctype_dashboards = {
 # 	"Task": "npro.task.get_dashboard_data"
 # }
-fixtures = [
-    {
-        "dt": "Property Setter",
-        "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]],
-    },
-    {
-        "dt": "Lead Source",
-        "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Tele calling referral",
-                    "Tele calling",
-                    "LinkedIn",
-                    "Campaign",
-                    "Mass Mailing",
-                    "Cold Calling",
-                    "Advertisement",
-                    "Reference",
-                    "Existing Customer",
-                ],
+fixtures = [{"dt": "Property Setter",
+             "filters": [["name",
+                          "in",
+                          ["Opportunity-Allow events in timeline"]]],
+             },
+            {"dt": "Lead Source",
+             "filters": [["name",
+                          "in",
+                          ["Tele calling referral",
+                           "Tele calling",
+                           "LinkedIn",
+                           "Campaign",
+                           "Mass Mailing",
+                           "Cold Calling",
+                           "Advertisement",
+                           "Reference",
+                           "Existing Customer",
+                           ],
+                          ]],
+             },
+            {"dt": "Opportunity Type",
+             "filters": [["name",
+                          "in",
+                          ["Project",
+                           "Consulting"]]]},
+            {"dt": "Sales Stage",
+             "filters": [["name",
+                          "in",
+                          ["Completed",
+                           "Discovery Call",
+                           "NPro Candidate Sourcing",
+                           "Client Interview",
+                           "Client CV Screening",
+                           "Candidate Approved",
+                           "New",
+                           "Negotiation",
+                           "Proposal Sent",
+                           "Needs Analysis",
+                           ],
+                          ]],
+             },
             ]
-        ],
-    },
-    {"dt": "Opportunity Type", "filters": [["name", "in", ["Project", "Consulting"]]]},
-    {
-        "dt": "Sales Stage",
-        "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Completed",
-                    "Discovery Call",
-                    "NPro Candidate Sourcing",
-                    "Client Interview",
-                    "Client CV Screening",
-                    "Candidate Approved",
-                    "New",
-                    "Negotiation",
-                    "Proposal Sent",
-                    "Needs Analysis",
-                ],
-            ]
-        ],
-    },
-]
 # exempt linked doctypes from being automatically cancelled
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]

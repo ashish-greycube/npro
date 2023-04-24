@@ -5,7 +5,7 @@ from frappe import _
 from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
-    make_child_status_log,
+    get_last_status
 )
 from npro.api import notify_update
 
@@ -37,35 +37,45 @@ def on_submit_interview_feedback(doc, method):
 
 
 def on_update_interview(doc, method):
-    status = ""
-    if doc.interview_type_cf == "Client Interview":
-        is_internal_hiring = cint(
-            frappe.db.get_value(
-                "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
-            )
+    status_log = get_last_status("Interview", "status")
+    is_internal_hiring = cint(
+        frappe.db.get_value(
+            "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
         )
-        status = {
-            "Under Review": "Hold",
-            "Cleared": "Accepted",
-            "Rejected": "Rejected"
-            if is_internal_hiring
-            else "Client interview-Rejected",
-        }.get(doc.status)
+    )
 
-    elif doc.interview_type_cf == "Technical Interview":
-        status = {
-            "Cleared": "Client CV Screening",
-            "Rejected": "Technical interview-Rejected",
-        }.get(doc.status) or "Technical interview"
+    ja_status = None
+    if status_log and not status_log.old_value == doc.status:
+        if doc.interview_type_cf == "Client Interview" and not is_internal_hiring:
+            ja_status = {
+                "Pending": "Client Interview",
+                "Rejected": 'Client interview-Rejected',
+                "Under Review": "Hold",
+                "Cleared": "Accepted",
+            }.get(doc.status)
+        elif doc.interview_type_cf == "Technical Interview" and not is_internal_hiring:
+            ja_status = {
+                "Pending": 'Technical interview',
+                "Rejected": 'Technical interview- Rejected',
+                "Under Review": "Hold",
+                "Cleared": 'Technical Interview- Accepted',
+            }.get(doc.status)
+        elif doc.interview_type_cf == "Technical Interview" and is_internal_hiring:
+            ja_status = {
+                "Pending": 'Technical interview',
+                "Rejected": 'Technical interview- Rejected',
+                "Under Review": "Hold",
+                "Cleared": "Accepted",
+            }.get(doc.status)
 
-    if status:
-        frappe.db.set_value(
-            "Job Applicant",
-            doc.job_applicant,
-            "status",
-            status)
-        frappe.db.commit()
-        notify_update("Job Applicant", doc.job_applicant)
+        if ja_status:
+            frappe.db.set_value(
+                "Job Applicant",
+                doc.job_applicant,
+                "status",
+                ja_status)
+            frappe.db.commit()
+            notify_update("Job Applicant", doc.job_applicant)
 
 
 def on_validate_lead(doc, method):
@@ -206,7 +216,7 @@ def on_update_task(doc, method):
         frappe.db.commit()
 
 
-def on_update_consultant_onboarding(doc, method):
+def after_insert_consultant_onboarding(doc, method):
     if doc.date_of_joining:
         frappe.db.sql(
             """
@@ -225,13 +235,25 @@ def on_update_consultant_onboarding(doc, method):
 
 @frappe.whitelist()
 def cancel_consultant_onboarding(name, rejection_reasons=""):
-    # frappe.throw("ee")
+    '''Cannot cancel Employee On Boarding without cancelling linked docs.
+    So setting status to Cancelled and changing docstatus to 2'''
     frappe.set_value(
         "Employee Onboarding",
         name,
         "boarding_status",
         "Cancelled")
     frappe.db.set_value("Employee Onboarding", name, "docstatus", 2)
+
+    status_doc = frappe.new_doc("NPro Status Log")
+    status_doc.update({"doc_type": "Employee Onboarding",
+                       "doc_name": name,
+                       "docfield_name": "boarding_status",
+                       "old_value": frappe.db.get_value("Employee Onboarding",
+                                                        name,
+                                                        "boarding_status"),
+                       "new_value": "Cancelled",
+                       })
+    status_doc.save(ignore_permissions=True)
 
     rejection_reasons = json.loads(rejection_reasons or "[]")
 

@@ -3,7 +3,6 @@ import frappe
 import json
 from frappe.utils import cint
 from npro.npro.doctype.npro_status_log.npro_status_log import (
-    make_status_log,
     make_child_status_log,
 )
 
