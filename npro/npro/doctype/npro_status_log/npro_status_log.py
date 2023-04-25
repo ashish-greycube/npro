@@ -59,11 +59,15 @@ def make_status_log(doc, docfield_name):
     frappe.db.commit()
 
 
-def get_last_status(doc_type, docfield_name):
+def get_last_status(doc_type, doc_name, docfield_name="status"):
     return frappe.db.get_value(
         "NPro Status Log",
         filters={
-            "doc_type": "User"},
+            "doc_type": doc_type,
+            "doc_name": doc_name,
+            "docfield_name": docfield_name
+
+        },
         order_by="creation desc",
         fieldname=['old_value', 'new_value'], as_dict=True
     )

@@ -131,7 +131,7 @@ doc_events = {
     "Job Offer": {
         "on_submit": "npro.npro.doc_events.on_submit_job_offer",
         "validate": "npro.npro.doc_events.on_validate_job_offer",
-        "on_update": "npro.npro.doc_events.on_update_job_offer",
+        "on_update_after_submit": "npro.npro.doc_events.on_update_after_submit_job_offer",
     },
     "Job Opening": {
         "autoname": "npro.api.autoname_job_opening",

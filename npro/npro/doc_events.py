@@ -37,7 +37,7 @@ def on_submit_interview_feedback(doc, method):
 
 
 def on_update_interview(doc, method):
-    status_log = get_last_status("Interview", "status")
+    status_log = get_last_status("Interview", doc.name)
     is_internal_hiring = cint(
         frappe.db.get_value(
             "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
@@ -137,14 +137,14 @@ def on_submit_job_offer(doc, method):
                     ",".join(missing)))
 
 
-def on_update_job_offer(doc, method):
+def on_update_after_submit_job_offer(doc, method):
     if doc.status == "Rejected":
         # change Job Applicant status to 'Rejected by Candidate' and set
         # rejection reason
         if frappe.db.get_value(
             "Job Applicant", {
                 "name": doc.job_applicant, "status": (
-                "!=", "Rejected by Candidate")}, ):
+                "!=", "Rejected by Candidate")}):
             frappe.set_value(
                 "Job Applicant",
                 doc.job_applicant,
@@ -156,10 +156,12 @@ def on_update_job_offer(doc, method):
                 filters={"parent": doc.name},
                 fields=["name", "rejected_reason"],
             ):
-                reason = doc.append(
-                    "rejected_reason_cf", {"rejected_reason": r.rejected_reason}
-                )
-                reason.save()
+                frappe.get_doc({"doctype": "Npro Rejected Reason Detail",
+                                "parent": doc.job_applicant,
+                                "parentfield": "rejected_reason_cf",
+                                "parenttype": "Job Applicant",
+                                "rejected_reason": r.rejected_reason
+                                }).insert()
             frappe.db.commit()
 
 
