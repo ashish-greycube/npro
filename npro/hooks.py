@@ -171,14 +171,13 @@ scheduler_events = {
         "npro.npro.report.lead_status_reminder.lead_status_reminder.send_reminder",
         "npro.npro.report.opportunity_sales_stage_reminder.opportunity_sales_stage_reminder.send_reminder",
         "npro.npro.report.customer_contactwise_communication_frequency_alert.customer_contactwise_communication_frequency_alert.send_reminder",
-        "npro.utils.set_client_interview_waiting_for_feedback",
-    ]
+    ],
     # 	"all": [
     # 		"npro.tasks.all"
     # 	],
-    # 	"hourly": [
-    # 		"npro.tasks.hourly"
-    # 	],
+    "hourly": [
+        "npro.utils.set_client_interview_waiting_for_feedback",
+    ],
     # 	"weekly": [
     # 		"npro.tasks.weekly"
     # 	]
@@ -205,48 +204,54 @@ override_whitelisted_methods = {
 # override_doctype_dashboards = {
 # 	"Task": "npro.task.get_dashboard_data"
 # }
-fixtures = [{"dt": "Property Setter",
-             "filters": [["name",
-                          "in",
-                          ["Opportunity-Allow events in timeline"]]],
-             },
-            {"dt": "Lead Source",
-             "filters": [["name",
-                          "in",
-                          ["Tele calling referral",
-                           "Tele calling",
-                           "LinkedIn",
-                           "Campaign",
-                           "Mass Mailing",
-                           "Cold Calling",
-                           "Advertisement",
-                           "Reference",
-                           "Existing Customer",
-                           ],
-                          ]],
-             },
-            {"dt": "Opportunity Type",
-             "filters": [["name",
-                          "in",
-                          ["Project",
-                           "Consulting"]]]},
-            {"dt": "Sales Stage",
-             "filters": [["name",
-                          "in",
-                          ["Completed",
-                           "Discovery Call",
-                           "NPro Candidate Sourcing",
-                           "Client Interview",
-                           "Client CV Screening",
-                           "Candidate Approved",
-                           "New",
-                           "Negotiation",
-                           "Proposal Sent",
-                           "Needs Analysis",
-                           ],
-                          ]],
-             },
+fixtures = [
+    {
+        "dt": "Property Setter",
+        "filters": [["name", "in", ["Opportunity-Allow events in timeline"]]],
+    },
+    {
+        "dt": "Lead Source",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Tele calling referral",
+                    "Tele calling",
+                    "LinkedIn",
+                    "Campaign",
+                    "Mass Mailing",
+                    "Cold Calling",
+                    "Advertisement",
+                    "Reference",
+                    "Existing Customer",
+                ],
             ]
+        ],
+    },
+    {"dt": "Opportunity Type", "filters": [["name", "in", ["Project", "Consulting"]]]},
+    {
+        "dt": "Sales Stage",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Completed",
+                    "Discovery Call",
+                    "NPro Candidate Sourcing",
+                    "Client Interview",
+                    "Client CV Screening",
+                    "Candidate Approved",
+                    "New",
+                    "Negotiation",
+                    "Proposal Sent",
+                    "Needs Analysis",
+                ],
+            ]
+        ],
+    },
+]
 # exempt linked doctypes from being automatically cancelled
 #
 # auto_cancel_exempted_doctypes = ["Auto Repeat"]

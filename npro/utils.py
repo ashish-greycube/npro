@@ -142,20 +142,20 @@ def update_job_applicant_status_client_cv_screening(applicants):
 
 
 def set_client_interview_waiting_for_feedback():
-    """Daily cron for interviews in status Pending"""
-    for d in frappe.db.get_all(
-        "Interview",
-        {
-            "status": "Pending",
-            "docstatus": ["!=", 2],
-            "scheduled_on": ["<", today()],
-        },
-        ["job_applicant"],
-    ):
-        frappe.db.set_value(
-            "Job Applicant",
-            d.job_applicant,
-            "status",
-            "Client Interview-waiting for feedback",
-        )
+    """Hourly cron for interviews in status Pending"""
+
+    frappe.db.sql(
+        """
+        update `tabJob Applicant` 
+        set status = 'Client Interview-waiting for feedback'
+        where name in 
+        (
+            select job_applicant  
+            from tabInterview ti 
+            where status = 'Pending' and docstatus <> 2 
+            and ADDTIME(scheduled_on, to_time) < %s
+        )""",
+        frappe.utils.now(),
+    )
+
     frappe.db.commit()
