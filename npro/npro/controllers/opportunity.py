@@ -21,6 +21,7 @@ def on_update_opportunity(doc, method):
                 jo.customer_contact_cf = doc.contact_person
             if d.project_name:
                 jo.opportunity_technology_cf = d.project_name
+                jo.job_title = d.project_name
 
             # set JO status to Closed if Opp requirement is Lost
             if d.stage == "Lost" and not jo.status == "Lost":

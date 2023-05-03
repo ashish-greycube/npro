@@ -32,9 +32,9 @@ def on_update_opportunity(doc, method):
     # send email for job creation
 
     notification = (
-        frappe.db.get_single_value(
-            "NPro Settings",
-            "candidate_sourcing_notification") or "")
+        frappe.db.get_single_value("NPro Settings", "candidate_sourcing_notification")
+        or ""
+    )
 
     if notification:
         job_openings = [
@@ -67,15 +67,16 @@ def on_validate_opportunity(doc, method):
 
 def validate_requirement_unique_job_opening(doc, method):
     job_openings = [
-        d.job_opening for d in doc.opportunity_consulting_detail_ct_cf if d.job_opening]
+        d.job_opening for d in doc.opportunity_consulting_detail_ct_cf if d.job_opening
+    ]
 
     from itertools import groupby
 
     for key, group in groupby(sorted(job_openings)):
         if len(list(group)) > 1:
             frappe.throw(
-                "Job Opening '%s' must be unique in requirements." %
-                (frappe.bold(key)))
+                "Job Opening '%s' must be unique in requirements." % (frappe.bold(key))
+            )
 
 
 def validate_requirement_stage(doc, method):
@@ -91,10 +92,9 @@ def validate_requirement_stage(doc, method):
         ]:
             if not d.job_opening:
                 invalid_stage.append(
-                    "Row #%s: Stage for '%s' cannot be set to '%s' without a Job Opening." %
-                    (d.idx, frappe.bold(
-                        d.project_name), frappe.bold(
-                        d.stage)))
+                    "Row #%s: Stage for '%s' cannot be set to '%s' without a Job Opening."
+                    % (d.idx, frappe.bold(d.project_name), frappe.bold(d.stage))
+                )
 
     if invalid_stage:
         frappe.throw(",".join(invalid_stage))
@@ -112,9 +112,8 @@ def opportunity_cost_calculation(self, method):
                 frappe.throw(
                     title="Incorrect stage in Opportunity Consulting Detail",
                     msg="Row #{0}, stage is {1}. It should be either Won or Lost or Candidate On-Boarded. Please correct it.".format(
-                        frappe.bold(
-                            row.idx),
-                        row.stage),
+                        frappe.bold(row.idx), row.stage
+                    ),
                 )
     elif self.opportunity_type == "Project":
         for row in self.opportunity_project_detail_ct_cf:
@@ -124,9 +123,8 @@ def opportunity_cost_calculation(self, method):
                 frappe.throw(
                     title="Incorrect stage in Opportunity Project Detail",
                     msg="Row #{0}, stage is {1}. It should be either Won or Lost. Please correct it.".format(
-                        frappe.bold(
-                            row.idx),
-                        row.stage),
+                        frappe.bold(row.idx), row.stage
+                    ),
                 )
 
     # calculate per row amount for  Consulting
@@ -157,9 +155,8 @@ def opportunity_cost_calculation(self, method):
     self.won_amount_cf = child_table_won_amount
     self.lost_amount_cf = child_table_lost_amount
     self.opportunity_amount = flt(
-        child_table_grand_total -
-        child_table_won_amount -
-        child_table_lost_amount)
+        child_table_grand_total - child_table_won_amount - child_table_lost_amount
+    )
 
 
 @frappe.whitelist()
@@ -218,13 +215,7 @@ def remove_standard_crm_values():
 
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
-def contact_for_customer_query(
-        doctype,
-        txt,
-        searchfield,
-        start,
-        page_len,
-        filters):
+def contact_for_customer_query(doctype, txt, searchfield, start, page_len, filters):
     """returns Contacts linked to Customer of filters.contact"""
     filters["txt"] = "%" + txt + "%"
     return frappe.db.sql(
@@ -248,14 +239,7 @@ def contact_for_customer_query(
 
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
-def get_contacts_for_customer(
-        doctype,
-        txt,
-        searchfield,
-        start,
-        page_len,
-        filters):
-
+def get_contacts_for_customer(doctype, txt, searchfield, start, page_len, filters):
     filters["txt"] = "%%{}%%".format(txt)
     return frappe.db.sql(
         """
@@ -285,16 +269,12 @@ def create_event_for_interview(doc):
     )
 
     starts_on = get_datetime(
-        "{0} {1}".format(
-            getdate(
-                doc.scheduled_on).strftime("%Y-%m-%d"),
-            doc.from_time))
+        "{0} {1}".format(getdate(doc.scheduled_on).strftime("%Y-%m-%d"), doc.from_time)
+    )
 
     ends_on = get_datetime(
-        "{0} {1}".format(
-            getdate(
-                doc.scheduled_on).strftime("%Y-%m-%d"),
-            doc.to_time))
+        "{0} {1}".format(getdate(doc.scheduled_on).strftime("%Y-%m-%d"), doc.to_time)
+    )
 
     attendees = [d.interviewer for d in doc.interview_details]
 
@@ -335,11 +315,7 @@ def attach_interview_ics(doc):
         "YYYYMMDDThhmmss",
     )
 
-    attendees = [
-        frappe.db.get_value(
-            "Job Applicant",
-            doc.job_applicant,
-            "email_id")]
+    attendees = [frappe.db.get_value("Job Applicant", doc.job_applicant, "email_id")]
     for i in doc.interview_details:
         attendees.append(i.interviewer)
     doc.attendees = "\n".join(
@@ -348,8 +324,7 @@ def attach_interview_ics(doc):
             for x in attendees
         ]
     )
-    ics_file = frappe.render_template(
-        "templates/includes/interview_ics.html", doc)
+    ics_file = frappe.render_template("templates/includes/interview_ics.html", doc)
     # print(ics_file)
 
     _file = frappe.get_doc(
@@ -401,31 +376,48 @@ def on_update_job_opening(doc, method):
 
 
 def on_update_job_applicant(doc, method):
-
     validate_technical_interview(doc, method)
-    results = frappe.db.sql(
+
+    for d in frappe.db.sql(
         """
-        update `tabOpportunity Consulting Detail CT` ocd
-        inner join
-        (
-            select
-            opportunity_consulting_stage , tja.job_title
-            from `tabOpportunity Job Applicant Status Priority Mapping` tmap
-            inner join `tabJob Applicant` tja on tja.status = tmap.job_applicant_status
-            where tja.job_title = %s
-            order by priority
-            limit 1
-        ) t1 on ocd.job_opening = t1.job_title
-        set ocd.stage = t1.opportunity_consulting_stage
+    select 
+        tocd.name detail_name ,
+        tocd.stage , tja.job_title , toj.opportunity_consulting_stage ,
+        tocd.parent opportunity
+    from `tabOpportunity Consulting Detail CT` tocd
+    inner join `tabJob Applicant` tja on tja.job_title = tocd.job_opening 
+    inner join `tabOpportunity Job Applicant Status Priority Mapping` toj 
+        on toj.job_applicant_status = tja.status 
+    where tja.job_title = %s
     """,
         (doc.job_title),
-    )
+        as_dict=True,
+    ):
+        frappe.db.set_value(
+            "Opportunity Consulting Detail CT",
+            d.detail_name,
+            "stage",
+            d.opportunity_consulting_stage,
+        )
+        if not d.stage == d.opportunity_consulting_stage:
+            # make log for tabOpportunity Consulting Detail CT
+            frappe.get_doc(
+                {
+                    "doctype": "NPro Status Log",
+                    "doc_type": "Opportunity",
+                    "doc_name": d.opportunity,
+                    "docfield_name": "opportunity_consulting_detail_ct_cf",
+                    "child_doc_type": d.doctype,
+                    "child_doc_name": d.name,
+                    "child_docfield_name": "status",
+                    "old_value": d.stage,
+                    "new_value": d.opportunity_consulting_stage,
+                }
+            ).save(ignore_permissions=True)
 
     for d in frappe.get_all(
-            "Job Opening",
-            filters={
-                "name": doc.job_title},
-            fields=["opportunity_cf"]):
+        "Job Opening", filters={"name": doc.job_title}, fields=["opportunity_cf"]
+    ):
         if d.opportunity_cf:
             # notify so doc is reloaded in client
             notify_update("Opportunity", d.opportunity_cf)
@@ -439,8 +431,9 @@ def validate_technical_interview(doc, method):
         ):
             frappe.throw(
                 _("No Interview of type 'Technical Interview' found for {0}").format(
-                    frappe.bold(
-                        doc.name)))
+                    frappe.bold(doc.name)
+                )
+            )
 
 
 def notify_sales_stage_update(doc, method):
@@ -449,7 +442,8 @@ def notify_sales_stage_update(doc, method):
     Has to be done in validation, because in on_update we will not know if stage value hsa changed
     """
     notification = frappe.db.get_single_value(
-        "NPro Settings", "opportunity_consulting_detail_stage_update_notification")
+        "NPro Settings", "opportunity_consulting_detail_stage_update_notification"
+    )
 
     if notification:
         for d in doc.opportunity_consulting_detail_ct_cf:
