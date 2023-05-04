@@ -78,10 +78,12 @@ frappe.ui.form.on("Job Offer", {
   },
 
   validate: function (frm) {
-    if (frm.doc.status == "Sent for Approval") {
+    if (frm.doc.status == "Offer Approved") {
       if (frm.doc.offer_approver_cf !== frm.doc.offer_approved_by_cf) {
         frappe.throw(
-          __("Offer in status 'Sent For Approval' cannot be changed ")
+          __(
+            "Cannot save for status 'Offer Approved', as the Offer Approved By is not same as Offer Approver."
+          )
         );
       }
     }
