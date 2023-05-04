@@ -1,24 +1,24 @@
 frappe.ui.form.on("Job Offer", {
   refresh: function (frm) {
     frm.events.add_custom_buttons(frm);
-    frm.trigger("toggle_offer_approver");
-  },
-
-  status(frm) {
-    if (!frm.doc.offer_approver_cf) {
-      frm.set_value("offer_approver_cf", frappe.user.name);
-    }
     // frm.trigger("toggle_offer_approver");
   },
 
-  toggle_offer_approver(frm) {
-    if (
-      !frm.doc.offer_approver_cf ||
-      frm.doc.offer_approver_cf == frappe.user.name
-    ) {
-      frm.set_df_property("offer_approver_cf", "disabled", 1);
-    }
-  },
+  // status(frm) {
+  //   if (!frm.doc.offer_approver_cf) {
+  //     frm.set_value("offer_approver_cf", frappe.user.name);
+  //   }
+  //   frm.trigger("toggle_offer_approver");
+  // },
+
+  // toggle_offer_approver(frm) {
+  //   if (
+  //     !frm.doc.offer_approver_cf ||
+  //     frm.doc.offer_approver_cf == frappe.user.name
+  //   ) {
+  //     frm.set_df_property("offer_approver_cf", "disabled", 1);
+  //   }
+  // },
 
   add_custom_buttons(frm) {
     frm.remove_custom_button("Create Employee");
