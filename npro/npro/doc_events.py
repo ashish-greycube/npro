@@ -166,14 +166,14 @@ def on_update_after_submit_job_offer(doc, method):
 
 
 def on_validate_job_offer(doc, method):
-    if doc.db_get("status") == "Sent for Approval":
-        if doc.offer_approver_cf == frappe.session.user:
-            doc.offer_approved_by_cf = frappe.session.user
-        else:
-            frappe.throw(_("Not allowed to change Job Offer"))
-    if doc.status == "Offer Approved":
-        if not doc.offer_approver_cf:
-            doc.offer_approver_cf = frappe.session.user
+    # if doc.db_get("status") == "Sent for Approval":
+    #     if doc.offer_approver_cf == frappe.session.user:
+    #         doc.offer_approved_by_cf = frappe.session.user
+    #     else:
+    #         frappe.throw(_("Not allowed to change Job Offer"))
+    # if doc.status == "Offer Approved":
+    #     if not doc.offer_approver_cf:
+    #         doc.offer_approver_cf = frappe.session.user
     make_status_log(doc, "status")
 
 
