@@ -275,6 +275,21 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
         )
         reason.save()
 
+
+    # set consultant name null in Opportunity Consultant detail
+    for d in frappe.db.sql(
+        """
+        select name , parent
+        from `tabOpportunity Consulting Detail CT`
+        where job_opening = %s and employee_name = %s
+    """,
+        (applicant.job_title, applicant.applicant_name),
+    ):
+        frappe.db.set_value(
+            "Opportunity Consulting Detail CT", d[0], "employee_name", None
+        )
+        frappe.get_doc("Opportunity", d[1]).reload()
+
     # Job Applicant
     applicant = frappe.get_doc("Job Applicant", doc.job_applicant)
     existing_reasons = frappe.get_all(
