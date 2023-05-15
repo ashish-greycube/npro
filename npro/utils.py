@@ -148,7 +148,7 @@ def set_client_interview_waiting_for_feedback():
         """
         update `tabJob Applicant` 
         set status = 'Client Interview-waiting for feedback'
-        where name in 
+        where interview_type_cf = 'Client Interview' and name in 
         (
             select job_applicant  
             from tabInterview ti 
