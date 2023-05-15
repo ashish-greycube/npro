@@ -148,11 +148,12 @@ def set_client_interview_waiting_for_feedback():
         """
         update `tabJob Applicant` 
         set status = 'Client Interview-waiting for feedback'
-        where interview_type_cf = 'Client Interview' and name in 
+        where name in 
         (
             select job_applicant  
             from tabInterview ti 
             where status = 'Pending' and docstatus <> 2 
+            and interview_type_cf = 'Client Interview'
             and ADDTIME(scheduled_on, to_time) < %s
         )""",
         frappe.utils.now(),
