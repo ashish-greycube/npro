@@ -65,9 +65,27 @@ def get_last_status(doc_type, doc_name, docfield_name="status"):
         filters={
             "doc_type": doc_type,
             "doc_name": doc_name,
-            "docfield_name": docfield_name
-
+            "docfield_name": docfield_name,
         },
         order_by="creation desc",
-        fieldname=['old_value', 'new_value'], as_dict=True
+        fieldname=["old_value", "new_value"],
+        as_dict=True,
     )
+
+
+def set_status_and_log(doctype, docname, docfield_name, new_value, commit=True):
+    old_value = None
+    if frappe.db.exists(doctype, docname):
+        old_value = frappe.db.get_value(doctype, docname, docfield_name)
+    frappe.get_doc(
+        {
+            "doctype": "NPro Status Log",
+            "doc_type": doctype,
+            "doc_name": docname,
+            "docfield_name": docfield_name,
+            "old_value": old_value,
+            "new_value": new_value,
+        }
+    ).save(ignore_permissions=True)
+    if commit:
+        frappe.db.commit()

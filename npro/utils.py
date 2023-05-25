@@ -4,6 +4,9 @@ import frappe
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import today
 import json
+from npro.npro.doctype.npro_status_log.npro_status_log import (
+    set_status_and_log,
+)
 
 
 @frappe.whitelist()
@@ -137,26 +140,27 @@ def get_resumes(applicants):
 def update_job_applicant_status_client_cv_screening(applicants):
     applicants = json.loads(applicants or "[]")
     for d in applicants:
-        frappe.db.set_value("Job Applicant", d, "status", "Client CV Screening")
-    frappe.db.commit()
+        set_status_and_log("Job Applicant", d, "status", "Client CV Screening")
 
 
 def set_client_interview_waiting_for_feedback():
     """Hourly cron for interviews in status Pending"""
 
-    frappe.db.sql(
+    for d in frappe.db.sql(
         """
-        update `tabJob Applicant` 
-        set status = 'Client Interview-waiting for feedback'
-        where name in 
-        (
             select job_applicant  
             from tabInterview ti 
             where status = 'Pending' and docstatus <> 2 
             and interview_type_cf = 'Client Interview'
             and ADDTIME(scheduled_on, to_time) < %s
-        )""",
+        """,
         frappe.utils.now(),
-    )
-
+    ):
+        set_status_and_log(
+            "Job Applicant",
+            d,
+            "status",
+            "Client Interview-waiting for feedback",
+            commit=False,
+        )
     frappe.db.commit()

@@ -5,7 +5,8 @@ from frappe import _
 from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
-    get_last_status
+    get_last_status,
+    set_status_and_log,
 )
 from npro.api import notify_update
 
@@ -24,8 +25,7 @@ def on_validate_consultant_onboarding(doc, method):
 
 def on_submit_interview_feedback(doc, method):
     if not doc.result:
-        frappe.throw(
-            _("Interview Feedback status has to be Cleared or Rejected"))
+        frappe.throw(_("Interview Feedback status has to be Cleared or Rejected"))
     interview = frappe.get_doc("Interview", doc.interview)
     interview.status = doc.result
     interview.save()
@@ -39,9 +39,7 @@ def on_submit_interview_feedback(doc, method):
 def on_update_interview(doc, method):
     status_log = get_last_status("Interview", doc.name)
     is_internal_hiring = cint(
-        frappe.db.get_value(
-            "Job Applicant", doc.job_applicant, "is_internal_hiring_cf"
-        )
+        frappe.db.get_value("Job Applicant", doc.job_applicant, "is_internal_hiring_cf")
     )
 
     ja_status = None
@@ -49,32 +47,27 @@ def on_update_interview(doc, method):
         if doc.interview_type_cf == "Client Interview" and not is_internal_hiring:
             ja_status = {
                 "Pending": "Client Interview",
-                "Rejected": 'Client interview-Rejected',
+                "Rejected": "Client interview-Rejected",
                 "Under Review": "Hold",
                 "Cleared": "Accepted",
             }.get(doc.status)
         elif doc.interview_type_cf == "Technical Interview" and not is_internal_hiring:
             ja_status = {
-                "Pending": 'Technical interview',
-                "Rejected": 'Technical interview- Rejected',
+                "Pending": "Technical interview",
+                "Rejected": "Technical interview- Rejected",
                 "Under Review": "Hold",
-                "Cleared": 'Technical Interview- Accepted',
+                "Cleared": "Technical Interview- Accepted",
             }.get(doc.status)
         elif doc.interview_type_cf == "Technical Interview" and is_internal_hiring:
             ja_status = {
-                "Pending": 'Technical interview',
-                "Rejected": 'Technical interview- Rejected',
+                "Pending": "Technical interview",
+                "Rejected": "Technical interview- Rejected",
                 "Under Review": "Hold",
                 "Cleared": "Accepted",
             }.get(doc.status)
 
         if ja_status:
-            frappe.db.set_value(
-                "Job Applicant",
-                doc.job_applicant,
-                "status",
-                ja_status)
-            frappe.db.commit()
+            set_status_and_log("Job Applicant", doc.job_applicant, "status", ja_status)
             notify_update("Job Applicant", doc.job_applicant)
 
 
@@ -132,9 +125,7 @@ def on_submit_job_offer(doc, method):
                 ):
                     missing.append(att.attachment_type)
         if missing:
-            frappe.throw(
-                _("Attachments missing: {0}").format(
-                    ",".join(missing)))
+            frappe.throw(_("Attachments missing: {0}").format(",".join(missing)))
 
 
 def on_update_after_submit_job_offer(doc, method):
@@ -142,26 +133,27 @@ def on_update_after_submit_job_offer(doc, method):
         # change Job Applicant status to 'Rejected by Candidate' and set
         # rejection reason
         if frappe.db.get_value(
-            "Job Applicant", {
-                "name": doc.job_applicant, "status": (
-                "!=", "Rejected by Candidate")}):
-            frappe.set_value(
-                "Job Applicant",
-                doc.job_applicant,
-                "status",
-                "Rejected by Candidate")
+            "Job Applicant",
+            {"name": doc.job_applicant, "status": ("!=", "Rejected by Candidate")},
+        ):
+            set_status_and_log(
+                "Job Applicant", doc.job_applicant, "status", "Rejected by Candidate"
+            )
 
             for r in frappe.get_all(
                 "Npro Rejected Reason Detail",
                 filters={"parent": doc.name},
                 fields=["name", "rejected_reason"],
             ):
-                frappe.get_doc({"doctype": "Npro Rejected Reason Detail",
-                                "parent": doc.job_applicant,
-                                "parentfield": "rejected_reason_cf",
-                                "parenttype": "Job Applicant",
-                                "rejected_reason": r.rejected_reason
-                                }).insert()
+                frappe.get_doc(
+                    {
+                        "doctype": "Npro Rejected Reason Detail",
+                        "parent": doc.job_applicant,
+                        "parentfield": "rejected_reason_cf",
+                        "parenttype": "Job Applicant",
+                        "rejected_reason": r.rejected_reason,
+                    }
+                ).insert()
             frappe.db.commit()
 
 
@@ -182,9 +174,7 @@ def on_validate_employee(doc, method):
 
     # copy attachments from job offer to employee
     attachments = [d.file_name for d in get_attachments(doc.doctype, doc.name)]
-    for d in frappe.get_all(
-            "Job Offer", {
-            "job_applicant": doc.job_applicant}, limit=1):
+    for d in frappe.get_all("Job Offer", {"job_applicant": doc.job_applicant}, limit=1):
         for att in get_attachments("Job Offer", d.name):
             print(att)
             if att.file_name not in attachments:
@@ -237,24 +227,23 @@ def after_insert_consultant_onboarding(doc, method):
 
 @frappe.whitelist()
 def cancel_consultant_onboarding(name, rejection_reasons=""):
-    '''Cannot cancel Employee On Boarding without cancelling linked docs.
-    So setting status to Cancelled and changing docstatus to 2'''
-    frappe.set_value(
-        "Employee Onboarding",
-        name,
-        "boarding_status",
-        "Cancelled")
+    """Cannot cancel Employee On Boarding without cancelling linked docs.
+    So setting status to Cancelled and changing docstatus to 2"""
+    frappe.set_value("Employee Onboarding", name, "boarding_status", "Cancelled")
     frappe.db.set_value("Employee Onboarding", name, "docstatus", 2)
 
     status_doc = frappe.new_doc("NPro Status Log")
-    status_doc.update({"doc_type": "Employee Onboarding",
-                       "doc_name": name,
-                       "docfield_name": "boarding_status",
-                       "old_value": frappe.db.get_value("Employee Onboarding",
-                                                        name,
-                                                        "boarding_status"),
-                       "new_value": "Cancelled",
-                       })
+    status_doc.update(
+        {
+            "doc_type": "Employee Onboarding",
+            "doc_name": name,
+            "docfield_name": "boarding_status",
+            "old_value": frappe.db.get_value(
+                "Employee Onboarding", name, "boarding_status"
+            ),
+            "new_value": "Cancelled",
+        }
+    )
     status_doc.save(ignore_permissions=True)
 
     rejection_reasons = json.loads(rejection_reasons or "[]")
@@ -274,7 +263,6 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
             "rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
         )
         reason.save()
-
 
     # set consultant name null in Opportunity Consultant detail
     for d in frappe.db.sql(
@@ -328,8 +316,8 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
             if d["rejected_reason"] in existing_reasons:
                 continue
             reason = offer.append(
-                "offer_rejection_reason_cf", {
-                    "rejected_reason": d["rejected_reason"]})
+                "offer_rejection_reason_cf", {"rejected_reason": d["rejected_reason"]}
+            )
             reason.save()
         frappe.get_doc("Job Offer", doc.job_offer).cancel()
 
@@ -381,7 +369,7 @@ def after_insert_communication(doc, method):
                 "Interview", doc.reference_name, ["job_applicant", "interview_type_cf"]
             )
             if interview_type_cf == "Client Interview":
-                frappe.db.set_value(
+                set_status_and_log(
                     "Job Applicant", job_applicant, "status", "Client Interview"
                 )
                 notify_update("Job Applicant", job_applicant)
@@ -396,9 +384,7 @@ def get_boarding_status(project):
         doc = frappe.get_doc("Project", project)
         if doc.status == "Cancelled":
             return "Cancelled"
-        if flt(
-                doc.percent_complete) > 0.0 and flt(
-                doc.percent_complete) < 100.0:
+        if flt(doc.percent_complete) > 0.0 and flt(doc.percent_complete) < 100.0:
             status = "In Process"
         elif flt(doc.percent_complete) == 100.0:
             status = "Completed"
