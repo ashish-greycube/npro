@@ -77,15 +77,17 @@ def set_status_and_log(doctype, docname, docfield_name, new_value, commit=True):
     old_value = None
     if frappe.db.exists(doctype, docname):
         old_value = frappe.db.get_value(doctype, docname, docfield_name)
-    frappe.get_doc(
-        {
-            "doctype": "NPro Status Log",
-            "doc_type": doctype,
-            "doc_name": docname,
-            "docfield_name": docfield_name,
-            "old_value": old_value,
-            "new_value": new_value,
-        }
-    ).save(ignore_permissions=True)
-    if commit:
-        frappe.db.commit()
+    last_log = get_last_status(doctype, docname, docfield_name)
+    if not last_log or not last_log.new_value == new_value:
+        frappe.get_doc(
+            {
+                "doctype": "NPro Status Log",
+                "doc_type": doctype,
+                "doc_name": docname,
+                "docfield_name": docfield_name,
+                "old_value": old_value,
+                "new_value": new_value,
+            }
+        ).save(ignore_permissions=True)
+        if commit:
+            frappe.db.commit()

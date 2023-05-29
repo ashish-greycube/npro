@@ -120,11 +120,11 @@ Object.assign(frappe.utils, {
   },
 
   validate_email: function (fieldname, frm, raise) {
-    let email = frm.doc[fieldname];
-    if (email && (!email.includes(".com") || !email.includes("@"))) {
+    if (!frappe.utils.validate_type(frm.doc[fieldname], "email")) {
       let args = {
-        title: __("Invalid {0}.", [frm.fields_dict[fieldname].df.label.bold()]),
-        message: __("Please include @ and .com in email."),
+        message: __("Invalid email for {0}.", [
+          frm.fields_dict[fieldname].df.label.bold(),
+        ]),
       };
       if (raise) {
         frappe.throw(args);
