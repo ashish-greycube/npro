@@ -158,7 +158,7 @@ def set_client_interview_waiting_for_feedback():
     ):
         set_status_and_log(
             "Job Applicant",
-            d,
+            d[0],
             "status",
             "Client Interview-waiting for feedback",
             commit=False,

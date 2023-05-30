@@ -5,7 +5,6 @@ from frappe import _
 from frappe.utils import cint, flt
 from npro.npro.doctype.npro_status_log.npro_status_log import (
     make_status_log,
-    get_last_status,
     set_status_and_log,
 )
 from npro.api import notify_update
@@ -37,38 +36,36 @@ def on_submit_interview_feedback(doc, method):
 
 
 def on_update_interview(doc, method):
-    status_log = get_last_status("Interview", doc.name)
     is_internal_hiring = cint(
         frappe.db.get_value("Job Applicant", doc.job_applicant, "is_internal_hiring_cf")
     )
 
     ja_status = None
-    if status_log and not status_log.old_value == doc.status:
-        if doc.interview_type_cf == "Client Interview" and not is_internal_hiring:
-            ja_status = {
-                "Pending": "Client Interview",
-                "Rejected": "Client interview-Rejected",
-                "Under Review": "Hold",
-                "Cleared": "Accepted",
-            }.get(doc.status)
-        elif doc.interview_type_cf == "Technical Interview" and not is_internal_hiring:
-            ja_status = {
-                "Pending": "Technical interview",
-                "Rejected": "Technical interview- Rejected",
-                "Under Review": "Hold",
-                "Cleared": "Technical Interview- Accepted",
-            }.get(doc.status)
-        elif doc.interview_type_cf == "Technical Interview" and is_internal_hiring:
-            ja_status = {
-                "Pending": "Technical interview",
-                "Rejected": "Technical interview- Rejected",
-                "Under Review": "Hold",
-                "Cleared": "Accepted",
-            }.get(doc.status)
+    if doc.interview_type_cf == "Client Interview" and not is_internal_hiring:
+        ja_status = {
+            "Pending": "Client Interview",
+            "Rejected": "Client interview-Rejected",
+            "Under Review": "Hold",
+            "Cleared": "Accepted",
+        }.get(doc.status)
+    elif doc.interview_type_cf == "Technical Interview" and not is_internal_hiring:
+        ja_status = {
+            "Pending": "Technical interview",
+            "Rejected": "Technical interview- Rejected",
+            "Under Review": "Hold",
+            "Cleared": "Technical Interview- Accepted",
+        }.get(doc.status)
+    elif doc.interview_type_cf == "Technical Interview" and is_internal_hiring:
+        ja_status = {
+            "Pending": "Technical interview",
+            "Rejected": "Technical interview- Rejected",
+            "Under Review": "Hold",
+            "Cleared": "Accepted",
+        }.get(doc.status)
 
-        if ja_status:
-            set_status_and_log("Job Applicant", doc.job_applicant, "status", ja_status)
-            notify_update("Job Applicant", doc.job_applicant)
+    if ja_status:
+        set_status_and_log("Job Applicant", doc.job_applicant, "status", ja_status)
+        notify_update("Job Applicant", doc.job_applicant)
 
 
 def on_validate_lead(doc, method):
