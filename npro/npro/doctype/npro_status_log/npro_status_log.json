@@ -15,7 +15,8 @@
   "child_docfield_name",
   "column_break_7",
   "old_value",
-  "new_value"
+  "new_value",
+  "trigger"
  ],
  "fields": [
   {
@@ -63,11 +64,16 @@
   {
    "fieldname": "column_break_7",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "trigger",
+   "fieldtype": "Data",
+   "label": "Trigger"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-02-21 08:26:00.353239",
+ "modified": "2023-05-31 12:51:10.736260",
  "modified_by": "Administrator",
  "module": "NPro",
  "name": "NPro Status Log",

@@ -140,7 +140,14 @@ def get_resumes(applicants):
 def update_job_applicant_status_client_cv_screening(applicants):
     applicants = json.loads(applicants or "[]")
     for d in applicants:
-        set_status_and_log("Job Applicant", d, "status", "Client CV Screening")
+        set_status_and_log(
+            "Job Applicant",
+            d,
+            "status",
+            "Client CV Screening",
+            trigger="update_job_applicant_status_client_cv_screening",
+            commit=True,
+        )
 
 
 def set_client_interview_waiting_for_feedback():
@@ -161,6 +168,7 @@ def set_client_interview_waiting_for_feedback():
             d[0],
             "status",
             "Client Interview-waiting for feedback",
+            trigger="set_client_interview_waiting_for_feedback",
             commit=False,
         )
     frappe.db.commit()

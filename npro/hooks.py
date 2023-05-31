@@ -125,12 +125,12 @@ doc_events = {
         "validate": "npro.npro.doc_events.on_validate_interview",
     },
     "Interview Feedback": {
-        "validate": "npro.npro.doc_events.on_validate_interview_feedback",
+        "on_update": "npro.npro.doc_events.on_validate_interview_feedback",
         "on_submit": "npro.npro.doc_events.on_submit_interview_feedback",
     },
     "Job Offer": {
         "on_submit": "npro.npro.doc_events.on_submit_job_offer",
-        "validate": "npro.npro.doc_events.on_validate_job_offer",
+        "on_update": "npro.npro.doc_events.on_update_job_offer",
         "on_update_after_submit": "npro.npro.doc_events.on_update_after_submit_job_offer",
     },
     "Job Opening": {
@@ -156,7 +156,7 @@ doc_events = {
     },
     "Employee Onboarding": {
         "after_insert": "npro.npro.doc_events.after_insert_consultant_onboarding",
-        "validate": "npro.npro.doc_events.on_validate_consultant_onboarding",
+        "on_update": "npro.npro.doc_events.on_update_consultant_onboarding",
     },
     "Communication": {
         "after_insert": "npro.npro.doc_events.after_insert_communication"

@@ -357,10 +357,10 @@ def validate_job_opening(doc, method):
     if doc.status == "Closed" and not doc.closed_date_cf:
         doc.closed_date_cf = nowdate()
 
-    make_status_log(doc, "status")
-
 
 def on_update_job_opening(doc, method):
+    make_status_log(doc, "status", trigger="validate_job_opening")
+
     if doc.opportunity_cf and doc.opportunity_consulting_detail_ct_cf:
         # notify update to reload Opportunity in client
         frappe.db.sql(

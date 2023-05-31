@@ -10,16 +10,16 @@ from npro.npro.doctype.npro_status_log.npro_status_log import (
 from npro.api import notify_update
 
 
-def on_validate_job_applicant(doc, method):
-    make_status_log(doc, "status")
+def on_update_job_applicant(doc, method):
+    make_status_log(doc, "status", trigger="on_update_job_applicant")
 
 
-def on_validate_interview_feedback(doc, method):
-    make_status_log(doc, "result")
+def on_update_interview_feedback(doc, method):
+    make_status_log(doc, "result", trigger="on_update_interview_feedback")
 
 
-def on_validate_consultant_onboarding(doc, method):
-    make_status_log(doc, "boarding_status")
+def on_update_consultant_onboarding(doc, method):
+    make_status_log(doc, "boarding_status", trigger="on_update_consultant_onboarding")
 
 
 def on_submit_interview_feedback(doc, method):
@@ -36,6 +36,8 @@ def on_submit_interview_feedback(doc, method):
 
 
 def on_update_interview(doc, method):
+    make_status_log(doc, "status", trigger="on_update_interview")
+
     is_internal_hiring = cint(
         frappe.db.get_value("Job Applicant", doc.job_applicant, "is_internal_hiring_cf")
     )
@@ -64,18 +66,22 @@ def on_update_interview(doc, method):
         }.get(doc.status)
 
     if ja_status:
-        set_status_and_log("Job Applicant", doc.job_applicant, "status", ja_status)
+        set_status_and_log(
+            "Job Applicant",
+            doc.job_applicant,
+            "status",
+            ja_status,
+            trigger="on_update_interview",
+            commit=True,
+        )
         notify_update("Job Applicant", doc.job_applicant)
-
-
-def on_validate_lead(doc, method):
-    make_status_log(doc, "status")
 
 
 def on_update_lead(doc, method):
     # Set Contact details in Lead update as Contact is created by ErpNext
     # before_insert
     set_contact_details(doc)
+    make_status_log(doc, "status", trigger="on_update_lead")
 
 
 def set_contact_details(doc):
@@ -134,7 +140,11 @@ def on_update_after_submit_job_offer(doc, method):
             {"name": doc.job_applicant, "status": ("!=", "Rejected by Candidate")},
         ):
             set_status_and_log(
-                "Job Applicant", doc.job_applicant, "status", "Rejected by Candidate"
+                "Job Applicant",
+                doc.job_applicant,
+                "status",
+                "Rejected by Candidate",
+                trigger="on_update_after_submit_job_offer",
             )
 
             for r in frappe.get_all(
@@ -154,7 +164,7 @@ def on_update_after_submit_job_offer(doc, method):
             frappe.db.commit()
 
 
-def on_validate_job_offer(doc, method):
+def on_update_job_offer(doc, method):
     # if doc.db_get("status") == "Sent for Approval":
     #     if doc.offer_approver_cf == frappe.session.user:
     #         doc.offer_approved_by_cf = frappe.session.user
@@ -163,7 +173,7 @@ def on_validate_job_offer(doc, method):
     # if doc.status == "Offer Approved":
     #     if not doc.offer_approver_cf:
     #         doc.offer_approver_cf = frappe.session.user
-    make_status_log(doc, "status")
+    make_status_log(doc, "status", "on_update_job_offer")
 
 
 def on_validate_employee(doc, method):
@@ -351,10 +361,6 @@ def cancel_consultant_onboarding(name, rejection_reasons=""):
     frappe.db.commit()
 
 
-def on_validate_interview(doc, method):
-    make_status_log(doc, "status")
-
-
 def after_insert_communication(doc, method):
     try:
         if (
@@ -367,7 +373,12 @@ def after_insert_communication(doc, method):
             )
             if interview_type_cf == "Client Interview":
                 set_status_and_log(
-                    "Job Applicant", job_applicant, "status", "Client Interview"
+                    "Job Applicant",
+                    job_applicant,
+                    "status",
+                    "Client Interview",
+                    trigger="after_insert_communication",
+                    commit=True,
                 )
                 notify_update("Job Applicant", job_applicant)
     except Exception:

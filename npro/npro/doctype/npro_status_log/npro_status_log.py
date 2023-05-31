@@ -38,31 +38,8 @@ def make_child_status_log(doc, docfield_name, child_docfield_name):
         ).save(ignore_permissions=True)
 
 
-def make_status_log(doc, docfield_name):
-    old_value = (
-        None
-        if doc.is_new()
-        else frappe.db.get_value(doc.doctype, doc.name, docfield_name)
-    )
-    if not old_value == doc.get(docfield_name):
-        status_doc = frappe.new_doc("NPro Status Log")
-        status_doc.update(
-            {
-                "doc_type": doc.doctype,
-                "doc_name": doc.name,
-                "docfield_name": docfield_name,
-                "old_value": old_value,
-                "new_value": doc.get(docfield_name),
-            }
-        )
-        status_doc.save(ignore_permissions=True)
-    frappe.db.commit()
-
-
-def set_status_and_log(doctype, docname, docfield_name, new_value, commit=True):
-    old_value = frappe.db.get_value(doctype, docname, docfield_name)
-
-    last_value = frappe.db.get_value(
+def check_last_log(doctype, docname, docfield_name, new_value):
+    last = frappe.db.get_value(
         "NPro Status Log",
         filters={
             "doc_type": doctype,
@@ -71,7 +48,37 @@ def set_status_and_log(doctype, docname, docfield_name, new_value, commit=True):
         },
         fieldname="new_value",
     )
-    if not last_value or not last_value == new_value:
+    return not last or not last == new_value
+
+
+def make_status_log(doc, docfield_name, trigger=None):
+    old_value = (
+        None
+        if doc.is_new()
+        else frappe.db.get_value(doc.doctype, doc.name, docfield_name)
+    )
+    if not old_value == doc.get(docfield_name):
+        if check_last_log(doc.doctype, doc.name, docfield_name, doc.get(docfield_name)):
+            status_doc = frappe.new_doc("NPro Status Log")
+            status_doc.update(
+                {
+                    "doc_type": doc.doctype,
+                    "doc_name": doc.name,
+                    "docfield_name": docfield_name,
+                    "old_value": old_value,
+                    "new_value": doc.get(docfield_name),
+                    "trigger": trigger,
+                }
+            )
+            status_doc.save(ignore_permissions=True)
+            frappe.db.commit()
+
+
+def set_status_and_log(
+    doctype, docname, docfield_name, new_value, trigger=None, commit=True
+):
+    old_value = frappe.db.get_value(doctype, docname, docfield_name)
+    if check_last_log(doctype, docname, docfield_name, new_value):
         frappe.get_doc(
             {
                 "doctype": "NPro Status Log",
@@ -80,7 +87,9 @@ def set_status_and_log(doctype, docname, docfield_name, new_value, commit=True):
                 "docfield_name": docfield_name,
                 "old_value": old_value,
                 "new_value": new_value,
+                "trigger": trigger,
             }
         ).save(ignore_permissions=True)
-        if commit:
-            frappe.db.commit()
+    frappe.db.set_value(doctype, docname, docfield_name, new_value)
+    if commit:
+        frappe.db.commit()
