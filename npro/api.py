@@ -378,42 +378,63 @@ def on_update_job_opening(doc, method):
 def on_update_job_applicant(doc, method):
     validate_technical_interview(doc, method)
 
-    for d in frappe.db.sql(
+    # update stage in Opportunity Consulting Detail CT
+    # if opportunity_consulting_stage for the current Job Applicant status
+    # has a higher priority
+
+    # select stages with lower or equal priority than the stage for the current status
+    stage_priority = frappe.db.sql_list(
         """
-    select 
-        tocd.name detail_name ,
-        tocd.stage , tja.job_title , toj.opportunity_consulting_stage ,
-        tocd.parent opportunity
-    from `tabOpportunity Consulting Detail CT` tocd
-    inner join `tabJob Applicant` tja on tja.job_title = tocd.job_opening 
-    inner join `tabOpportunity Job Applicant Status Priority Mapping` toj 
-        on toj.job_applicant_status = tja.status 
-    where tja.job_title = %s
+    select distinct t.opportunity_consulting_stage
+    from `tabOpportunity Job Applicant Status Priority Mapping` t
+    where priority >= (
+        select priority from `tabOpportunity Job Applicant Status Priority Mapping` 
+        where job_applicant_status = %s
+    )
+    order by t.priority 
     """,
-        (doc.job_title),
-        as_dict=True,
-    ):
-        frappe.db.set_value(
-            "Opportunity Consulting Detail CT",
-            d.detail_name,
-            "stage",
-            d.opportunity_consulting_stage,
-        )
-        if not d.stage == d.opportunity_consulting_stage:
-            # make log for tabOpportunity Consulting Detail CT
+        (doc.status),
+    )
+
+    if stage_priority:
+        for d in frappe.db.sql(
+            """
+        select 
+            tocd.name detail_name , tocd.stage , tja.job_title , 
+            tocd.parent opportunity 
+        from `tabOpportunity Consulting Detail CT` tocd
+        inner join `tabJob Applicant` tja on tja.job_title = tocd.job_opening 
+        and tja.name = %s
+        """,
+            (doc.name),
+            as_dict=True,
+        ):
+            if not d.stage in stage_priority or d.stage == stage_priority[0]:
+                continue
+            # update child table row
+            frappe.db.sql(
+                """
+                update `tabOpportunity Consulting Detail CT`
+                set stage = %s where name = %s
+            """,
+                (stage_priority[0], d.detail_name),
+            )
+            # make npro status log for stage change in child table tabOpportunity Consulting Detail CT
             frappe.get_doc(
                 {
                     "doctype": "NPro Status Log",
                     "doc_type": "Opportunity",
                     "doc_name": d.opportunity,
                     "docfield_name": "opportunity_consulting_detail_ct_cf",
-                    "child_doc_type": d.doctype,
-                    "child_doc_name": d.name,
-                    "child_docfield_name": "status",
+                    "child_doc_type": "Opportunity Consulting Detail CT",
+                    "child_doc_name": d.detail_name,
+                    "child_docfield_name": "stage",
                     "old_value": d.stage,
-                    "new_value": d.opportunity_consulting_stage,
+                    "new_value": stage_priority[0],
+                    "trigger": "on_update_job_applicant",
                 }
             ).save(ignore_permissions=True)
+    frappe.db.commit()
 
     for d in frappe.get_all(
         "Job Opening", filters={"name": doc.job_title}, fields=["opportunity_cf"]
