@@ -122,10 +122,8 @@ doc_events = {
             "npro.api.on_update_interview",
             "npro.npro.doc_events.on_update_interview",
         ],
-        "validate": "npro.npro.doc_events.on_validate_interview",
     },
     "Interview Feedback": {
-        "on_update": "npro.npro.doc_events.on_validate_interview_feedback",
         "on_submit": "npro.npro.doc_events.on_submit_interview_feedback",
     },
     "Job Offer": {
@@ -141,7 +139,6 @@ doc_events = {
         ],
     },
     "Lead": {
-        "validate": "npro.npro.doc_events.on_validate_lead",
         "on_update": "npro.npro.doc_events.on_update_lead",
     },
     "Job Applicant": {
