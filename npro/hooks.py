@@ -142,7 +142,10 @@ doc_events = {
         "on_update": "npro.npro.doc_events.on_update_lead",
     },
     "Job Applicant": {
-        "on_update": "npro.api.on_update_job_applicant",
+        "on_update": [
+            "npro.api.on_update_job_applicant",
+            "npro.npro.doc_events.on_update_job_applicant",
+        ]
     },
     "Employee": {
         "validate": "npro.npro.doc_events.on_validate_employee",

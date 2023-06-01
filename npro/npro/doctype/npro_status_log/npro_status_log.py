@@ -52,12 +52,10 @@ def check_last_log(doctype, docname, docfield_name, new_value):
 
 
 def make_status_log(doc, docfield_name, trigger=None):
-    old_value = (
-        None
-        if doc.is_new()
-        else frappe.db.get_value(doc.doctype, doc.name, docfield_name)
-    )
-    if not old_value == doc.get(docfield_name):
+    before_save = doc.get_doc_before_save()
+    old_value = None if not before_save else before_save.get(docfield_name)
+
+    if not old_value or not old_value == doc.get(docfield_name):
         if check_last_log(doc.doctype, doc.name, docfield_name, doc.get(docfield_name)):
             status_doc = frappe.new_doc("NPro Status Log")
             status_doc.update(
