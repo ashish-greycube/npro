@@ -163,12 +163,16 @@ def set_client_interview_waiting_for_feedback():
         """,
         frappe.utils.now(),
     ):
-        set_status_and_log(
-            "Job Applicant",
-            d[0],
-            "status",
-            "Client Interview-waiting for feedback",
-            trigger="set_client_interview_waiting_for_feedback",
-            commit=False,
-        )
+        ja_doc = frappe.get_doc("Job Applicant", d[0])
+        ja_doc.status = "Client Interview-waiting for feedback"
+        ja_doc.save()
+
+        # set_status_and_log(
+        #     "Job Applicant",
+        #     d[0],
+        #     "status",
+        #     "Client Interview-waiting for feedback",
+        #     trigger="set_client_interview_waiting_for_feedback",
+        #     commit=False,
+        # )
     frappe.db.commit()
